@@ -1,0 +1,40 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: 'Segoe UI', sans-serif; color: var(--color-text); background: var(--color-bg); }
+a { color: inherit; text-decoration: none; }
+.container { width: min(var(--container-max), 92%); margin: 0 auto; }
+.section { padding: 5rem 0; }
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: rgba(244, 91, 122, 0.94);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.26);
+    transition: box-shadow var(--transition-fast), backdrop-filter var(--transition-fast), background-color var(--transition-fast);
+}
+.navbar.is-scrolled {
+    box-shadow: 0 8px 22px rgba(17, 24, 39, 0.18);
+    backdrop-filter: blur(8px);
+}
+.navbar-inner { display:flex; align-items:center; justify-content:space-between; min-height:74px; gap: 1rem; }
+.brand-mark { color: #fff; font-weight: 900; letter-spacing: .03em; font-size: 1.03rem; }
+.nav-menu { display: flex; gap: 1.35rem; align-items: center; }
+.nav-menu a {
+    color: #fff;
+    font-weight: 800;
+    font-size: .86rem;
+    letter-spacing: .03em;
+    opacity: .88;
+    transition: opacity var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast);
+    border-bottom: 2px solid transparent;
+    padding-bottom: .2rem;
+}
+.nav-menu a:hover { opacity: 1; transform: translateY(-1px); }
+.nav-menu a.is-active { opacity: 1; border-color: rgba(255, 255, 255, 0.95); }
+.nav-right { display: flex; align-items: center; gap: .8rem; }
+.nav-toggle { display: none; }
+.footer {
+    padding: 3rem 0 2.2rem;
+    color: #e2e8f0;
+    text-align:center;
+    background: #0f172a;
+}
