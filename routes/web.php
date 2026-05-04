@@ -8,7 +8,6 @@ use App\Http\Controllers\Admin\HeroBannerController as AdminHeroBannerController
 use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\MarketplaceLinkController as AdminMarketplaceLinkController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
-use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController;
 use App\Http\Controllers\Public\AboutController;
 use App\Http\Controllers\Public\CatalogController;
@@ -31,16 +30,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-        Route::resource('products', AdminProductController::class)->except(['show']);
-        Route::resource('categories', AdminCategoryController::class)->except(['show']);
+        Route::resource('products', AdminProductController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('categories', AdminCategoryController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('hero-banners', AdminHeroBannerController::class)->except(['show']);
-        Route::resource('marketplace-links', AdminMarketplaceLinkController::class)->except(['show']);
-        Route::resource('testimonials', AdminTestimonialController::class)->except(['show']);
+        Route::resource('marketplace-links', AdminMarketplaceLinkController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('testimonials', AdminTestimonialController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('faqs', AdminFaqController::class)->except(['show']);
         Route::get('inquiries', [AdminInquiryController::class, 'index'])->name('inquiries.index');
         Route::post('inquiries/{inquiry}/handle', [AdminInquiryController::class, 'markHandled'])->name('inquiries.handle');
         Route::get('inquiries-export', [AdminInquiryController::class, 'export'])->name('inquiries.export');
-        Route::get('settings', [AdminSettingController::class, 'index'])->name('settings.index');
-        Route::put('settings', [AdminSettingController::class, 'update'])->name('settings.update');
     });
 });

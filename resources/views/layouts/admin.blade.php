@@ -9,12 +9,22 @@
 <body>
 <div class="admin-shell">
     <aside class="admin-sidebar">
-        <h3>Admin Panel</h3>
-        <a href="{{ route('admin.dashboard') }}">Dashboard</a><br>
-        <a href="{{ route('admin.products.index') }}">Produk</a><br>
-        <a href="{{ route('admin.categories.index') }}">Kategori</a><br>
-        <a href="{{ route('admin.inquiries.index') }}">Inquiry</a><br>
-        <a href="{{ route('admin.settings.index') }}">SEO</a><br>
+        <div class="admin-brand">
+            <strong>Pelangi Admin</strong>
+            <small>Dashboard Konten</small>
+        </div>
+        <nav class="admin-nav">
+            <a class="{{ request()->routeIs('admin.dashboard') ? 'is-active' : '' }}" href="{{ route('admin.dashboard') }}">Dashboard</a>
+            <a class="{{ request()->routeIs('admin.products.*') ? 'is-active' : '' }}" href="{{ route('admin.products.index') }}">Produk</a>
+            <a class="{{ request()->routeIs('admin.categories.*') ? 'is-active' : '' }}" href="{{ route('admin.categories.index') }}">Kategori</a>
+            <a class="{{ request()->routeIs('admin.marketplace-links.*') ? 'is-active' : '' }}" href="{{ route('admin.marketplace-links.index') }}">Marketplace</a>
+            <a class="{{ request()->routeIs('admin.testimonials.*') ? 'is-active' : '' }}" href="{{ route('admin.testimonials.index') }}">Testimonial</a>
+            <a class="{{ request()->routeIs('admin.inquiries.*') ? 'is-active' : '' }}" href="{{ route('admin.inquiries.index') }}">Inquiry</a>
+        </nav>
+        <form method="POST" action="{{ route('admin.logout') }}" style="margin-top:auto;">
+            @csrf
+            <button class="btn btn-outline-white" style="width:100%;">Logout</button>
+        </form>
     </aside>
     <main class="admin-main">
         @if(session('success'))<div class="card" data-toast>{{ session('success') }}</div>@endif

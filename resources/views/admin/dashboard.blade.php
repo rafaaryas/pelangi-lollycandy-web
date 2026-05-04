@@ -3,17 +3,22 @@
 @section('title', 'Dashboard Admin')
 
 @section('content')
-<h1>Dashboard</h1>
-<div class="grid" style="grid-template-columns:repeat(4,minmax(120px,1fr));">
-    <div class="card">Produk: {{ $stats['products'] }}</div>
-    <div class="card">Scheduled: {{ $stats['scheduled'] }}</div>
-    <div class="card">Inquiry: {{ $stats['inquiries'] }}</div>
-    <div class="card">Clicks: {{ $stats['clicks'] }}</div>
+<div class="admin-page-head">
+    <h1>Dashboard</h1>
+    <p>Ringkasan cepat performa katalog Pelangi Lollycandy.</p>
 </div>
-<h2>Produk Paling Diklik</h2>
-<div class="card">
-    @foreach($mostClicked as $item)
-        <p>{{ $item->name }} ({{ $item->favorite_clicks }} klik)</p>
-    @endforeach
+
+<div class="admin-kpi-grid">
+    <div class="card"><strong>Total Produk</strong><h2>{{ $stats['products'] }}</h2></div>
+    <div class="card"><strong>Total Inquiry</strong><h2>{{ $stats['inquiries'] }}</h2></div>
+</div>
+
+<div class="card" style="margin-top:1rem;">
+    <h3>Most Clicked Products</h3>
+    @forelse($mostClicked as $item)
+        <p>{{ $item->name }} <span class="text-muted">({{ $item->favorite_clicks }} klik)</span></p>
+    @empty
+        <p class="text-muted">Belum ada data klik produk.</p>
+    @endforelse
 </div>
 @endsection
