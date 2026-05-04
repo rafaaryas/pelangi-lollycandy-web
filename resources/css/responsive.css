@@ -7,17 +7,18 @@
     .nav-menu {
         display: none;
         position: absolute;
-        top: 72px;
+        top: 82px;
         left: 0;
         right: 0;
         background: #f26672;
         padding: 1rem;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
         box-shadow: 0 14px 26px rgba(17, 24, 39, 0.16);
     }
     .nav-menu.is-open { display: flex; }
-    .nav-toggle { display: inline-flex; }
+    .nav-toggle.btn { display: inline-flex; }
+    .nav-pill { width: 100%; justify-content: center; }
     .admin-sidebar { position: sticky; top: 0; z-index: 20; }
     .admin-page-head { flex-direction: column; align-items: flex-start; }
     .admin-kpi-grid { grid-template-columns: 1fr 1fr; }
@@ -27,12 +28,25 @@
 }
 @media (max-width: 640px) {
     .section { padding: 3.4rem 0; }
-    .stats { flex-direction: column; }
+    .stats { justify-content: center; }
+    .stat { padding: .65rem .8rem; }
     .btn { width: 100%; }
-    .hero-copy h1 { font-size: 2.4rem; }
+    .brand-mark img { width: 142px; }
+    .navbar-inner { position: relative; }
+    .nav-right { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+    .nav-right .nav-toggle.btn { width: auto; min-width: 78px; padding: .55rem .9rem; }
+    .hero-like-reference { min-height: auto; padding-top: 2.2rem; }
+    .hero-grid-ref { gap: 1rem; min-height: auto; }
+    .hero-copy { text-align: center; }
+    .hero-copy h1 { font-size: 2.35rem; }
+    .hero-copy p { width: 100%; margin-left: auto; margin-right: auto; padding: 0 .5rem; }
+    .hero-actions { justify-content: center; }
+    .hero-illustration { justify-content: center; }
+    .hero-lollipop { width: min(86vw, 330px); }
+    .wave-bottom { height: 76px; margin-top: 1rem; }
     .about-grid { grid-template-columns: 1fr; }
-    .nav-right a { display: none; }
     .marketplace-grid { grid-template-columns: 1fr; }
+    .floating-wa.btn { width: auto; right: 12px; bottom: 12px; padding: .72rem 1.05rem; }
     .admin-kpi-grid { grid-template-columns: 1fr; }
     .modal-content { margin-top: 3vh; width: 95%; max-height: 94vh; }
 }

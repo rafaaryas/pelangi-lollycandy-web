@@ -6,19 +6,17 @@
 <section class="hero hero-like-reference">
     <div class="container hero-grid hero-grid-ref">
         <div class="hero-illustration">
-            <img src="{{ asset('images/hero-reference.png') }}" alt="Lollipop Illustration" class="hero-lollipop">
+            <img src="{{ asset('images/lollipop-banner.png') }}" alt="Lollipop Illustration" class="hero-lollipop">
         </div>
         <div class="hero-copy">
-            <h1>{{ $hero->title ?? 'PELANGI LOLLYCANDY' }}</h1>
-            <p>{{ $hero->subtitle ?? 'Colorful premium candy untuk anak muda & keluarga modern.' }}</p>
-            <div style="display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem">
-                <a href="{{ route('products.index') }}" class="btn btn-primary">Lihat Katalog</a>
-                <a href="#marketplace-hub" class="btn btn-outline-white">Kunjungi Marketplace</a>
+            <h1>PELANGI<br>LOLLYCANDY</h1>
+            <p>{{ $hero->subtitle ?? 'Permen colorful premium untuk anak muda & keluarga.' }}</p>
+            <div class="hero-actions">
+                <a href="{{ route('products.index') }}" class="btn btn-outline-white hero-catalog-btn">Lihat Katalog</a>
             </div>
             <div class="stats">
                 <div class="stat">{{ $stats['products'] }} Produk</div>
                 <div class="stat">{{ $stats['variants'] }} Varian</div>
-                <div class="stat">{{ $stats['marketplaces'] }} Marketplace</div>
             </div>
         </div>
     </div>
