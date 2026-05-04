@@ -1,0 +1,26 @@
+@import './variables.css';
+@import './layout.css';
+@import './components.css';
+@import './pages.css';
+@import './responsive.css';
+
+@font-face {
+    font-family: 'Centra';
+    src: url("G:\2026\mei\laragon\www\pemweb\pelangi-lollycandy-web-main\public\fonts\centra1b.otf") format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'gwenchana';
+    src: url("G:\2026\mei\laragon\www\pemweb\pelangi-lollycandy-web-main\public\fonts\Gwenchana.ttf") format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'matcha';
+    src: url("G:\2026\mei\laragon\www\pemweb\pelangi-lollycandy-web-main\public\fonts\Matcha.otf") format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}

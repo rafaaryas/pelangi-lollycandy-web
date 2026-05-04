@@ -1,0 +1,30 @@
+@media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .admin-shell { grid-template-columns: 1fr; }
+    .hero-grid-ref { grid-template-columns: 1fr; gap: 1.2rem; }
+    .about-grid { grid-template-columns: 1fr 1fr; }
+    .section-head-inline { flex-direction: column; align-items: flex-start; }
+    .nav-menu {
+        display: none;
+        position: absolute;
+        top: 72px;
+        left: 0;
+        right: 0;
+        background: #f26672;
+        padding: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        box-shadow: 0 14px 26px rgba(17, 24, 39, 0.16);
+    }
+    .nav-menu.is-open { display: flex; }
+    .nav-toggle { display: inline-flex; }
+}
+@media (max-width: 640px) {
+    .section { padding: 3.4rem 0; }
+    .stats { flex-direction: column; }
+    .btn { width: 100%; }
+    .hero-copy h1 { font-size: 2.4rem; }
+    .about-grid { grid-template-columns: 1fr; }
+    .nav-right a { display: none; }
+    .marketplace-grid { grid-template-columns: 1fr; }
+}
