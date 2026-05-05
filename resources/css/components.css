@@ -10,12 +10,12 @@
     transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
 }
 .btn-primary {
-    background: var(--color-pink);
+    background: #e4506f;
     color: #fff;
     box-shadow: var(--shadow-soft);
 }
 .btn-secondary {
-    background: var(--color-blue);
+    background: transparent;
     color: #fff;
     box-shadow: var(--shadow-soft);
 }
@@ -32,6 +32,12 @@
 .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
 .btn-primary:hover { background: #e4506f; }
 .btn-secondary:hover { background: #3f7de8; }
+.btn-secondary:active,
+.btn-secondary:focus {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+    color: #fff;
+}
 .btn-outline:hover { background: rgba(77, 141, 255, 0.08); }
 .btn-outline-white:hover { background: rgba(255, 255, 255, 0.16); }
 .card { background:#fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); padding:1.2rem; border: 1px solid #eff2f7; }

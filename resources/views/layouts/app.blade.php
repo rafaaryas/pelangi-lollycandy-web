@@ -8,20 +8,17 @@
 </head>
 <body>
     <header class="navbar" data-navbar>
-        <div class="container navbar-inner">
-            <a href="{{ route('home') }}" class="brand-mark" aria-label="Pelangi Lollycandy home">
-                <img src="{{ asset('images/pelangi-logo.png') }}" alt="Pelangi Lollycandy">
+        <div class="container navbar-inner" style="justify-content:space-between;">
+            <a href="{{ route('home') }}" class="brand-mark" style="margin-right: auto;">
+                <img src="images/pelangi-logo.png" alt="Pelangi Lollycandy" style="height: 65px; width: auto;">
             </a>
             <nav data-nav-menu class="nav-menu">
-                <a class="nav-pill {{ request()->routeIs('home') ? 'is-active' : '' }}" href="{{ route('home') }}">HOME</a>
-                <a class="nav-pill" href="{{ route('home') }}#about-brand">ABOUT US</a>
-                <a class="nav-pill {{ request()->routeIs('products.*') ? 'is-active' : '' }}" href="{{ route('products.index') }}">PRODUCTS</a>
-                <a class="nav-pill {{ request()->routeIs('contact.*') ? 'is-active' : '' }}" href="{{ route('contact.index') }}">CONTACT US</a>
-                <a class="nav-pill" href="{{ route('home') }}#marketplace-hub">MARKETPLACE</a>
+                <a class="btn nav-secondary {{ request()->routeIs('home') ? 'is-active' : '' }}" href="{{ route('home') }}">HOME</a>
+                <a class="btn nav-secondary" href="{{ route('home') }}#about-brand">ABOUT US</a>
+                <a class="btn nav-secondary" href="{{ route('home') }}#marketplace-hub">MARKETPLACE</a>
+                <a class="btn nav-secondary {{ request()->routeIs('product.*') ? 'is-active' : '' }}" href="{{ route('products.index') }}">PRODUCTS</a>
+                <a class="btn nav-secondary {{ request()->routeIs('contact.*') ? 'is-active' : '' }}" href="{{ route('contact.index') }}">CONTACT US</a>
             </nav>
-            <div class="nav-right">
-                <button data-nav-toggle class="btn btn-outline-white nav-toggle">Menu</button>
-            </div>
         </div>
     </header>
     @if(session('success'))
