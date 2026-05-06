@@ -10,7 +10,7 @@
         </div>
         <div class="hero-copy">
             <h1>PELANGI<br>LOLLYCANDY</h1>
-            <p>Permen colorful premium untuk anak muda & keluarga.</p>
+            <p>{{ $hero->subtitle ?? 'Permen colorful premium untuk anak muda & keluarga.' }}</p>
             <div class="hero-actions">
                 <a href="{{ route('products.index') }}" class="btn btn-outline-white hero-catalog-btn">Lihat Katalog</a>
             </div>
