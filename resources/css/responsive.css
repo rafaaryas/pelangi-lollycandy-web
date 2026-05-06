@@ -1,0 +1,84 @@
+@media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .admin-shell { grid-template-columns: 1fr; }
+    .admin-main { padding: 1.35rem; }
+    .hero-grid-ref { grid-template-columns: 1fr; gap: 1.2rem; }
+    .about-grid { grid-template-columns: 1fr 1fr; }
+    .section-head-inline { flex-direction: column; align-items: flex-start; }
+    .nav-menu {
+        display: none;
+        position: absolute;
+        top: 82px;
+        left: 0;
+        right: 0;
+        background: #f26672;
+        padding: 1rem;
+        flex-direction: column;
+        align-items: stretch;
+        box-shadow: 0 14px 26px rgba(17, 24, 39, 0.16);
+    }
+    .nav-menu.is-open { display: flex; }
+    .nav-toggle.btn { display: inline-flex; }
+    .nav-pill { width: 100%; justify-content: center; }
+    .admin-sidebar {
+        position: relative;
+        top: auto;
+        z-index: 20;
+        height: auto;
+        min-height: auto;
+        padding: 1.25rem;
+        gap: 1.2rem;
+    }
+    .admin-nav {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: .5rem;
+    }
+    .admin-nav a {
+        justify-content: center;
+        min-height: 46px;
+        padding: .7rem .65rem;
+        text-align: center;
+    }
+    .admin-logout {
+        max-width: 220px;
+    }
+    .admin-page-head { flex-direction: column; align-items: flex-start; }
+    .admin-page-head p { text-align: left; }
+    .admin-kpi-grid { grid-template-columns: 1fr 1fr; }
+    .admin-form-grid,
+    .product-form-grid { grid-template-columns: 1fr; }
+    .form-col-2 { grid-column: auto; }
+    .variant-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+    .section { padding: 3.4rem 0; }
+    .stats { justify-content: center; }
+    .stat { padding: .65rem .8rem; }
+    .btn { width: 100%; }
+    .brand-mark img { width: 142px; }
+    .navbar-inner { position: relative; }
+    .nav-right { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+    .nav-right .nav-toggle.btn { width: auto; min-width: 78px; padding: .55rem .9rem; }
+    .hero-like-reference { min-height: auto; padding-top: 2.2rem; }
+    .hero-grid-ref { gap: 1rem; min-height: auto; }
+    .hero-copy { text-align: center; }
+    .hero-copy h1 { font-size: 2.35rem; }
+    .hero-copy p { width: 100%; margin-left: auto; margin-right: auto; padding: 0 .5rem; }
+    .hero-actions { justify-content: center; }
+    .hero-illustration { justify-content: center; }
+    .hero-lollipop { width: min(86vw, 330px); }
+    .wave-bottom { height: 76px; margin-top: 1rem; }
+    .about-grid { grid-template-columns: 1fr; }
+    .marketplace-grid { grid-template-columns: 1fr; }
+    .floating-wa.btn { width: auto; right: 12px; bottom: 12px; padding: .72rem 1.05rem; }
+    .admin-kpi-grid { grid-template-columns: 1fr; }
+    .admin-main { padding: 1rem; }
+    .admin-page-head h1 { font-size: 2rem; }
+    .admin-nav { grid-template-columns: 1fr 1fr; }
+    .admin-actions .btn,
+    .admin-actions form,
+    .modal-head .btn {
+        width: auto;
+    }
+    .modal-content { margin-top: 3vh; width: 95%; max-height: 94vh; }
+}

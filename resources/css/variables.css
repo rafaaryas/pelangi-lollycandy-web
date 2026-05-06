@@ -1,0 +1,47 @@
+@font-face {
+    font-family: 'Matcha';
+    src: url('../fonts/Matcha.otf') format('opentype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Centra';
+    src: url('../fonts/centra1b.otf') format('opentype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Bubblegum';
+    src: url('../fonts/Bubblegum.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Dino';
+    src: url('../fonts/dino.otf') format('opentype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gwenchana';
+    src: url('../fonts/Gwenchana.ttf') format('truetype');
+    font-display: swap;
+}
+
+:root {
+    --color-blue: #4d8dff;
+    --color-pink: #f45b7a;
+    --color-yellow: #ffd95a;
+    --color-mint: #5ed6b3;
+    --color-bg: #f8fafc;
+    --color-text: #1f2937;
+    --color-muted: #64748b;
+    --color-white: #ffffff;
+    --radius-lg: 18px;
+    --radius-xl: 28px;
+    --radius-pill: 999px;
+    --shadow-soft: 0 14px 34px rgba(31, 41, 55, 0.09);
+    --shadow-hover: 0 16px 30px rgba(31, 41, 55, 0.14);
+    --container-max: 1120px;
+    --transition-fast: 0.22s ease;
+}
