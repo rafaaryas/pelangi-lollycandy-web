@@ -32,19 +32,32 @@
         </div>
         <div class="about-grid">
             <article class="card about-card about-card-media">
-                <img src="https://placehold.co/640x420?text=Produksi+Permen" alt="Placeholder produksi permen">
-                <h3>Kualitas Terjaga</h3>
-                <p>Placeholder: tulis cerita singkat tentang bahan, proses produksi, dan standar kualitas brand di sini.</p>
+                {{-- Image wrapper keeps any uploaded/replaced image cropped neatly inside the card. --}}
+                <div class="about-card-image">
+                    <img src="https://placehold.co/640x420?text=Produksi+Permen" alt="Placeholder produksi permen">
+                </div>
+                <div class="about-card-content">
+                    <h3>Kualitas Terjaga</h3>
+                    <p>Placeholder: tulis cerita singkat tentang bahan, proses produksi, dan standar kualitas brand di sini.</p>
+                </div>
             </article>
             <article class="card about-card about-card-media">
-                <img src="https://placehold.co/640x420?text=Varian+Warna" alt="Placeholder varian permen">
-                <h3>Varian Ceria</h3>
-                <p>Placeholder: jelaskan pilihan ukuran, bentuk, dan warna yang membuat produk mudah dipilih pelanggan.</p>
+                <div class="about-card-image">
+                    <img src="{{ asset('images/ceria.jpg') }}" alt="Placeholder varian permen">
+                </div>
+                <div class="about-card-content">
+                    <h3>Varian Ceria</h3>
+                    <p>Placeholder: jelaskan pilihan ukuran, bentuk, dan warna yang membuat produk mudah dipilih pelanggan.</p>
+                </div>
             </article>
             <article class="card about-card about-card-media">
-                <img src="https://placehold.co/640x420?text=Kemasan+Produk" alt="Placeholder kemasan produk">
-                <h3>Siap Dipasarkan</h3>
-                <p>Placeholder: tambahkan informasi reseller, grosir, event, atau kebutuhan custom produk di sini.</p>
+                <div class="about-card-image">
+                    <img src="https://placehold.co/640x420?text=Kemasan+Produk" alt="Placeholder kemasan produk">
+                </div>
+                <div class="about-card-content">
+                    <h3>Siap Dipasarkan</h3>
+                    <p>Placeholder: tambahkan informasi reseller, grosir, event, atau kebutuhan custom produk di sini.</p>
+                </div>
             </article>
         </div>
     </div>
@@ -57,13 +70,21 @@
             <h2>Best Seller Products</h2>
             <a class="btn btn-secondary" href="{{ route('products.index') }}">Lihat Semua</a>
         </div>
+        {{-- Product preview cards mirror the catalog cards: compact ecommerce hierarchy with details kept behind the CTA. --}}
         <div class="grid products-grid">
             @foreach($featuredProducts as $product)
-            <article class="card product-card-refined">
-                <img loading="lazy" class="product-image" src="{{ $product->images->first() ? asset('storage/'.$product->images->first()->image_path) : 'https://placehold.co/420x420?text=Candy' }}" alt="{{ $product->name }}">
-                <h3>{{ $product->name }}</h3>
-                <p class="price-tag">Rp {{ number_format($product->price_from, 0, ',', '.') }}</p>
-                <a class="btn btn-outline" href="{{ route('products.show', $product->slug) }}">Lihat Detail</a>
+            @php($productImagePath = $product->images->first()?->storagePath())
+            <article class="card product-card product-card-refined">
+                <div class="product-media">
+                    <img loading="lazy" class="product-image" src="{{ $productImagePath ? asset('storage/'.$productImagePath) : asset(\App\Models\ProductImage::PLACEHOLDER) }}" alt="{{ $product->name }}">
+                    @if($product->badge === 'new') <span class="product-badge">NEW</span> @endif
+                    @if($product->badge === 'best_seller') <span class="product-badge">BEST SELLER</span> @endif
+                </div>
+                <div class="product-card-body">
+                    <h3>{{ $product->name }}</h3>
+                    <p class="product-price">Rp {{ number_format($product->price_from, 0, ',', '.') }}</p>
+                    <a class="btn product-cta" href="{{ route('products.show', $product->slug) }}">Lihat Produk</a>
+                </div>
             </article>
             @endforeach
         </div>

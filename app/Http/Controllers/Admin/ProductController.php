@@ -90,7 +90,9 @@ class ProductController extends Controller
 
     private function syncPrimaryImage(Product $product, Request $request): void
     {
-        // Primary image replacement: one uploaded image is kept as the product preview.
+        // Product images are stored on Laravel's public disk:
+        // storage/app/public/products. Run `php artisan storage:link` so that
+        // public/storage points there and asset('storage/'.$path) can serve them.
         if (!$request->hasFile('image')) {
             return;
         }

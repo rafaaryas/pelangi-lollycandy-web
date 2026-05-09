@@ -22,18 +22,21 @@
             </select>
         </form>
 
+        {{-- Product cards stay compact: image, name, price, and CTA only. Longer details remain on the detail page. --}}
         <div class="grid products-grid" style="margin-top:1rem">
             @forelse($products as $product)
-            <article class="card">
-                <img loading="lazy" class="product-image" src="{{ $product->images->first() ? asset('storage/'.$product->images->first()->image_path) : 'https://placehold.co/420x420?text=Candy' }}" alt="{{ $product->name }}">
-                @if($product->badge === 'new') <span class="badge badge-new">Baru</span> @endif
-                @if($product->badge === 'best_seller') <span class="badge badge-best">Best Seller</span> @endif
-                <h3>{{ $product->name }}</h3>
-                <p>{{ $product->description }}</p>
-                <p>{{ $product->category->name }}</p>
-                <p>Size: {{ $product->variants->pluck('size')->filter()->unique()->join(', ') ?: '-' }}</p>
-                <p>Mulai Rp {{ number_format($product->price_from, 0, ',', '.') }}</p>
-                <a class="btn btn-outline" href="{{ route('products.show', $product->slug) }}">Detail</a>
+            @php($productImagePath = $product->images->first()?->storagePath())
+            <article class="card product-card">
+                <div class="product-media">
+                    <img loading="lazy" class="product-image" src="{{ $productImagePath ? asset('storage/'.$productImagePath) : asset(\App\Models\ProductImage::PLACEHOLDER) }}" alt="{{ $product->name }}">
+                    @if($product->badge === 'new') <span class="product-badge">NEW</span> @endif
+                    @if($product->badge === 'best_seller') <span class="product-badge">BEST SELLER</span> @endif
+                </div>
+                <div class="product-card-body">
+                    <h3>{{ $product->name }}</h3>
+                    <p class="product-price">Rp {{ number_format($product->price_from, 0, ',', '.') }}</p>
+                    <a class="btn product-cta" href="{{ route('products.show', $product->slug) }}">Lihat Produk</a>
+                </div>
             </article>
             @empty
             <div class="card">Produk tidak ditemukan.</div>

@@ -1,5 +1,6 @@
 @php
     $editing = $product !== null;
+    $productImagePath = $editing ? $product->images->first()?->storagePath() : null;
 @endphp
 
 {{-- Product identity fields: edit these to control what appears on the homepage/catalog. --}}
@@ -41,7 +42,7 @@
         <span>Pilih Foto</span>
         <input type="file" name="image" accept="image/*" data-image-preview-input="preview-{{ $product->id ?? 'new' }}">
     </label>
-    <img class="admin-image-preview" id="preview-{{ $product->id ?? 'new' }}" data-image-preview-img src="{{ $editing && $product->images->first() ? asset('storage/'.$product->images->first()->image_path) : 'https://placehold.co/420x300?text=Preview' }}" alt="Preview gambar produk">
+    <img class="admin-image-preview" id="preview-{{ $product->id ?? 'new' }}" data-image-preview-img src="{{ $productImagePath ? asset('storage/'.$productImagePath) : asset(\App\Models\ProductImage::PLACEHOLDER) }}" alt="Preview gambar produk">
 </div>
 <div class="form-group">
     <label>Status Aktif</label>

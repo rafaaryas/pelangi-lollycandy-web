@@ -4,7 +4,7 @@
 .hero p { color:var(--color-muted); max-width:58ch; }
 .stats { display:flex; gap:1rem; margin-top:1.4rem; }
 .stat { background:#fff; border-radius:14px; padding:.8rem 1rem; box-shadow: var(--shadow-soft); }
-.products-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.products-grid { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.15rem; align-items: stretch; }
 .product-image { width:100%; aspect-ratio: 1/1; object-fit:cover; border-radius: 14px; background:#f1f5f9; }
 .wave { display:block; width:100%; height:50px; background: linear-gradient(180deg, transparent 0%, #f8fafc 100%); }
 .admin-body {
@@ -495,9 +495,53 @@
 .section-head p { margin: 0; color: var(--color-muted); }
 .section-head-inline { display: flex; justify-content: space-between; align-items: center; gap: 1rem; max-width: none; }
 .home-about { padding-top: 2.2rem; }
-.about-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
-.about-card h3 { margin: .7rem 0 .45rem; }
-.about-card p { margin: 0; color: var(--color-muted); }
+
+/* About Us cards use a fixed media frame so any replacement image stays aligned and cannot overflow. */
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 1rem;
+}
+
+.about-card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+    min-height: 390px;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.about-card-image {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: inherit;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background: #eef2f7;
+}
+
+.about-card-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.about-card-content {
+    display: grid;
+    align-content: start;
+    gap: .55rem;
+    padding: 1rem 1.05rem 1.1rem;
+}
+
+.about-card h3 { margin: 0; color: #12233f; font-size: 1.08rem; line-height: 1.25; }
+.about-card p { margin: 0; color: var(--color-muted); line-height: 1.5; }
 .icon-placeholder {
     width: 52px;
     height: 52px;
@@ -506,8 +550,101 @@
     border: 1px solid rgba(77, 141, 255, 0.25);
 }
 .home-bestseller { padding-top: 1rem; }
-.product-card-refined { display: grid; gap: .6rem; }
-.price-tag { font-weight: 800; color: var(--color-blue); margin: 0; }
+
+/* Ecommerce product cards: compact preview only; descriptions and variants stay on detail views. */
+.product-card {
+    position: relative;
+    display: grid;
+    gap: .85rem;
+    padding: .85rem;
+    border: 1px solid rgba(244, 91, 122, .12);
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 14px 32px rgba(31, 41, 55, .08);
+    overflow: hidden;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(244, 91, 122, .28);
+    box-shadow: 0 22px 44px rgba(228, 80, 111, .16);
+}
+
+.product-media {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    background: #fff4f7;
+}
+
+.product-media .product-image {
+    display: block;
+    aspect-ratio: 4/3;
+    border-radius: 0;
+    transition: transform .32s ease;
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.045);
+}
+
+.product-badge {
+    position: absolute;
+    top: .65rem;
+    left: .65rem;
+    z-index: 1;
+    padding: .28rem .62rem;
+    border-radius: var(--radius-pill);
+    background: linear-gradient(135deg, #f45478, #ff7aa2);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: .03em;
+    box-shadow: 0 10px 20px rgba(244, 84, 120, .24);
+}
+
+.product-card-body {
+    display: grid;
+    gap: .55rem;
+}
+
+.product-card h3 {
+    min-height: 2.7em;
+    margin: 0;
+    color: #12233f;
+    font-size: 1.03rem;
+    font-weight: 900;
+    line-height: 1.35;
+}
+
+.product-price,
+.price-tag {
+    margin: .05rem 0 .15rem;
+    color: #e4506f;
+    font-size: 1.24rem;
+    font-weight: 950;
+    line-height: 1.1;
+}
+
+.product-cta {
+    width: 100%;
+    min-height: 44px;
+    margin-top: .1rem;
+    background: linear-gradient(135deg, #e4506f, #f86f95);
+    color: #fff;
+    border: 0;
+    border-radius: 14px;
+    box-shadow: 0 12px 24px rgba(228, 80, 111, .22);
+}
+
+.product-cta:hover {
+    background: linear-gradient(135deg, #d93f61, #f45b7a);
+    box-shadow: 0 16px 30px rgba(228, 80, 111, .28);
+}
+
+.product-card-refined { display: grid; }
 .home-marketplace { background: #f2f7ff; }
 .marketplace-card {
     display: flex;

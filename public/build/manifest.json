@@ -1,0 +1,44 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-CwU942Os.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "assets": [
+      "assets/Matcha-B4nJIQn8.otf",
+      "assets/centra1b-BHDDaSJn.otf",
+      "assets/Bubblegum-CYz23yZd.ttf",
+      "assets/dino-D3nyq5Rw.otf",
+      "assets/Gwenchana-BW7iYVev.ttf"
+    ]
+  },
+  "resources/fonts/Bubblegum.ttf": {
+    "file": "assets/Bubblegum-CYz23yZd.ttf",
+    "src": "resources/fonts/Bubblegum.ttf"
+  },
+  "resources/fonts/Gwenchana.ttf": {
+    "file": "assets/Gwenchana-BW7iYVev.ttf",
+    "src": "resources/fonts/Gwenchana.ttf"
+  },
+  "resources/fonts/Matcha.otf": {
+    "file": "assets/Matcha-B4nJIQn8.otf",
+    "src": "resources/fonts/Matcha.otf"
+  },
+  "resources/fonts/centra1b.otf": {
+    "file": "assets/centra1b-BHDDaSJn.otf",
+    "src": "resources/fonts/centra1b.otf"
+  },
+  "resources/fonts/dino.otf": {
+    "file": "assets/dino-D3nyq5Rw.otf",
+    "src": "resources/fonts/dino.otf"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-DQBtSRkl.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  }
+}

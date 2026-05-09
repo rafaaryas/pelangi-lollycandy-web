@@ -21,10 +21,11 @@
             </thead>
             <tbody>
                 @forelse($products as $product)
+                    @php($productImagePath = $product->images->first()?->storagePath())
                     <tr>
                         <td>
                             <div class="product-row">
-                                <img src="{{ $product->images->first() ? asset('storage/'.$product->images->first()->image_path) : 'https://placehold.co/80x80?text=IMG' }}" alt="{{ $product->name }}">
+                                <img src="{{ $productImagePath ? asset('storage/'.$productImagePath) : asset(\App\Models\ProductImage::PLACEHOLDER) }}" alt="{{ $product->name }}">
                                 <div>
                                     <strong>{{ $product->name }}</strong>
                                     <small>{{ $product->category->name ?? '-' }}</small>

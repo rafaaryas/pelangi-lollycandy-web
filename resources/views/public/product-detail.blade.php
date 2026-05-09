@@ -3,10 +3,11 @@
 @section('title', $product->name . ' - Pelangi Lollycandy')
 
 @section('content')
+@php($productImagePath = $product->images->first()?->storagePath())
 <section class="section">
     <div class="container" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
         <div class="card">
-            <img class="product-image" src="{{ $product->images->first() ? asset('storage/'.$product->images->first()->image_path) : 'https://placehold.co/420x420?text=Candy' }}" alt="{{ $product->name }}">
+            <img class="product-image" src="{{ $productImagePath ? asset('storage/'.$productImagePath) : asset(\App\Models\ProductImage::PLACEHOLDER) }}" alt="{{ $product->name }}">
         </div>
         <div class="card">
             <h1>{{ $product->name }}</h1>
