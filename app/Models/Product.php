@@ -2,18 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    // Catalog product fields shown on homepage, product pages, and admin tables.
     protected $fillable = [
         'category_id', 'name', 'slug', 'description', 'price_from',
-        'price_strike', 'badge', 'sku', 'weight_gram', 'flavor',
-        'shopee_url', 'favorite_clicks', 'click_count',
-        'published_at', 'is_active',
+        'badge', 'shopee_url', 'click_count', 'published_at', 'is_active',
     ];
 
     protected function casts(): array
@@ -35,8 +33,13 @@ class Product extends Model
         return $this->hasMany(ProductImage::class)->orderBy('sort_order');
     }
 
-    public function variants(): HasMany
+    public function scopeVisible(Builder $query): Builder
     {
-        return $this->hasMany(ProductVariant::class);
+        return $query
+            ->where('is_active', true)
+            ->whereHas('category', fn (Builder $query) => $query->where('is_active', true))
+            ->where(fn (Builder $query) => $query
+                ->whereNull('published_at')
+                ->orWhere('published_at', '<=', now()));
     }
 }

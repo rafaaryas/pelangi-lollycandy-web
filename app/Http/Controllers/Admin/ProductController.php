@@ -8,7 +8,6 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -19,6 +18,7 @@ class ProductController extends Controller
         // Product admin listing: eager-load related data used by table rows and modals.
         $products = Product::with(['category', 'images'])->latest()->paginate(12);
         $categories = Category::where('is_active', true)->orderBy('name')->get();
+
         return view('admin.products.index', compact('products', 'categories'));
     }
 
@@ -72,19 +72,6 @@ class ProductController extends Controller
         $validated['slug'] = Str::slug($validated['name']);
         $validated['is_active'] = $request->boolean('is_active');
 
-        // Compatibility for existing local databases that still have legacy product columns.
-        if (Schema::hasColumn('products', 'sku')) {
-            $validated['sku'] = $request->input('sku') ?: 'PROD-'.Str::upper(Str::random(8));
-        }
-
-        if (Schema::hasColumn('products', 'weight_gram')) {
-            $validated['weight_gram'] = $request->integer('weight_gram', 0);
-        }
-
-        if (Schema::hasColumn('products', 'flavor')) {
-            $validated['flavor'] = null;
-        }
-
         return $validated;
     }
 
@@ -93,7 +80,7 @@ class ProductController extends Controller
         // Product images are stored on Laravel's public disk:
         // storage/app/public/products. Run `php artisan storage:link` so that
         // public/storage points there and asset('storage/'.$path) can serve them.
-        if (!$request->hasFile('image')) {
+        if (! $request->hasFile('image')) {
             return;
         }
 
@@ -111,5 +98,4 @@ class ProductController extends Controller
             'sort_order' => 0,
         ]);
     }
-
 }

@@ -15,11 +15,7 @@ return new class extends Migration
 
         if (! Schema::hasColumn('products', 'click_count')) {
             Schema::table('products', function (Blueprint $table): void {
-                $column = $table->integer('click_count')->default(0);
-
-                if (Schema::hasColumn('products', 'favorite_clicks')) {
-                    $column->after('favorite_clicks');
-                }
+                $table->integer('click_count')->default(0)->after('shopee_url');
             });
         }
 

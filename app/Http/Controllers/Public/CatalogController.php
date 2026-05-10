@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\ProductClickLog;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class CatalogController extends Controller
 {
@@ -19,9 +17,8 @@ class CatalogController extends Controller
         };
 
         $products = Product::query()
-            ->with(['category', 'images', 'variants' => fn ($query) => $query->where('is_active', true)])
-            ->where('is_active', true)
-            ->whereHas('category', fn ($query) => $query->where('is_active', true))
+            ->visible()
+            ->with(['category', 'images'])
             ->when($request->filled('q'), fn ($query) => $query->where('name', 'like', '%'.$request->q.'%'))
             ->when($request->filled('category'), fn ($query) => $query->where('category_id', $request->integer('category')))
             ->when($request->filled('min_price'), fn ($query) => $query->where('price_from', '>=', $request->min_price))
@@ -35,7 +32,6 @@ class CatalogController extends Controller
 
         // Collapsible category filter data shown above the catalog grid.
         $categories = Category::query()
-            ->with(['products' => fn ($query) => $query->where('is_active', true)->orderBy('name')])
             ->where('is_active', true)
             ->orderBy('name')
             ->get();
@@ -45,12 +41,11 @@ class CatalogController extends Controller
 
     public function show(Product $product)
     {
-        Product::query()
-            ->whereKey($product->id)
-            ->update(['click_count' => DB::raw('COALESCE(click_count, 0) + 1')]);
+        Product::query()->whereKey($product->id)->increment('click_count');
 
-        $product->load(['images', 'variants', 'category']);
+        $product->load(['images', 'category']);
         $relatedProducts = Product::query()
+            ->visible()
             ->with('images')
             ->where('category_id', $product->category_id)
             ->whereKeyNot($product->id)
@@ -58,20 +53,5 @@ class CatalogController extends Controller
             ->get();
 
         return view('public.product-detail', compact('product', 'relatedProducts'));
-    }
-
-    public function click(Product $product, Request $request)
-    {
-        // Click counter used by the admin dashboard "Most Clicked Products" widget.
-        ProductClickLog::query()->create([
-            'product_id' => $product->id,
-            'target' => $request->input('target', 'marketplace'),
-            'ip_address' => $request->ip(),
-            'user_agent' => (string) $request->userAgent(),
-        ]);
-
-        $product->increment('favorite_clicks');
-
-        return response()->json(['ok' => true]);
     }
 }

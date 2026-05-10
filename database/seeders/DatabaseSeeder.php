@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
-use App\Models\HeroBanner;
 use App\Models\MarketplaceLink;
 use App\Models\Product;
 use App\Models\User;
@@ -26,7 +25,10 @@ class DatabaseSeeder extends Seeder
             'is_admin' => true,
         ]);
 
-        $category = Category::query()->updateOrCreate(['slug' => 'lollipop'], ['name' => 'Lollipop', 'description' => 'Varian lollipop premium']);
+        $category = Category::query()->updateOrCreate(['slug' => 'lollipop'], [
+            'name' => 'Lollipop',
+            'is_active' => true,
+        ]);
 
         $products = [
             'Lollipop Love Bulat 4cm isi 20', 'Lollipop Love Bulat 6cm', 'Lollipop Bulat Besar',
@@ -42,20 +44,12 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Permen premium colorful dengan rasa manis yang konsisten.',
                 'price_from' => rand(12000, 58000),
                 'badge' => rand(0, 1) ? 'new' : 'best_seller',
-                'sku' => 'SKU-'.strtoupper(Str::random(6)),
-                'weight_gram' => rand(75, 1000),
                 'is_active' => true,
             ]);
         }
 
-        HeroBanner::query()->updateOrCreate(['title' => 'Pelangi Lollycandy, Ceria Setiap Hari'], [
-            'subtitle' => 'Permen colorful premium untuk anak muda & keluarga.',
-            'is_active' => true,
-        ]);
-
         foreach (['Shopee', 'TikTok Shop', 'Tokopedia', 'Instagram', 'WhatsApp', 'Facebook'] as $platform) {
             MarketplaceLink::query()->updateOrCreate(['platform' => $platform], [
-                'label' => $platform,
                 'url' => 'https://example.com/'.Str::slug($platform),
                 'is_active' => true,
             ]);

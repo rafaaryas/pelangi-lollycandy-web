@@ -880,7 +880,6 @@
     background: #fff4f7;
     border: 1px solid rgba(244, 91, 122, .16);
 }
-.home-testimonials { padding-top: 3.4rem; }
 .testimonial-card p { color: var(--color-text); margin-top: 0; min-height: 78px; }
 .testimonial-card strong { display: block; }
 .testimonial-card small { color: var(--color-muted); }

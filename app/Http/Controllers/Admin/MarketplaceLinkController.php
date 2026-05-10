@@ -11,6 +11,7 @@ class MarketplaceLinkController extends Controller
     public function index()
     {
         $links = MarketplaceLink::latest()->paginate(15);
+
         return view('admin.marketplace-links.index', compact('links'));
     }
 
@@ -18,7 +19,6 @@ class MarketplaceLinkController extends Controller
     {
         $validated = $request->validate([
             'platform' => ['required', 'string', 'max:80', 'unique:marketplace_links,platform'],
-            'label' => ['nullable', 'string', 'max:80'],
             'url' => ['required', 'url', 'max:255'],
             'is_active' => ['nullable', 'boolean'],
         ]);
@@ -32,7 +32,6 @@ class MarketplaceLinkController extends Controller
     {
         $validated = $request->validate([
             'platform' => ['required', 'string', 'max:80', 'unique:marketplace_links,platform,'.$marketplace_link->id],
-            'label' => ['nullable', 'string', 'max:80'],
             'url' => ['required', 'url', 'max:255'],
             'is_active' => ['nullable', 'boolean'],
         ]);
@@ -45,6 +44,7 @@ class MarketplaceLinkController extends Controller
     public function destroy(MarketplaceLink $marketplace_link)
     {
         $marketplace_link->delete();
+
         return redirect()->route('admin.marketplace-links.index')->with('success', 'Marketplace link berhasil dihapus.');
     }
 }

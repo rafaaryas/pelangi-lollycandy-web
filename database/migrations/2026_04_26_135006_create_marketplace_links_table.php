@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('platform')->unique();
             $table->string('url');
-            $table->string('label')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

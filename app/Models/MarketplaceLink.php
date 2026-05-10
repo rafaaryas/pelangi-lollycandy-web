@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class MarketplaceLink extends Model
 {
-    protected $fillable = ['platform', 'url', 'label', 'is_active'];
+    protected $fillable = ['platform', 'url', 'is_active'];
 
     private const ICONS = [
         'facebook' => 'facebook.svg',
@@ -18,11 +18,6 @@ class MarketplaceLink extends Model
         'whatsapp' => 'whatsapp.svg',
         'website' => 'globe.svg',
     ];
-
-    public function displayName(): string
-    {
-        return $this->platform;
-    }
 
     public function iconPath(): string
     {

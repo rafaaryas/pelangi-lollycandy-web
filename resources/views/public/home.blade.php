@@ -16,7 +16,7 @@
             </div>
             <div class="stats">
                 <div class="stat">{{ $stats['products'] }} Produk</div>
-                <div class="stat">{{ $stats['variants'] }} Varian</div>
+                <div class="stat">{{ $stats['categories'] }} Kategori</div>
             </div>
         </div>
     </div>
@@ -63,7 +63,6 @@
     </div>
 </section>
 
-{{-- PRODUCT SECTION: data below comes from Admin > Produk and its variants. --}}
 <section class="section home-bestseller">
     <div class="container">
         <div class="section-head section-head-inline">
@@ -103,7 +102,7 @@
                     <span class="marketplace-icon-wrap">
                         <img src="{{ asset($marketplace->iconPath()) }}" alt="" aria-hidden="true" loading="lazy">
                     </span>
-                    <strong>{{ $marketplace->displayName() }}</strong>
+                    <strong>{{ $marketplace->platform }}</strong>
                     <span class="marketplace-visit">Kunjungi</span>
                 </a>
             @empty

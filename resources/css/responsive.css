@@ -257,7 +257,16 @@
         padding: 2rem 1rem 1.55rem;
         font-size: .9rem;
     }
-    .floating-wa.btn { display: none; }
+    .floating-wa {
+        right: 18px;
+        bottom: 18px;
+        width: 52px;
+        height: 52px;
+    }
+    .floating-wa svg {
+        width: 27px;
+        height: 27px;
+    }
 
     .admin-topbanner { padding: 0 .85rem; }
     .admin-menu-toggle {

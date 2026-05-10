@@ -30,24 +30,6 @@ return new class extends Migration
                 }
             });
         }
-
-        if (Schema::hasTable('product_variants')) {
-            Schema::table('product_variants', function (Blueprint $table): void {
-                if (!Schema::hasColumn('product_variants', 'name')) {
-                    $table->string('name')->after('product_id')->default('-');
-                }
-
-                if (!Schema::hasColumn('product_variants', 'stock')) {
-                    $table->unsignedInteger('stock')->after('size')->default(0);
-                }
-
-                foreach (['flavor', 'stock_info'] as $column) {
-                    if (Schema::hasColumn('product_variants', $column)) {
-                        $table->dropColumn($column);
-                    }
-                }
-            });
-        }
     }
 
     public function down(): void
