@@ -100,11 +100,14 @@
         <div class="marketplace-grid">
             @forelse($marketplaces as $marketplace)
                 <a class="card marketplace-card" href="{{ $marketplace->url }}" target="_blank" rel="noopener">
-                    <strong>{{ $marketplace->label ?? $marketplace->platform }}</strong>
-                    <span>Kunjungi</span>
+                    <span class="marketplace-icon-wrap">
+                        <img src="{{ asset($marketplace->iconPath()) }}" alt="" aria-hidden="true" loading="lazy">
+                    </span>
+                    <strong>{{ $marketplace->displayName() }}</strong>
+                    <span class="marketplace-visit">Kunjungi</span>
                 </a>
             @empty
-                <div class="card">Link marketplace belum tersedia.</div>
+                <div class="card marketplace-empty">Link marketplace belum tersedia.</div>
             @endforelse
         </div>
     </div>
@@ -115,9 +118,8 @@
         <div class="card cta-card">
             <h2>Siap Kolaborasi dengan Pelangi Lollycandy?</h2>
             <p>Hubungi tim kami untuk kebutuhan grosir, reseller, event, atau kolaborasi brand.</p>
-            <div style="display:flex;gap:.8rem;flex-wrap:wrap;justify-content:center;">
+            <div class="cta-actions">
                 <a class="btn btn-primary" href="{{ route('contact.index') }}">Hubungi Kami</a>
-                <a class="btn btn-secondary" href="#marketplace-hub">Lihat Marketplace</a>
             </div>
         </div>
     </div>

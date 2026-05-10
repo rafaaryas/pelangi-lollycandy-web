@@ -9,9 +9,12 @@
 <body class="admin-body">
 <div class="admin-topbanner">
     <img src="{{ asset('images/pelangi-logo.png') }}" alt="Pelangi Logo">
+    <button class="btn admin-menu-toggle" type="button" data-admin-nav-toggle aria-expanded="false" aria-controls="admin-sidebar">
+        Menu Admin
+    </button>
 </div>
 <div class="admin-shell">
-    <aside class="admin-sidebar ">
+    <aside class="admin-sidebar" id="admin-sidebar" data-admin-sidebar>
         <div>
                 <div class="admin-brand">
                     <strong>Pelangi Admin</strong>

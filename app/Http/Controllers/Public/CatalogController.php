@@ -7,22 +7,29 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductClickLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CatalogController extends Controller
 {
     public function index(Request $request)
     {
+        $sort = match ($request->query('sort')) {
+            'cheapest', 'highest', 'popular' => $request->query('sort'),
+            default => 'latest',
+        };
+
         $products = Product::query()
             ->with(['category', 'images', 'variants' => fn ($query) => $query->where('is_active', true)])
             ->where('is_active', true)
             ->whereHas('category', fn ($query) => $query->where('is_active', true))
             ->when($request->filled('q'), fn ($query) => $query->where('name', 'like', '%'.$request->q.'%'))
-            ->when($request->filled('category'), fn ($query) => $query->where('category_id', $request->category))
+            ->when($request->filled('category'), fn ($query) => $query->where('category_id', $request->integer('category')))
             ->when($request->filled('min_price'), fn ($query) => $query->where('price_from', '>=', $request->min_price))
             ->when($request->filled('max_price'), fn ($query) => $query->where('price_from', '<=', $request->max_price))
-            ->when($request->sort === 'cheapest', fn ($query) => $query->orderBy('price_from'))
-            ->when($request->sort === 'popular', fn ($query) => $query->orderByDesc('favorite_clicks'))
-            ->when(!$request->filled('sort') || $request->sort === 'latest', fn ($query) => $query->latest())
+            ->when($sort === 'cheapest', fn ($query) => $query->orderBy('price_from')->orderByDesc('id'))
+            ->when($sort === 'highest', fn ($query) => $query->orderByDesc('price_from')->orderByDesc('id'))
+            ->when($sort === 'popular', fn ($query) => $query->orderByDesc('click_count')->orderByDesc('id'))
+            ->when($sort === 'latest', fn ($query) => $query->latest())
             ->paginate(12)
             ->withQueryString();
 
@@ -33,11 +40,15 @@ class CatalogController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('public.products', compact('products', 'categories'));
+        return view('public.products', compact('products', 'categories', 'sort'));
     }
 
     public function show(Product $product)
     {
+        Product::query()
+            ->whereKey($product->id)
+            ->update(['click_count' => DB::raw('COALESCE(click_count, 0) + 1')]);
+
         $product->load(['images', 'variants', 'category']);
         $relatedProducts = Product::query()
             ->with('images')

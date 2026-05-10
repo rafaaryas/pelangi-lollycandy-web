@@ -12,7 +12,7 @@ class Product extends Model
     protected $fillable = [
         'category_id', 'name', 'slug', 'description', 'price_from',
         'price_strike', 'badge', 'sku', 'weight_gram', 'flavor',
-        'shopee_url', 'favorite_clicks',
+        'shopee_url', 'favorite_clicks', 'click_count',
         'published_at', 'is_active',
     ];
 
@@ -21,6 +21,7 @@ class Product extends Model
         return [
             'published_at' => 'datetime',
             'is_active' => 'boolean',
+            'click_count' => 'integer',
         ];
     }
 

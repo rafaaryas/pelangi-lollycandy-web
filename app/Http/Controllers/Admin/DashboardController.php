@@ -13,12 +13,13 @@ class DashboardController extends Controller
         $stats = [
             'products' => Product::count(),
             'categories' => Category::count(),
-            'clicks' => Product::sum('favorite_clicks'),
+            'clicks' => Product::sum('click_count'),
         ];
 
         $mostClicked = Product::query()
-            ->where('favorite_clicks', '>', 0)
-            ->orderByDesc('favorite_clicks')
+            ->where('click_count', '>', 0)
+            ->orderByDesc('click_count')
+            ->orderBy('name')
             ->take(5)
             ->get();
 

@@ -6,7 +6,7 @@
 <section class="section">
     <div class="container">
         <h1>Katalog Produk</h1>
-        <form method="GET" data-filter-form class="card" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;">
+        <form method="GET" data-filter-form class="card catalog-filter">
             <input name="q" value="{{ request('q') }}" placeholder="Cari produk...">
             <select name="category">
                 <option value="">Semua kategori</option>
@@ -14,16 +14,15 @@
                     <option value="{{ $cat->id }}" @selected(request('category') == $cat->id)>{{ $cat->name }}</option>
                 @endforeach
             </select>
-            <input name="flavor" value="{{ request('flavor') }}" placeholder="Rasa">
             <select name="sort">
-                <option value="latest">Terbaru</option>
-                <option value="cheapest" @selected(request('sort')==='cheapest')>Termurah</option>
-                <option value="popular" @selected(request('sort')==='popular')>Populer</option>
+                <option value="latest" @selected($sort === 'latest')>Terbaru</option>
+                <option value="cheapest" @selected($sort === 'cheapest')>Harga termurah</option>
+                <option value="highest" @selected($sort === 'highest')>Harga tertinggi</option>
+                <option value="popular" @selected($sort === 'popular')>Populer</option>
             </select>
         </form>
 
-        {{-- Product cards stay compact: image, name, price, and CTA only. Longer details remain on the detail page. --}}
-        <div class="grid products-grid" style="margin-top:1rem">
+        <div class="grid products-grid catalog-products-grid">
             @forelse($products as $product)
             @php($productImagePath = $product->images->first()?->storagePath())
             <article class="card product-card">

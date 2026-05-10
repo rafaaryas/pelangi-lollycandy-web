@@ -21,6 +21,7 @@ return new class extends Migration
             $table->enum('badge', ['none', 'new', 'best_seller'])->default('none');
             $table->string('shopee_url')->nullable();
             $table->unsignedBigInteger('favorite_clicks')->default(0);
+            $table->integer('click_count')->default(0);
             $table->timestamp('published_at')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();

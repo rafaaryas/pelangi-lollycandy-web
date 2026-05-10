@@ -10,13 +10,16 @@
     <header class="navbar" data-navbar>
         <div class="container navbar-inner" style="justify-content:space-between;">
             <a href="{{ route('home') }}" class="brand-mark" style="margin-right: auto;">
-                <img src="images/pelangi-logo.png" alt="Pelangi Lollycandy" style="height: 65px; width: auto;">
+                <img src="{{ asset('images/pelangi-logo.png') }}" alt="Pelangi Lollycandy" style="height: 65px; width: auto;">
             </a>
-            <nav data-nav-menu class="nav-menu">
+            <button class="btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-menu" style="display:inline-flex;">
+                Menu
+            </button>
+            <nav id="site-menu" data-nav-menu class="nav-menu">
                 <a class="btn nav-secondary {{ request()->routeIs('home') ? 'is-active' : '' }}" href="{{ route('home') }}" data-scroll-home>HOME</a>
                 <a class="btn nav-secondary" href="{{ route('home') }}#about-brand">ABOUT US</a>
                 <a class="btn nav-secondary" href="{{ route('home') }}#marketplace-hub">MARKETPLACE</a>
-                <a class="btn nav-secondary {{ request()->routeIs('product.*') ? 'is-active' : '' }}" href="{{ route('products.index') }}">PRODUCTS</a>
+                <a class="btn nav-secondary {{ request()->routeIs('products.*') ? 'is-active' : '' }}" href="{{ route('products.index') }}">PRODUCTS</a>
                 <a class="btn nav-secondary {{ request()->routeIs('contact.*') ? 'is-active' : '' }}" href="{{ route('contact.index') }}">CONTACT US</a>
             </nav>
         </div>

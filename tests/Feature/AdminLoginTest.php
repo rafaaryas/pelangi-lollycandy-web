@@ -10,6 +10,18 @@ class AdminLoginTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_guest_visiting_admin_dashboard_is_redirected_to_admin_login(): void
+    {
+        $this->get(route('admin.dashboard'))
+            ->assertRedirect(route('admin.login'));
+    }
+
+    public function test_guest_visiting_protected_admin_route_is_redirected_to_admin_login(): void
+    {
+        $this->get(route('admin.products.index'))
+            ->assertRedirect(route('admin.login'));
+    }
+
     public function test_admin_can_login_with_valid_credentials(): void
     {
         User::factory()->create([

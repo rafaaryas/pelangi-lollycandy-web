@@ -15,9 +15,10 @@
     box-shadow: var(--shadow-soft);
 }
 .btn-secondary {
-    background: transparent;
-    color: #fff;
-    box-shadow: var(--shadow-soft);
+    background: #fff;
+    color: #d93f61;
+    border-color: rgba(228, 80, 111, .22);
+    box-shadow: 0 12px 26px rgba(228, 80, 111, .14);
 }
 .btn-outline {
     border: 1px solid var(--color-blue);
@@ -31,12 +32,12 @@
 }
 .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
 .btn-primary:hover { background: #e4506f; }
-.btn-secondary:hover { background: #3f7de8; }
+.btn-secondary:hover { background: #fff4f7; color: #b8274b; border-color: rgba(228, 80, 111, .36); }
 .btn-secondary:active,
 .btn-secondary:focus {
-    background-color: #3b82f6;
-    border-color: #3b82f6;
-    color: #fff;
+    background-color: #fff4f7;
+    border-color: #e4506f;
+    color: #b8274b;
 }
 .btn-outline:hover { background: rgba(77, 141, 255, 0.08); }
 .btn-outline-white:hover { background: rgba(255, 255, 255, 0.16); }
@@ -45,5 +46,5 @@
 .badge-new { background:#dbeafe; color:#1d4ed8; }
 .badge-best { background:#fce7f3; color:#be185d; }
 .grid { display:grid; gap:1rem; }
-.marketplace-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:1rem; }
+.marketplace-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:1rem; }
 .floating-wa { position: fixed; right: 16px; bottom: 20px; z-index: 40; }

@@ -5,7 +5,7 @@
 @section('content')
 <div class="admin-page-head">
     <h1>Dashboard</h1>
-    <p>Ringkasan cepat performa katalog Pelangi Lollycandy.</p>
+    <p>Halaman Utama Admin.</p>
 </div>
 
 <div class="admin-kpi-grid">
@@ -16,10 +16,15 @@
 
 <div class="card admin-section-card">
     <h3>Most Clicked Products</h3>
-    @forelse($mostClicked as $item)
-        <p>{{ $item->name }} <span class="text-muted">({{ $item->favorite_clicks }} klik)</span></p>
-    @empty
-        <p class="text-muted">Belum ada data klik produk.</p>
-    @endforelse
+    <div class="admin-click-list">
+        @forelse($mostClicked as $item)
+            <div class="admin-click-item">
+                <span>{{ $item->name }}</span>
+                <strong>{{ number_format($item->click_count, 0, ',', '.') }} klik</strong>
+            </div>
+        @empty
+            <p class="text-muted admin-empty-state">Belum ada aktivitas kunjungan produk.</p>
+        @endforelse
+    </div>
 </div>
 @endsection
