@@ -167,8 +167,7 @@
     .admin-page-head p { text-align: left; }
     .admin-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .admin-form-grid,
-    .product-form-grid,
-    .variant-grid {
+    .product-form-grid {
         grid-template-columns: 1fr;
     }
     .form-col-2 { grid-column: auto; }
@@ -230,8 +229,7 @@
     }
     .product-card:hover .product-image { transform: none; }
     .product-card h3 { min-height: auto; }
-    .product-price,
-    .price-tag { font-size: 1.12rem; }
+    .product-price { font-size: 1.12rem; }
 
     .marketplace-card {
         grid-template-columns: auto minmax(0, 1fr);

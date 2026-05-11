@@ -10,7 +10,7 @@
         </div>
         <div class="hero-copy">
             <h1>PELANGI<br>LOLLYCANDY</h1>
-            <p>Permen colorful premium untuk anak muda & keluarga.</p>
+            <p>Hadirkan warna dan manis kebahagiaan dalam setiap gigitan.</p>
             <div class="hero-actions">
                 <a href="{{ route('products.index') }}" class="btn btn-outline-white hero-catalog-btn">Lihat Katalog</a>
             </div>
@@ -28,17 +28,17 @@
     <div class="container">
         <div class="section-head">
             <h2>About Us</h2>
-            <p>Pelangi Lollycandy menghadirkan permen colorful dengan bentuk menarik, kemasan ceria, dan varian yang mudah disukai keluarga.</p>
+            <p>Permen colorful dengan desain menarik, rasa lezat, dan varian beragam yang cocok untuk camilan, hadiah, maupun acara spesial..</p>
         </div>
         <div class="about-grid">
             <article class="card about-card about-card-media">
                 {{-- Image wrapper keeps any uploaded/replaced image cropped neatly inside the card. --}}
                 <div class="about-card-image">
-                    <img src="https://placehold.co/640x420?text=Produksi+Permen" alt="Placeholder produksi permen">
+                    <img src="{{ asset('images/kualitas.jpg') }}" alt="Placeholder produksi permen">
                 </div>
                 <div class="about-card-content">
                     <h3>Kualitas Terjaga</h3>
-                    <p>Placeholder: tulis cerita singkat tentang bahan, proses produksi, dan standar kualitas brand di sini.</p>
+                    <p>Pelangi Lollycandy dibuat dari bahan berkualitas dengan proses produksi yang higienis untuk menjaga rasa, warna, dan kualitas permen tetap konsisten..</p>
                 </div>
             </article>
             <article class="card about-card about-card-media">
@@ -47,16 +47,16 @@
                 </div>
                 <div class="about-card-content">
                     <h3>Varian Ceria</h3>
-                    <p>Placeholder: jelaskan pilihan ukuran, bentuk, dan warna yang membuat produk mudah dipilih pelanggan.</p>
+                    <p>Tersedia dalam berbagai bentuk, warna, dan rasa menarik yang cocok untuk anak-anak, remaja, hingga acara spesial dan hampers..</p>
                 </div>
             </article>
             <article class="card about-card about-card-media">
                 <div class="about-card-image">
-                    <img src="https://placehold.co/640x420?text=Kemasan+Produk" alt="Placeholder kemasan produk">
+                    <img src="{{ asset('images/pasar.jpg') }}" alt="Placeholder kemasan produk">
                 </div>
                 <div class="about-card-content">
                     <h3>Siap Dipasarkan</h3>
-                    <p>Placeholder: tambahkan informasi reseller, grosir, event, atau kebutuhan custom produk di sini.</p>
+                    <p>Mendukung pembelian retail, grosir, hingga kebutuhan acara dengan pilihan kemasan menarik yang siap dijual kembali atau dijadikan hadiah..</p>
                 </div>
             </article>
         </div>
@@ -66,7 +66,7 @@
 <section class="section home-bestseller">
     <div class="container">
         <div class="section-head section-head-inline">
-            <h2>Best Seller Products</h2>
+            <h2>Featured Products</h2>
             <a class="btn btn-secondary" href="{{ route('products.index') }}">Lihat Semua</a>
         </div>
         {{-- Product preview cards mirror the catalog cards: compact ecommerce hierarchy with details kept behind the CTA. --}}

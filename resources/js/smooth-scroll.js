@@ -1,5 +1,4 @@
-// Homepage smooth scrolling:
-// Handles navbar/CTA links that point to sections on the same page, such as #about-brand.
+
 document.querySelectorAll('a[href*="#"]').forEach((link) => {
     link.addEventListener('click', (event) => {
         const targetUrl = new URL(link.href, window.location.origin);
@@ -32,8 +31,6 @@ document.querySelectorAll('a[href*="#"]').forEach((link) => {
     });
 });
 
-// Homepage HOME button:
-// If the user is already on the homepage, scroll back to the top instead of reloading.
 document.querySelectorAll('a[data-scroll-home]').forEach((link) => {
     link.addEventListener('click', (event) => {
         const targetUrl = new URL(link.href, window.location.origin);
