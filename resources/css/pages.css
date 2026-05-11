@@ -14,7 +14,7 @@
 .admin-shell {
     display: grid;
     grid-template-columns: 325px minmax(0, 1fr);
-    min-height: 100vh;
+    min-height: calc(100vh - 70px);
     background: #fff;
 }
 
@@ -41,7 +41,7 @@
 .admin-sidebar {
     position: sticky;
     top: 0;
-    height: 100vh;
+    height: calc(100vh - 70px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -160,7 +160,7 @@
 
 .admin-kpi-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.25rem;
 }
 

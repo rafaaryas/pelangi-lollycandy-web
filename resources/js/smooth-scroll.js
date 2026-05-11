@@ -26,6 +26,7 @@ document.querySelectorAll('a[href*="#"]').forEach((link) => {
             behavior: 'smooth',
         });
 
+        link.blur();
         document.querySelector('[data-nav-menu]')?.classList.remove('is-open');
         window.history.pushState(null, '', targetUrl.hash);
     });
@@ -48,6 +49,7 @@ document.querySelectorAll('a[data-scroll-home]').forEach((link) => {
             behavior: 'smooth',
         });
 
+        link.blur();
         document.querySelector('[data-nav-menu]')?.classList.remove('is-open');
         window.history.pushState(null, '', targetUrl.pathname);
     });

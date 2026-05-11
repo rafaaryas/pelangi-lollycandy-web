@@ -6,6 +6,7 @@
     .products-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .catalog-products-grid { grid-template-columns: repeat(auto-fill, minmax(230px, 300px)); }
     .admin-shell { grid-template-columns: 280px minmax(0, 1fr); }
+    .admin-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 1024px) {

@@ -67,7 +67,7 @@ img { max-width: 100%; }
 }
 .nav-secondary:hover { background: #3f7de8; }
 .nav-secondary:active,
-.nav-secondary:focus {
+.nav-secondary:focus-visible {
     background-color: #3b82f6;
     border-color: #3b82f6;
     color: #fff;
