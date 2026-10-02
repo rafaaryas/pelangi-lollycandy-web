@@ -12,7 +12,7 @@ class MarketplaceLinkController extends Controller
     {
         $links = MarketplaceLink::latest()->paginate(15);
 
-        return view('admin.marketplace-links.index', compact('links'));
+        return view('admin.marketplace-links.marketplace', compact('links'));
     }
 
     public function store(Request $request)

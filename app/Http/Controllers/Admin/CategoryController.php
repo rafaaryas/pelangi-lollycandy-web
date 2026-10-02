@@ -14,7 +14,7 @@ class CategoryController extends Controller
         // Category admin listing: products are grouped by these records.
         $categories = Category::latest()->paginate(15);
 
-        return view('admin.categories.index', compact('categories'));
+        return view('admin.categories.categories', compact('categories'));
     }
 
     public function store(Request $request)
