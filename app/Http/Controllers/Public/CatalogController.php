@@ -12,7 +12,7 @@ class CatalogController extends Controller
     public function index(Request $request)
     {
         $sort = match ($request->query('sort')) {
-            'cheapest', 'highest', 'popular' => $request->query('sort'),
+            'cheapest', 'highest' => $request->query('sort'),
             default => 'latest',
         };
 
@@ -25,7 +25,6 @@ class CatalogController extends Controller
             ->when($request->filled('max_price'), fn ($query) => $query->where('price_from', '<=', $request->max_price))
             ->when($sort === 'cheapest', fn ($query) => $query->orderBy('price_from')->orderByDesc('id'))
             ->when($sort === 'highest', fn ($query) => $query->orderByDesc('price_from')->orderByDesc('id'))
-            ->when($sort === 'popular', fn ($query) => $query->orderByDesc('click_count')->orderByDesc('id'))
             ->when($sort === 'latest', fn ($query) => $query->latest())
             ->paginate(12)
             ->withQueryString();
@@ -41,8 +40,6 @@ class CatalogController extends Controller
 
     public function show(Product $product)
     {
-        Product::query()->whereKey($product->id)->increment('click_count');
-
         $product->load(['images', 'category']);
         $relatedProducts = Product::query()
             ->visible()

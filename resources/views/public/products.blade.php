@@ -18,7 +18,6 @@
                 <option value="latest" @selected($sort === 'latest')>Terbaru</option>
                 <option value="cheapest" @selected($sort === 'cheapest')>Harga termurah</option>
                 <option value="highest" @selected($sort === 'highest')>Harga tertinggi</option>
-                <option value="popular" @selected($sort === 'popular')>Populer</option>
             </select>
         </form>
 

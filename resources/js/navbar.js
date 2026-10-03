@@ -24,6 +24,13 @@ if (adminNavToggle && adminSidebar) {
         const isOpen = adminSidebar.classList.toggle('is-open');
         adminNavToggle.setAttribute('aria-expanded', String(isOpen));
     });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape' || !adminSidebar.classList.contains('is-open')) return;
+        adminSidebar.classList.remove('is-open');
+        adminNavToggle.setAttribute('aria-expanded', 'false');
+        adminNavToggle.focus();
+    });
 }
 
 if (navbar) {

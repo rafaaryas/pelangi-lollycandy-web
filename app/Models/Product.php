@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Product extends Model
 {
     protected $fillable = [
         'category_id', 'name', 'slug', 'description', 'price_from',
-        'badge', 'shopee_url', 'click_count', 'published_at', 'is_active',
+        'badge', 'shopee_url', 'published_at', 'is_active', 'stock_quantity', 'minimum_stock',
     ];
 
     protected function casts(): array
@@ -19,7 +20,8 @@ class Product extends Model
         return [
             'published_at' => 'datetime',
             'is_active' => 'boolean',
-            'click_count' => 'integer',
+            'stock_quantity' => 'decimal:3',
+            'minimum_stock' => 'decimal:3',
         ];
     }
 
@@ -31,6 +33,21 @@ class Product extends Model
     public function images(): HasMany
     {
         return $this->hasMany(ProductImage::class)->orderBy('sort_order');
+    }
+
+    public function saleDetails(): HasMany
+    {
+        return $this->hasMany(SaleDetail::class);
+    }
+
+    public function productionResults(): HasMany
+    {
+        return $this->hasMany(ProductionResult::class);
+    }
+
+    public function stockMovements(): MorphMany
+    {
+        return $this->morphMany(StockMovement::class, 'stockable');
     }
 
     public function scopeVisible(Builder $query): Builder

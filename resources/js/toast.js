@@ -1,4 +1,13 @@
-const toast = document.querySelector('[data-toast]');
-if (toast) {
-    setTimeout(() => toast.remove(), 2800);
-}
+document.querySelectorAll('[data-toast]').forEach((toast) => {
+    let timer;
+    const dismiss = () => toast.remove();
+    const startTimer = () => { timer = window.setTimeout(dismiss, 6500); };
+    const stopTimer = () => window.clearTimeout(timer);
+
+    toast.querySelector('[data-toast-dismiss]')?.addEventListener('click', dismiss);
+    toast.addEventListener('mouseenter', stopTimer);
+    toast.addEventListener('mouseleave', startTimer);
+    toast.addEventListener('focusin', stopTimer);
+    toast.addEventListener('focusout', startTimer);
+    startTimer();
+});

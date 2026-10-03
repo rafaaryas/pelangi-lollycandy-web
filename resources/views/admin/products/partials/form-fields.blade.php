@@ -5,39 +5,47 @@
 
 {{-- Product identity fields: edit these to control what appears on the homepage/catalog. --}}
 <div class="form-group">
-    <label>Nama Produk</label>
-    <input name="name" value="{{ old('name', $product->name ?? '') }}" required>
+    <label for="product-name-{{ $product->id ?? 'new' }}">Nama Produk <span aria-hidden="true">*</span></label>
+    <input id="product-name-{{ $product->id ?? 'new' }}" name="name" value="{{ old('name', $product->name ?? '') }}" required autocomplete="off" @if($errors->has('name')) aria-invalid="true" aria-describedby="error-name" @endif>
+    <x-field-error name="name" />
 </div>
 <div class="form-group">
-    <label>Kategori</label>
-    <select name="category_id" required>
+    <label for="product-category-{{ $product->id ?? 'new' }}">Kategori <span aria-hidden="true">*</span></label>
+    <select id="product-category-{{ $product->id ?? 'new' }}" name="category_id" required @if($errors->has('category_id')) aria-invalid="true" aria-describedby="error-category_id" @endif>
         @foreach($categories as $category)
             <option value="{{ $category->id }}" @selected(old('category_id', $product->category_id ?? '') == $category->id)>{{ $category->name }}</option>
         @endforeach
     </select>
+    <x-field-error name="category_id" />
 </div>
 <div class="form-group form-col-2">
-    <label>Deskripsi</label>
-    <textarea class="admin-description-field" name="description" rows="5" required>{{ old('description', $product->description ?? '') }}</textarea>
+    <label for="product-description-{{ $product->id ?? 'new' }}">Deskripsi <span aria-hidden="true">*</span></label>
+    <textarea id="product-description-{{ $product->id ?? 'new' }}" class="admin-description-field" name="description" rows="5" required @if($errors->has('description')) aria-invalid="true" aria-describedby="error-description" @endif>{{ old('description', $product->description ?? '') }}</textarea><x-field-error name="description" />
 </div>
 <div class="form-group">
-    <label>Harga Produk</label>
-    <input type="number" step="0.01" min="0" name="price_from" value="{{ old('price_from', $product->price_from ?? '') }}" required>
+    <label for="product-price-{{ $product->id ?? 'new' }}">Harga Produk <span aria-hidden="true">*</span></label>
+    <input id="product-price-{{ $product->id ?? 'new' }}" type="number" step="0.01" min="0" name="price_from" value="{{ old('price_from', $product->price_from ?? '') }}" required @if($errors->has('price_from')) aria-invalid="true" aria-describedby="error-price_from" @endif><x-field-error name="price_from" />
 </div>
 <div class="form-group">
-    <label>Badge</label>
-    <select name="badge">
+    <label for="product-minimum-stock-{{ $product->id ?? 'new' }}">Stok Minimum</label>
+    <input id="product-minimum-stock-{{ $product->id ?? 'new' }}" type="number" step="0.001" min="0" name="minimum_stock" value="{{ old('minimum_stock', $product->minimum_stock ?? 0) }}">
+    <small>Stok produk dikelola melalui menu Persediaan.</small>
+</div>
+<div class="form-group">
+    <label for="product-badge-{{ $product->id ?? 'new' }}">Badge <span aria-hidden="true">*</span></label>
+    <select id="product-badge-{{ $product->id ?? 'new' }}" name="badge" required @if($errors->has('badge')) aria-invalid="true" aria-describedby="error-badge" @endif>
         <option value="none" @selected(old('badge', $product->badge ?? 'none') === 'none')>None</option>
         <option value="new" @selected(old('badge', $product->badge ?? '') === 'new')>Baru</option>
         <option value="best_seller" @selected(old('badge', $product->badge ?? '') === 'best_seller')>Best Seller</option>
     </select>
+    <x-field-error name="badge" />
 </div>
 <div class="form-group">
-    <label>Link Shopee</label>
-    <input name="shopee_url" value="{{ old('shopee_url', $product->shopee_url ?? '') }}">
+    <label for="product-marketplace-url-{{ $product->id ?? 'new' }}">Link Shopee</label>
+    <input id="product-marketplace-url-{{ $product->id ?? 'new' }}" type="url" name="shopee_url" value="{{ old('shopee_url', $product->shopee_url ?? '') }}">
 </div>
 <div class="form-group">
-    <label>Upload Gambar</label>
+    <span class="field-label">Upload Gambar</span>
     <label class="admin-file-picker">
         <span>Pilih Foto</span>
         <input type="file" name="image" accept="image/*" data-image-preview-input="preview-{{ $product->id ?? 'new' }}">
@@ -45,7 +53,7 @@
     <img class="admin-image-preview" id="preview-{{ $product->id ?? 'new' }}" data-image-preview-img src="{{ $productImagePath ? asset('storage/'.$productImagePath) : asset(\App\Models\ProductImage::PLACEHOLDER) }}" alt="Preview gambar produk">
 </div>
 <div class="form-group">
-    <label>Status Aktif</label>
+    <span class="field-label">Status Aktif</span>
     <label style="display:flex;align-items:center;gap:.5rem">
         <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $product->is_active ?? true))> Aktif
     </label>

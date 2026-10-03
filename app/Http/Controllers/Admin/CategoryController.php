@@ -9,10 +9,13 @@ use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // Category admin listing: products are grouped by these records.
-        $categories = Category::latest()->paginate(15);
+        $categories = Category::withCount('products')
+            ->when($request->filled('q'), fn ($query) => $query->where('name', 'like', '%'.$request->q.'%'))
+            ->when($request->filled('status'), fn ($query) => $query->where('is_active', $request->status === 'active'))
+            ->latest()->paginate(15)->withQueryString();
 
         return view('admin.categories.categories', compact('categories'));
     }
@@ -40,7 +43,7 @@ class CategoryController extends Controller
         $validated['is_active'] = $request->boolean('is_active');
         $category->update($validated);
 
-        if (!$validated['is_active']) {
+        if (! $validated['is_active']) {
             $category->products()->update(['is_active' => false]);
         }
 
@@ -49,7 +52,9 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        // Products are removed by the category foreign key cascade; the UI warns before this runs.
+        if ($category->products()->exists()) {
+            return redirect()->route('admin.categories.index')->withErrors(['delete' => 'Kategori masih memiliki produk. Pindahkan produk ke kategori lain sebelum menghapus kategori ini.']);
+        }
         $category->delete();
 
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil dihapus.');
