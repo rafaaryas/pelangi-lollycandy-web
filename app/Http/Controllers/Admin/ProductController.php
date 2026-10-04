@@ -45,6 +45,9 @@ class ProductController extends Controller
             $this->syncPrimaryImage($product, $request);
         });
 
+        if ($request->expectsJson()) {
+            return response()->json(['message' => 'Produk berhasil ditambahkan.']);
+        }
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil ditambahkan.');
     }
 
@@ -57,12 +60,18 @@ class ProductController extends Controller
             $this->syncPrimaryImage($product, $request);
         });
 
-        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil diupdate.');
+        if ($request->expectsJson()) {
+            return response()->json(['message' => 'Produk berhasil diperbarui.']);
+        }
+        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil diperbarui.');
     }
 
     public function destroy(Product $product)
     {
         if ($product->saleDetails()->exists() || $product->productionResults()->exists() || $product->stockMovements()->exists()) {
+            if (request()->expectsJson()) {
+                return response()->json(['message' => 'Produk dengan histori transaksi atau stok tidak dapat dihapus. Nonaktifkan produk sebagai gantinya.'], 422);
+            }
             return redirect()->route('admin.products.index')->withErrors(['delete' => 'Produk dengan histori transaksi atau stok tidak dapat dihapus. Nonaktifkan produk sebagai gantinya.']);
         }
         foreach ($product->images as $image) {
@@ -70,6 +79,9 @@ class ProductController extends Controller
         }
         $product->delete();
 
+        if (request()->expectsJson()) {
+            return response()->json(['message' => 'Produk berhasil dihapus.']);
+        }
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil dihapus.');
     }
 
@@ -83,6 +95,7 @@ class ProductController extends Controller
             'minimum_stock' => ['nullable', 'numeric', 'min:0'],
             'badge' => ['required', 'in:none,new,best_seller'],
             'shopee_url' => ['nullable', 'url', 'max:255'],
+            'whatsapp_url' => ['nullable', 'url', 'max:255'],
             'published_at' => ['nullable', 'date'],
             'is_active' => ['nullable', 'boolean'],
             'image' => ['nullable', 'image', 'max:4096'],

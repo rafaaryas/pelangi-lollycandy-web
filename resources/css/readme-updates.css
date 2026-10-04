@@ -1,0 +1,112 @@
+/* Shared refinement for the existing storefront and operational admin. */
+:root { --admin-form-gap: 18px; --admin-field-height: 44px; --admin-modal-shadow: 0 22px 52px rgba(27,42,65,.20); }
+
+.login-page { background: radial-gradient(circle at 8% 3%, rgba(249,220,229,.72), transparent 35%), linear-gradient(135deg,#fffafa 0%,#fdf4f7 50%,#f8eef5 100%); }
+.login-stage { background: transparent; }
+.login-visual { display: block; overflow: hidden; padding: 0; border-radius: 11px; background: #fff0f1; }
+.login-visual > img { display: block; width: 100%; height: 100%; min-height: 100%; object-fit: cover; object-position: center; }
+.login-intro { margin-bottom: 1.45rem; }
+
+.admin-sidebar .admin-nav-link { gap: .78rem; min-height: 42px; padding: .6rem .78rem; font-size: .95rem; transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease; }
+.admin-sidebar .admin-nav-group > p { font-size: .69rem; color: rgba(255,255,255,.68); }
+.admin-sidebar .admin-nav-link:active { background: rgba(255,255,255,.16); }
+.admin-sidebar .admin-nav-link.is-pending { background: rgba(255,255,255,.16); color: #fff; box-shadow: inset 2px 0 var(--color-pink); }
+.public-page .nav-menu .nav-link.is-pending { background: #f3bdd0; color: #3b2134; }
+.admin-sidebar .admin-nav-link:focus-visible, .admin-body .btn:focus-visible, .admin-body .text-action:focus-visible, .admin-body .modal-close:focus-visible { outline: 3px solid rgba(244,91,122,.45); outline-offset: 2px; }
+
+.admin-body .modal-content { max-height: calc(100dvh - 32px); margin: 0 auto; border-radius: 18px; box-shadow: var(--admin-modal-shadow); }
+.admin-body .modal-small, .admin-body .product-modal-content { width: min(680px, calc(100vw - 32px)); }
+.admin-body .confirm-dialog, .admin-body .confirm-dialog-content { width: min(520px, calc(100vw - 32px)); }
+.admin-body .transaction-modal-content { width: min(800px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); margin: 0 auto; overflow-y: auto; }
+.admin-body .transaction-modal-content .modal-head { position: sticky; top: -1.25rem; z-index: 3; padding: .3rem 0 .85rem; background: #fff; border-bottom: 1px solid #f0e7eb; }
+.admin-body .transaction-modal-content .transaction-form-footer { position: sticky; bottom: -1.25rem; z-index: 3; padding: .9rem 0 .25rem; background: #fff; border-top: 1px solid #f0e7eb; }
+.admin-body .modal { display: grid; align-items: center; visibility: hidden; opacity: 0; pointer-events: none; transition: opacity 150ms ease, visibility 0s linear 150ms; }
+.admin-body .modal.is-open { visibility: visible; opacity: 1; pointer-events: auto; transition: opacity 200ms ease; }
+.admin-body .modal .modal-content { opacity: 0; transform: translateY(8px) scale(.985); transition: opacity 150ms ease, transform 150ms ease; }
+.admin-body .modal.is-open .modal-content { opacity: 1; transform: translateY(0) scale(1); transition: opacity 210ms ease, transform 210ms cubic-bezier(.22,1,.36,1); }
+
+.admin-body .module-form-grid, .admin-body .admin-form-grid, .admin-body .transaction-fields { grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--admin-form-gap) 20px; align-items: start; }
+.admin-body .module-field, .admin-body .form-group { min-width: 0; align-content: start; gap: 7px; font-size: .8rem; line-height: 1.35; }
+.admin-body .module-field > span:first-child, .admin-body .form-group > label { min-height: 19px; }
+.admin-body .required-marker, .admin-body .form-group label [aria-hidden="true"] { color: var(--brand-pink-dark); }
+.admin-body .module-field input, .admin-body .module-field select, .admin-body .module-field textarea,
+.admin-body .form-group input, .admin-body .form-group select, .admin-body .form-group textarea { min-height: var(--admin-field-height); border-radius: 9px; font: inherit; font-size: .84rem; }
+.admin-body .module-field textarea, .admin-body .form-group textarea { min-height: 76px; }
+.admin-body .module-field input:focus-visible, .admin-body .module-field select:focus-visible, .admin-body .module-field textarea:focus-visible,
+.admin-body .form-group input:focus-visible, .admin-body .form-group select:focus-visible, .admin-body .form-group textarea:focus-visible { border-color: var(--brand-pink); outline: 3px solid rgba(228,80,111,.16); outline-offset: 0; }
+.admin-body .module-field-wide, .admin-body .form-col-2, .admin-body .form-actions, .admin-body .modal-form-actions { grid-column: 1 / -1; }
+.admin-body .form-actions, .admin-body .modal-form-actions { justify-content: flex-end; align-items: center; padding-top: .65rem; border-top: 1px solid #f0e7eb; }
+.admin-body .checkbox-field { align-self: center; }
+.admin-body .modal .btn, .admin-body .module-page-head .btn { transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease; }
+.admin-body .modal .btn:active, .admin-body .module-page-head .btn:active { transform: translateY(1px); }
+.admin-body .modal .btn:disabled { opacity: .65; cursor: wait; }
+.admin-body .modal .btn.is-loading::before { content: ''; display: inline-block; width: 13px; height: 13px; margin-right: .4rem; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: admin-spin 700ms linear infinite; vertical-align: -2px; }
+.admin-body .is-refreshed { animation: table-refreshed 180ms ease-out both; }
+@keyframes table-refreshed { from { opacity: .65; } to { opacity: 1; } }
+.admin-body .transaction-modal-content .form-section { padding: .85rem; }
+.admin-body .transaction-modal-content [data-transaction-form], .admin-body .transaction-modal-content .form-section, .admin-body .transaction-modal-content .line-table-wrap { min-width: 0; max-width: 100%; }
+.admin-body .transaction-modal-content .line-table { min-width: 620px; }
+.admin-body .transaction-modal-content .modal-inline-error { margin-bottom: .8rem; }
+.admin-body .report-mode-tabs { display: flex; flex-wrap: wrap; gap: .55rem; margin: 1rem 0 .35rem; }
+.admin-body .report-mode-tabs a { padding: .58rem .85rem; border: 1px solid #dfe5ec; border-radius: 8px; background: #fff; color: #5a6c82; font-size: .78rem; font-weight: 700; transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease; }
+.admin-body .report-mode-tabs a:hover, .admin-body .report-mode-tabs a.is-active { border-color: #e8b7c6; background: #fce9ef; color: #aa3155; }
+.admin-body .stock-unit { display: block; color: #8794a5; font-size: .69rem; font-weight: 400; }
+.admin-body .module-table .table-actions { gap: .6rem; }
+.admin-body .module-table .text-action { display: inline-flex; align-items: center; gap: .22rem; white-space: nowrap; }
+.admin-body .report-stock-note { margin: .55rem 0 1rem; color: #718197; font-size: .75rem; }
+
+.public-page .product-card-link { display: flex; flex-direction: column; height: 100%; }
+.public-page .footer-links a img { display: inline-block; margin-right: .3rem; vertical-align: -.2rem; }
+.public-page .product-card-body { flex: 1; }
+.public-page .product-card-action { min-height: 40px; padding: 10px 14px; border: 0; border-radius: 10px; background: #fce7ee; color: #b82e55; font-family: 'Nunito Sans','Segoe UI',sans-serif; font-size: .82rem; font-weight: 750; transition: background-color 190ms ease, color 190ms ease, transform 190ms ease; }
+.public-page .product-card:hover .product-card-action, .public-page .product-card-link:focus-visible .product-card-action { background: #f9d7e3; color: #a9234c; transform: translateY(-1px); }
+.public-page .product-card:active .product-card-action { transform: translateY(0); }
+.public-page .product-card:hover .product-card-action .ui-icon { transform: translateX(3px); }
+.public-page .product-gallery-main.product-detail-media { position: relative; isolation: isolate; aspect-ratio: 1 / 1; background: #faf5f5; }
+.public-page .product-gallery-main.product-detail-media[data-media-shape="landscape"] { aspect-ratio: 6 / 5; }
+.public-page .product-gallery-main.product-detail-media::after { content: ''; position: absolute; inset: 0; z-index: -1; background: rgba(255,250,250,.72); }
+.public-page .product-gallery-main .product-gallery-backdrop { position: absolute; inset: -5%; z-index: -2; width: 110%; height: 110%; object-fit: cover; filter: blur(22px); opacity: .28; pointer-events: none; }
+.public-page .product-gallery-main .product-gallery-foreground { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: contain; opacity: 0; transform: scale(.985); transition: opacity 280ms ease, transform 280ms cubic-bezier(.22,1,.36,1); }
+.public-page .product-gallery-main.is-loaded .product-gallery-foreground { opacity: 1; transform: scale(1); }
+.public-page .product-gallery-main .product-gallery-foreground.is-switching { opacity: .55; }
+@media (hover: hover) { .public-page .product-gallery-main.is-loaded:hover .product-gallery-foreground { transform: scale(1.015); } }
+
+.public-page #main-content, .admin-body .admin-main, .login-page .login-container { animation: page-enter 220ms cubic-bezier(.22,1,.36,1); }
+.public-page.page-is-leaving #main-content, .admin-body.page-is-leaving .admin-main, .login-page.page-is-leaving .login-container { opacity: .4; transition: opacity 90ms ease; }
+@keyframes page-enter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 640px) {
+    .admin-body .module-form-grid, .admin-body .admin-form-grid, .admin-body .transaction-fields { grid-template-columns: 1fr; }
+    .admin-body .module-field-wide, .admin-body .form-col-2, .admin-body .form-actions, .admin-body .modal-form-actions { grid-column: auto; }
+    .admin-body .modal-small, .admin-body .product-modal-content, .admin-body .transaction-modal-content { width: 100%; max-height: calc(100dvh - 16px); margin: 0 auto; }
+    .admin-body .transaction-modal-content .transaction-form-footer { bottom: -1rem; flex-direction: column; align-items: stretch; }
+    .admin-body .transaction-modal-content .form-section-heading { flex-wrap: wrap; }
+    .admin-body .transaction-modal-content .transaction-form-footer > div { display: grid; grid-template-columns: 1fr; width: 100%; }
+    .admin-body .transaction-modal-content .transaction-form-footer .btn { width: 100%; min-width: 0; }
+    .admin-body .transaction-form .line-table-wrap { overflow: visible; }
+    .admin-body .transaction-form .line-table, .admin-body .transaction-form .line-table tbody { display: block; width: 100%; min-width: 0; }
+    .admin-body .transaction-form .line-table thead { display: none; }
+    .admin-body .transaction-form .line-table tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem .8rem; padding: .75rem 0; border-bottom: 1px solid #e9edf2; }
+    .admin-body .transaction-form .line-table td { display: block; min-width: 0; padding: 0; border: 0; }
+    .admin-body .transaction-form .line-table td:first-child { grid-column: 1 / -1; min-width: 0; }
+    .admin-body .transaction-form .line-table td[data-label]::before { content: attr(data-label); display: block; margin-bottom: .32rem; color: #6e7d91; font-size: .68rem; font-weight: 700; }
+    .admin-body .transaction-form .line-table td.line-remove-cell { grid-column: 1 / -1; justify-self: end; }
+    .admin-body .transaction-form .line-table input, .admin-body .transaction-form .line-table select { min-width: 0; }
+    .public-page .product-gallery-main.product-detail-media { aspect-ratio: 1 / 1; }
+    .public-page .product-gallery-main.product-detail-media[data-media-shape="landscape"] { aspect-ratio: 4 / 3; }
+    .public-page .product-card-action { padding: 8px 10px; min-height: 36px; font-size: .72rem; }
+}
+@media (max-width: 560px) {
+    .login-page .login-container { background: #fff; }
+    .login-stage { background: transparent; }
+    .login-visual { display: block; width: 100%; height: 185px; min-height: 185px; }
+    .login-visual > img { height: 185px; min-height: 185px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .public-page #main-content, .admin-body .admin-main, .login-page .login-container,
+    .admin-body .modal, .admin-body .modal .modal-content { animation: none !important; transition: none !important; }
+    .admin-body .is-refreshed, .admin-body .modal .btn.is-loading::before { animation: none !important; }
+    .public-page .product-gallery-main .product-gallery-foreground { transition: none !important; transform: none !important; }
+    .public-page .product-card-action, .admin-sidebar .admin-nav-link { transition: none !important; }
+    html { scroll-behavior: auto !important; }
+}

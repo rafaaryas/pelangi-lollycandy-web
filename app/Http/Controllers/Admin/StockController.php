@@ -42,7 +42,9 @@ class StockController extends Controller
         $materialCount = RawMaterial::where('is_active', true)->count();
         $productCount = Product::where('is_active', true)->whereNotNull('stock_quantity')->count();
 
-        return view('admin.stock.index', compact('items', 'tab', 'lowProducts', 'outProducts', 'lowMaterials', 'outMaterials', 'totalTracked', 'untrackedProducts', 'materialCount', 'productCount'));
+        $materialOptions = RawMaterial::where('is_active', true)->orderBy('name')->get(['id', 'name', 'unit']);
+
+        return view('admin.stock.index', compact('items', 'tab', 'lowProducts', 'outProducts', 'lowMaterials', 'outMaterials', 'totalTracked', 'untrackedProducts', 'materialCount', 'productCount', 'materialOptions'));
     }
 
     public function adjust(Request $request)
@@ -81,6 +83,30 @@ class StockController extends Controller
         });
 
         return back()->with('success', 'Penyesuaian stok dan histori berhasil disimpan.');
+    }
+
+    public function addMaterial(Request $request)
+    {
+        $data = $request->validate([
+            'raw_material_id' => ['required', 'exists:raw_materials,id'],
+            'quantity' => ['required', 'numeric', 'gt:0'],
+            'movement_date' => ['required', 'date'],
+            'notes' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        DB::transaction(function () use ($data): void {
+            $material = RawMaterial::query()->lockForUpdate()->findOrFail($data['raw_material_id']);
+            $material->increment('current_stock', $data['quantity']);
+            $material->stockMovements()->create([
+                'movement_type' => 'adjustment_in',
+                'quantity' => $data['quantity'],
+                'unit' => $material->unit,
+                'movement_date' => $data['movement_date'].' 12:00:00',
+                'notes' => $data['notes'] ?: 'Penambahan stok bahan baku',
+            ]);
+        });
+
+        return redirect()->route('admin.stock.index', ['tab' => 'materials'])->with('success', 'Stok bahan baku ditambahkan dan dicatat di laporan.');
     }
 
     public function history(string $type, int $id)

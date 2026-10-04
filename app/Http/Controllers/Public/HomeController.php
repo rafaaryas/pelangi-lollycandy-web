@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\MarketplaceLink;
 use App\Models\Product;
 
@@ -13,21 +12,12 @@ class HomeController extends Controller
     {
         $featuredProducts = Product::query()
             ->visible()
-            ->with('images')
+            ->with(['images', 'category'])
             ->latest()
-            ->take(6)
+            ->take(4)
             ->get();
 
         $marketplaces = MarketplaceLink::query()->where('is_active', true)->get();
-        $stats = [
-            'products' => Product::query()->visible()->count(),
-            'categories' => Category::query()
-                ->where('is_active', true)
-                ->whereHas('products', fn ($query) => $query->visible())
-                ->count(),
-            'marketplaces' => $marketplaces->count(),
-        ];
-
-        return view('public.home', compact('featuredProducts', 'marketplaces', 'stats'));
+        return view('public.home', compact('featuredProducts', 'marketplaces'));
     }
 }

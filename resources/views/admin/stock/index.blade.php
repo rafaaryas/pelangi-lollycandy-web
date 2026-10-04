@@ -3,7 +3,7 @@
 @section('title', 'Stok | Pelangi Admin')
 
 @section('content')
-<header class="module-page-head"><div><div class="admin-breadcrumb"><a href="{{ route('admin.dashboard') }}">Dashboard</a><span>/</span><strong>Persediaan</strong></div><h1>Stok</h1><p>Pantau ketersediaan bahan baku dan produk jadi.</p></div></header>
+<header class="module-page-head"><div><div class="admin-breadcrumb"><a href="{{ route('admin.dashboard') }}">Dashboard</a><span>/</span><strong>Persediaan</strong></div><h1>Stok</h1><p>Pantau ketersediaan bahan baku dan produk jadi.</p></div>@if($tab === 'materials')<button class="btn btn-primary" type="button" data-modal-open="add-material-stock"><x-icon name="plus" />Tambah Stok</button>@endif</header>
 <section class="stock-summary-row">
     <div><span>Total item tercatat</span><strong>{{ $totalTracked }}</strong></div>
     <div><span>Stok rendah</span><strong class="stock-low-number">{{ $lowProducts + $lowMaterials }}</strong></div>
@@ -28,15 +28,28 @@
             <tr>
                 <td>{{ $tab === 'products' ? 'PR-'.$item->id : $item->code }}</td><td><strong>{{ $item->name }}</strong></td>
                 @if($tab === 'products')<td>{{ $item->category->name }}</td>@endif
-                <td class="numeric-cell">{{ number_format($quantity, 3, ',', '.') }}</td><td class="numeric-cell">{{ number_format($minimum, 3, ',', '.') }}</td><td>{{ $tab === 'products' ? 'pcs' : $item->unit }}</td>
+                <td class="numeric-cell">{{ \App\Support\Quantity::format($quantity) }}</td><td class="numeric-cell">{{ \App\Support\Quantity::format($minimum) }}</td><td>{{ $tab === 'products' ? 'pcs' : $item->unit }}</td>
                 <td><span class="stock-state stock-{{ strtolower($status) }}">{{ $status }}</span></td>
-                <td><div class="table-actions"><x-icon-link icon="eye" label="Lihat histori {{ $item->name }}" href="{{ route('admin.stock.history', [$tab, $item->id]) }}" /><button class="text-action" type="button" data-modal-open="adjust-stock-{{ $tab }}-{{ $item->id }}"><x-icon name="sliders" size="16" />Sesuaikan</button></div></td>
+                <td><div class="table-actions"><x-icon-link icon="eye" label="Lihat histori {{ $item->name }}" href="{{ route('admin.stock.history', [$tab, $item->id]) }}" />@if($tab === 'materials')<button class="text-action" type="button" data-modal-open="add-material-stock" data-stock-material="{{ $item->id }}"><x-icon name="plus" size="16" />Tambah</button>@endif<button class="text-action" type="button" data-modal-open="adjust-stock-{{ $tab }}-{{ $item->id }}"><x-icon name="sliders" size="16" />Sesuaikan</button></div></td>
             </tr>
         @empty
             <tr><td colspan="8"><div class="table-empty"><strong>Belum ada item stok.</strong><span>Data bahan baku dan saldo awal produk akan muncul di sini.</span></div></td></tr>
         @endforelse
     </tbody></table>
 </div>
+@if($tab === 'materials')
+<div class="modal" id="add-material-stock" data-modal data-open-on-error="{{ $errors->any() && old('_form') === 'add-stock' ? 'true' : 'false' }}"><div class="modal-backdrop" data-modal-close></div><section class="modal-content modal-small">
+    <div class="modal-head"><h2>Tambah Stok Bahan Baku</h2><button type="button" class="modal-close" data-modal-close aria-label="Tutup dialog"><x-icon name="close" /></button></div>
+    <form method="POST" action="{{ route('admin.stock.add-material') }}" class="module-form-grid" data-loading-form>@csrf
+        <input type="hidden" name="_form" value="add-stock">
+        <label class="module-field module-field-wide"><span>Bahan baku <span class="required-marker" aria-hidden="true">*</span></span><select name="raw_material_id" required><option value="">Pilih bahan baku</option>@foreach($materialOptions as $material)<option value="{{ $material->id }}" @selected(old('raw_material_id') == $material->id)>{{ $material->name }} ({{ $material->unit }})</option>@endforeach</select><x-field-error name="raw_material_id" /></label>
+        <label class="module-field"><span>Jumlah ditambahkan <span class="required-marker" aria-hidden="true">*</span></span><input type="number" name="quantity" min="0.001" step="0.001" value="{{ old('quantity') }}" required><x-field-error name="quantity" /></label>
+        <label class="module-field"><span>Tanggal <span class="required-marker" aria-hidden="true">*</span></span><input type="date" name="movement_date" value="{{ old('movement_date', now()->toDateString()) }}" required><x-field-error name="movement_date" /></label>
+        <label class="module-field module-field-wide">Catatan<textarea name="notes" rows="2" placeholder="Contoh: penambahan persediaan">{{ old('notes') }}</textarea></label>
+        <div class="modal-form-actions"><button type="button" class="btn btn-secondary" data-modal-close>Batal</button><button type="submit" class="btn btn-primary">Simpan Stok</button></div>
+    </form>
+</section></div>
+@endif
 @foreach($items as $item)
 <div class="modal" id="adjust-stock-{{ $tab }}-{{ $item->id }}" data-modal><div class="modal-backdrop" data-modal-close></div><section class="modal-content modal-small">
     <div class="modal-head"><h2>Sesuaikan stok · {{ $item->name }}</h2><button type="button" class="modal-close" data-modal-close aria-label="Tutup"><x-icon name="close" /></button></div>

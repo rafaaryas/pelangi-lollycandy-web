@@ -43,7 +43,7 @@ class CatalogController extends Controller
         $product->load(['images', 'category']);
         $relatedProducts = Product::query()
             ->visible()
-            ->with('images')
+            ->with(['images', 'category'])
             ->where('category_id', $product->category_id)
             ->whereKeyNot($product->id)
             ->take(4)

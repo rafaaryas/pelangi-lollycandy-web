@@ -14,10 +14,10 @@
     <div class="admin-table-wrap">
         <table class="admin-table">
             <thead><tr><th>Nama</th><th>Slug</th><th>Jumlah Produk</th><th>Status</th><th>Aksi</th></tr></thead>
-            <tbody>
+            <tbody data-admin-list>
             @forelse($categories as $category)
                 <tr>
-                    <td>{{ $category->name }}</td>
+                    <td><strong>{{ $category->name }}</strong>@if($category->description)<small class="category-row-description">{{ $category->description }}</small>@endif</td>
                     <td>{{ $category->slug }}</td>
                     <td>{{ number_format($category->products_count, 0, ',', '.') }} produk</td>
                     <td><span class="state-text {{ $category->is_active ? 'state-active' : 'state-inactive' }}"><i></i>{{ $category->is_active ? 'Aktif' : 'Nonaktif' }}</span></td>
@@ -34,19 +34,21 @@
             </tbody>
         </table>
     </div>
-    <div style="margin-top:1rem;">{{ $categories->links() }}</div>
+    <div class="module-pagination" data-admin-pagination>{{ $categories->links() }}</div>
 </div>
 
+<div data-admin-modals>
 <div class="modal" id="category-create-modal" data-modal data-open-on-error="{{ $errors->any() && old('_form') === 'create' ? 'true' : 'false' }}">
     <div class="modal-backdrop" data-modal-close></div>
     <div class="modal-content modal-small">
-        <div class="modal-head"><h3>Tambah Kategori</h3><button data-modal-close class="btn btn-outline">Tutup</button></div>
-        <form method="POST" action="{{ route('admin.categories.store') }}" class="admin-form-grid" data-loading-form>
+        <div class="modal-head"><div><h3>Tambah Kategori</h3><p class="modal-subtitle">Tambahkan pengelompokan baru untuk katalog.</p></div><button type="button" data-modal-close class="modal-close" aria-label="Tutup dialog"><x-icon name="close" /></button></div>
+        <form method="POST" action="{{ route('admin.categories.store') }}" class="admin-form-grid" data-admin-ajax>
             @csrf
             <input type="hidden" name="_form" value="create">
             <div class="form-group form-col-2"><label for="category-create-name">Nama kategori <span aria-hidden="true">*</span></label><input id="category-create-name" name="name" value="{{ old('name') }}" required autocomplete="off" @if($errors->has('name')) aria-invalid="true" aria-describedby="error-name" @endif><x-field-error name="name" /></div>
+            <div class="form-group form-col-2"><label for="category-create-description">Deskripsi singkat <span class="field-optional">(opsional)</span></label><textarea id="category-create-description" name="description" rows="3" maxlength="240">{{ old('description') }}</textarea></div>
             <div class="form-group form-col-2"><label><input type="checkbox" name="is_active" value="1" checked> Aktif</label></div>
-            <div class="form-actions"><button class="btn btn-primary">Simpan</button></div>
+            <div class="form-actions"><button type="button" class="btn btn-secondary" data-modal-close>Batal</button><button type="submit" class="btn btn-primary">Tambah Kategori</button></div>
         </form>
     </div>
 </div>
@@ -55,14 +57,15 @@
 <div class="modal" id="edit-category-{{ $category->id }}" data-modal data-open-on-error="{{ $errors->any() && old('_form') === 'edit-'.$category->id ? 'true' : 'false' }}">
     <div class="modal-backdrop" data-modal-close></div>
     <div class="modal-content modal-small">
-        <div class="modal-head"><h3>Edit Kategori</h3><button data-modal-close class="btn btn-outline">Tutup</button></div>
-        <form method="POST" action="{{ route('admin.categories.update', $category) }}" class="admin-form-grid" data-loading-form>
+        <div class="modal-head"><h3>Edit Kategori</h3><button type="button" data-modal-close class="modal-close" aria-label="Tutup dialog"><x-icon name="close" /></button></div>
+        <form method="POST" action="{{ route('admin.categories.update', $category) }}" class="admin-form-grid" data-admin-ajax>
             @csrf @method('PUT')
             <input type="hidden" name="_form" value="edit-{{ $category->id }}">
             <div class="form-group form-col-2"><label for="category-edit-name-{{ $category->id }}">Nama kategori <span aria-hidden="true">*</span></label><input id="category-edit-name-{{ $category->id }}" name="name" value="{{ old('name', $category->name) }}" required @if($errors->has('name')) aria-invalid="true" aria-describedby="error-name" @endif><x-field-error name="name" /></div>
+            <div class="form-group form-col-2"><label for="category-edit-description-{{ $category->id }}">Deskripsi singkat <span class="field-optional">(opsional)</span></label><textarea id="category-edit-description-{{ $category->id }}" name="description" rows="3" maxlength="240">{{ old('description', $category->description) }}</textarea></div>
             <p class="form-help form-col-2">Jika kategori dibuat nonaktif, semua produk di dalam kategori ini otomatis ikut nonaktif.</p>
             <div class="form-group form-col-2"><label><input type="checkbox" name="is_active" value="1" @checked($category->is_active)> Aktif</label></div>
-            <div class="form-actions"><button class="btn btn-secondary">Update</button></div>
+            <div class="form-actions"><button type="button" class="btn btn-secondary" data-modal-close>Batal</button><button type="submit" class="btn btn-primary">Update Kategori</button></div>
         </form>
     </div>
 </div>
@@ -73,7 +76,7 @@
         <section class="modal-content modal-small confirm-dialog-content">
             <div class="modal-head"><h2>Hapus kategori?</h2><button type="button" class="modal-close" data-modal-close aria-label="Tutup dialog"><x-icon name="close" /></button></div>
             <p>Kategori <strong>{{ $category->name }}</strong> akan dihapus. Kategori ini belum memiliki produk.</p>
-            <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" data-loading-form class="modal-form-actions">
+            <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" data-admin-ajax class="modal-form-actions">
                 @csrf @method('DELETE')
                 <button type="button" data-modal-close class="btn btn-secondary">Batal</button>
                 <button class="btn btn-danger" type="submit"><x-icon name="trash" />Hapus kategori</button>
@@ -82,4 +85,5 @@
 </div>
 @endif
 @endforeach
+</div>
 @endsection

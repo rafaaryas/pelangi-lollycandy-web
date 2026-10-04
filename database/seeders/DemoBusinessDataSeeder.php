@@ -2,103 +2,148 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
 use App\Models\Customer;
+use App\Models\ProductionMaterial;
+use App\Models\ProductionResult;
 use App\Models\Product;
 use App\Models\Production;
 use App\Models\Purchase;
+use App\Models\PurchaseDetail;
 use App\Models\RawMaterial;
 use App\Models\Sale;
+use App\Models\SaleDetail;
+use App\Models\StockMovement;
 use App\Models\Supplier;
 use App\Services\InventoryTransactionService;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DemoBusinessDataSeeder extends Seeder
 {
     public function run(): void
     {
         if (app()->environment('production')) {
-            throw new \RuntimeException('Demo business data can only be seeded outside production.');
+            throw new \RuntimeException('Data demo hanya boleh digunakan di lingkungan non-produksi.');
         }
 
-        $category = Category::firstOrCreate(['slug' => 'demo-lolly'], ['name' => 'Lolly Pop', 'is_active' => true]);
-        $supplier = Supplier::firstOrCreate(['code' => 'DEMO-SUP-01'], [
-            'name' => 'Pemasok Bahan Manis', 'phone' => '081200000101', 'email' => 'bahan@example.test', 'is_active' => true,
-        ]);
-        $customers = collect([
-            ['name' => 'Toko Ceria', 'phone' => '081200000201'],
-            ['name' => 'Kedai Pelangi', 'phone' => '081200000202'],
-            ['name' => 'Rani Pratama', 'phone' => '081200000203'],
-        ])->map(fn (array $data) => Customer::firstOrCreate(['phone' => $data['phone']], $data + ['is_active' => true]));
+        $products = Product::query()->where('is_active', true)->orderBy('id')->get();
+        if ($products->isEmpty()) {
+            throw new \RuntimeException('Isi produk asli terlebih dahulu sebelum menjalankan seeder demo.');
+        }
 
-        $sugar = RawMaterial::firstOrCreate(['code' => 'DEMO-RM-01'], [
-            'name' => 'Gula Halus', 'unit' => 'kg', 'current_stock' => 0, 'minimum_stock' => 10, 'is_active' => true,
-        ]);
-        $flavor = RawMaterial::firstOrCreate(['code' => 'DEMO-RM-02'], [
-            'name' => 'Perisa Stroberi', 'unit' => 'liter', 'current_stock' => 0, 'minimum_stock' => 2, 'is_active' => true,
-        ]);
-        $sticks = RawMaterial::firstOrCreate(['code' => 'DEMO-RM-03'], [
-            'name' => 'Lolly Stick', 'unit' => 'pcs', 'current_stock' => 0, 'minimum_stock' => 100, 'is_active' => true,
-        ]);
+        $supplierNames = ['Pemasok Manis Nusantara', 'Sumber Kemasan Ceria', 'Aroma Rasa Indonesia', 'Sentra Aksesori Permen'];
+        $suppliers = collect($supplierNames)->map(fn (string $name, int $index) => Supplier::firstOrCreate(
+            ['code' => sprintf('DEMO-SUP-%02d', $index + 1)],
+            ['name' => $name, 'phone' => sprintf('081290010%03d', $index + 1), 'is_active' => true]
+        ));
 
-        $products = collect([
-            ['name' => 'Lolly Stroberi', 'slug' => 'demo-lolly-stroberi', 'price' => 7500],
-            ['name' => 'Lolly Jeruk', 'slug' => 'demo-lolly-jeruk', 'price' => 7500],
-            ['name' => 'Lolly Anggur', 'slug' => 'demo-lolly-anggur', 'price' => 8000],
-        ])->map(fn (array $data) => Product::firstOrCreate(['slug' => $data['slug']], [
-            'category_id' => $category->id, 'name' => $data['name'], 'description' => 'Produk demo untuk alur operasional.',
-            'price_from' => $data['price'], 'badge' => 'none', 'is_active' => true,
-            'stock_quantity' => 0, 'minimum_stock' => 20,
-        ]));
+        $customerNames = ['Toko Ceria', 'Kedai Pelangi', 'Mira Andini', 'Toko Manis Jaya', 'Nadia Putri', 'Hampers Kita', 'Rani Pratama', 'Toko Bintang', 'Ayu Lestari', 'Kios Bahagia', 'Nusa Gift', 'Dina Maharani'];
+        $customers = collect($customerNames)->map(fn (string $name, int $index) => Customer::firstOrCreate(
+            ['phone' => sprintf('081290020%03d', $index + 1)],
+            ['name' => $name, 'is_active' => true]
+        ));
+
+        $materialData = [
+            ['Gula Pasir', 'kg', 8], ['Glucose Syrup', 'kg', 4], ['Pewarna Makanan', 'liter', 0.3],
+            ['Perisa Buah', 'liter', 0.4], ['Stik Lolipop', 'pcs', 150], ['Plastik Kemasan', 'pcs', 120],
+            ['Pita Kemasan', 'pcs', 70], ['Label Produk', 'pcs', 100],
+        ];
+        $materials = collect($materialData)->map(fn (array $data, int $index) => RawMaterial::firstOrCreate(
+            ['code' => sprintf('DEMO-RM-%02d', $index + 1)],
+            ['name' => $data[0], 'unit' => $data[1], 'current_stock' => 0, 'minimum_stock' => $data[2], 'is_active' => true]
+        ));
+
+        // Initialise only operational stock; existing catalog records and categories are reused.
+        $products->each(function (Product $product): void {
+            if ($product->stock_quantity === null && ! $product->stockMovements()->exists()) {
+                $product->update(['stock_quantity' => 0]);
+            }
+        });
 
         $service = app(InventoryTransactionService::class);
         $start = CarbonImmutable::now()->startOfMonth()->subMonths(5);
-        $productionQuantities = [90, 100, 105, 110, 115, 120];
-        $salesQuantities = [42, 55, 60, 63, 68, 72];
+        $batches = [90, 105, 98, 115, 110, 125];
 
         foreach (range(0, 5) as $offset) {
             $month = $start->addMonths($offset);
             $suffix = $month->format('Ym');
-            $purchaseNumber = 'DEMO-PB-'.$suffix;
-            $productionNumber = 'DEMO-PRD-'.$suffix;
-            $invoiceNumber = 'DEMO-PJ-'.$suffix;
+            $currentDay = CarbonImmutable::now()->day;
+            foreach (range(1, 2) as $cycle) {
+                $batch = $batches[$offset] + ($cycle === 2 ? 14 : 0);
+                $purchaseDate = $offset === 5 ? $month->addDays(min($cycle === 1 ? 1 : 3, $currentDay) - 1) : $month->addDays($cycle === 1 ? 2 : 15);
+                $productionDate = $offset === 5 ? $month->addDays(min($cycle === 1 ? 2 : 4, $currentDay) - 1) : $purchaseDate->addDays(2);
+                $product = $products[($offset * 2 + $cycle - 1) % $products->count()];
+                $purchaseNumber = "DEMO-PB-{$suffix}-{$cycle}";
+                $productionNumber = "DEMO-PRD-{$suffix}-{$cycle}";
 
-            if (! Purchase::where('reference_number', $purchaseNumber)->exists()) {
-                $service->savePurchase(null, [
-                    'supplier_id' => $supplier->id, 'purchase_date' => $month->startOfMonth()->toDateString(),
-                    'reference_number' => $purchaseNumber, 'notes' => 'Data demo bulanan.',
-                ], [
-                    ['raw_material_id' => $sugar->id, 'quantity' => 3, 'unit_price' => 18000],
-                    ['raw_material_id' => $flavor->id, 'quantity' => 0.6, 'unit_price' => 45000],
-                    ['raw_material_id' => $sticks->id, 'quantity' => $productionQuantities[$offset], 'unit_price' => 150],
-                ], true);
+                if (! Purchase::where('reference_number', $purchaseNumber)->exists()) {
+                    $lines = [[8, 18000], [5, 26000], [0.24, 175000], [0.5, 90000], [$batch + 28, 180], [$batch + 22, 260], [45, 350], [$batch + 15, 110]];
+                    $service->savePurchase(null, [
+                        'supplier_id' => $suppliers[($offset + $cycle) % $suppliers->count()]->id,
+                        'purchase_date' => $purchaseDate->toDateString(), 'reference_number' => $purchaseNumber,
+                        'notes' => 'Pembelian bahan dan kemasan untuk produksi demo.',
+                    ], collect($lines)->map(fn (array $line, int $index) => [
+                        'raw_material_id' => $materials[$index]->id, 'quantity' => $line[0], 'unit_price' => $line[1],
+                    ])->all(), true);
+                }
+                if ($offset === 5) {
+                    $purchase = Purchase::where('reference_number', $purchaseNumber)->firstOrFail();
+                    $purchase->update(['purchase_date' => $purchaseDate->toDateString()]);
+                    StockMovement::where('source_type', PurchaseDetail::class)->whereIn('source_id', $purchase->details()->pluck('id'))->update(['movement_date' => $purchaseDate]);
+                }
+
+                if (! Production::where('production_number', $productionNumber)->exists()) {
+                    $used = [3.2, 1.8, 0.1, 0.18, $batch, $batch, 40, $batch];
+                    $service->saveProduction(null, [
+                        'production_date' => $productionDate->toDateString(), 'production_number' => $productionNumber,
+                        'notes' => 'Batch demo menggunakan produk katalog yang sudah ada.',
+                    ], collect($used)->map(fn (float|int $quantity, int $index) => [
+                        'raw_material_id' => $materials[$index]->id, 'quantity_used' => $quantity,
+                    ])->all(), [['product_id' => $product->id, 'quantity_produced' => $batch]], true);
+                }
+                if ($offset === 5) {
+                    $production = Production::where('production_number', $productionNumber)->firstOrFail();
+                    $production->update(['production_date' => $productionDate->toDateString()]);
+                    StockMovement::where('source_type', ProductionMaterial::class)->whereIn('source_id', $production->materials()->pluck('id'))->update(['movement_date' => $productionDate]);
+                    StockMovement::where('source_type', ProductionResult::class)->whereIn('source_id', $production->results()->pluck('id'))->update(['movement_date' => $productionDate]);
+                }
+
+                foreach (range(1, 2) as $saleIndex) {
+                    $invoice = "DEMO-PJ-{$suffix}-{$cycle}-{$saleIndex}";
+                    $saleDate = $offset === 5 ? $month->addDays(min($cycle === 1 ? ($saleIndex === 1 ? 3 : 4) : 4, $currentDay) - 1) : $productionDate->addDays($saleIndex);
+                    if (Sale::where('invoice_number', $invoice)->exists()) {
+                        if ($offset === 5) {
+                            $sale = Sale::where('invoice_number', $invoice)->firstOrFail();
+                            $sale->update(['sale_date' => $saleDate->toDateString()]);
+                            StockMovement::where('source_type', SaleDetail::class)->whereIn('source_id', $sale->details()->pluck('id'))->update(['movement_date' => $saleDate]);
+                        }
+                        continue;
+                    }
+                    $quantity = $saleIndex === 1 ? (int) floor($batch * 0.32) : (int) floor($batch * 0.38);
+                    $service->saveSale(null, [
+                        'customer_id' => $customers[($offset * 4 + $cycle * 2 + $saleIndex) % $customers->count()]->id,
+                        'sale_date' => $saleDate->toDateString(),
+                        'invoice_number' => $invoice, 'notes' => 'Penjualan demo dari batch produksi.',
+                    ], [['product_id' => $product->id, 'quantity' => $quantity, 'unit_price' => $product->price_from]], true);
+                }
             }
 
-            if (! Production::where('production_number', $productionNumber)->exists()) {
-                $quantity = $productionQuantities[$offset];
-                $service->saveProduction(null, [
-                    'production_date' => $month->addDays(1)->toDateString(),
-                    'production_number' => $productionNumber, 'notes' => 'Data demo bulanan.',
-                ], [
-                    ['raw_material_id' => $sugar->id, 'quantity_used' => 2],
-                    ['raw_material_id' => $flavor->id, 'quantity_used' => 0.4],
-                    ['raw_material_id' => $sticks->id, 'quantity_used' => $quantity],
-                ], [
-                    ['product_id' => $products[$offset % 3]->id, 'quantity_produced' => $quantity],
-                ], true);
+            $stockNote = 'DEMO-STOCK-'.$suffix.' · Penambahan stok kemasan';
+            $material = $materials[5];
+            if (! $material->stockMovements()->where('notes', $stockNote)->exists()) {
+                DB::transaction(function () use ($material, $month, $stockNote): void {
+                    $locked = RawMaterial::query()->lockForUpdate()->findOrFail($material->id);
+                    $locked->increment('current_stock', 20);
+                    $locked->stockMovements()->create([
+                        'movement_type' => 'adjustment_in', 'quantity' => 20, 'unit' => $locked->unit,
+                        'movement_date' => $month->addDays(min(12, CarbonImmutable::now()->day) - 1)->setTime(12, 0), 'notes' => $stockNote,
+                    ]);
+                });
             }
-
-            if (! Sale::where('invoice_number', $invoiceNumber)->exists()) {
-                $quantity = $salesQuantities[$offset];
-                $unitPrice = (float) $products[$offset % 3]->price_from;
-                $service->saveSale(null, [
-                    'customer_id' => $customers[$offset % $customers->count()]->id,
-                    'sale_date' => $month->addDays(2)->toDateString(),
-                    'invoice_number' => $invoiceNumber, 'notes' => 'Data demo bulanan.',
-                ], [[
-                    'product_id' => $products[$offset % 3]->id, 'quantity' => $quantity, 'unit_price' => $unitPrice,
-                ]], true);
+            if ($offset === 5) {
+                $material->stockMovements()->where('notes', $stockNote)
+                    ->update(['movement_date' => $month->addDays(min(12, $currentDay) - 1)->setTime(12, 0)]);
             }
         }
     }

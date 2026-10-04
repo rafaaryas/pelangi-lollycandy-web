@@ -28,7 +28,7 @@
                         @if($key === 'is_active')
                             <span class="state-text {{ $item->is_active ? 'state-active' : 'state-inactive' }}"><i></i>{{ $item->is_active ? 'Aktif' : 'Nonaktif' }}</span>
                         @elseif(in_array($key, ['current_stock', 'minimum_stock'], true))
-                            {{ number_format((float) $item->{$key}, 3, ',', '.') }}
+                            {{ \App\Support\Quantity::format($item->{$key}) }}
                         @elseif(str_ends_with($key, '_count'))
                             {{ number_format($item->{$key}, 0, ',', '.') }}
                         @else
@@ -78,7 +78,7 @@
                 @elseif(($field['type'] ?? '') === 'textarea')
                     <label class="module-field module-field-wide">{{ $field['label'] }}<textarea name="{{ $field['name'] }}" rows="2" @if($errors->has($field['name'])) aria-invalid="true" aria-describedby="error-{{ $field['name'] }}" @endif>{{ old($field['name'], $value) }}</textarea><x-field-error :name="$field['name']" /></label>
                 @else
-                    <label class="module-field">{{ $field['label'] }}@if($field['required'] ?? false) <span aria-hidden="true">*</span>@endif<input name="{{ $field['name'] }}" type="{{ $field['type'] ?? 'text' }}" value="{{ old($field['name'], $value) }}" @if(isset($field['step'])) step="{{ $field['step'] }}" min="0" @endif @required($field['required'] ?? false) @if($errors->has($field['name'])) aria-invalid="true" aria-describedby="error-{{ $field['name'] }}" @endif><x-field-error :name="$field['name']" /></label>
+                    <label class="module-field"><span>{{ $field['label'] }}@if($field['required'] ?? false) <span class="required-marker" aria-hidden="true">*</span>@endif</span><input name="{{ $field['name'] }}" type="{{ $field['type'] ?? 'text' }}" value="{{ old($field['name'], $value) }}" @if(isset($field['step'])) step="{{ $field['step'] }}" min="0" @endif @required($field['required'] ?? false) @if($errors->has($field['name'])) aria-invalid="true" aria-describedby="error-{{ $field['name'] }}" @endif><x-field-error :name="$field['name']" /></label>
                 @endif
             @endforeach
             <div class="modal-form-actions"><button type="button" class="btn btn-secondary" data-modal-close>Tutup</button><button class="btn btn-primary" type="submit">Simpan perubahan</button></div>
@@ -117,7 +117,7 @@
                 @elseif(($field['type'] ?? '') === 'textarea')
                     <label class="module-field module-field-wide">{{ $field['label'] }}<textarea name="{{ $field['name'] }}" rows="2" @if($errors->has($field['name'])) aria-invalid="true" aria-describedby="error-{{ $field['name'] }}" @endif>{{ old($field['name']) }}</textarea><x-field-error :name="$field['name']" /></label>
                 @else
-                    <label class="module-field">{{ $field['label'] }}@if($field['required'] ?? false) <span aria-hidden="true">*</span>@endif<input name="{{ $field['name'] }}" type="{{ $field['type'] ?? 'text' }}" value="{{ old($field['name']) }}" placeholder="{{ $field['placeholder'] ?? '' }}" @if(isset($field['step'])) step="{{ $field['step'] }}" min="0" @endif @required($field['required'] ?? false) @if($errors->has($field['name'])) aria-invalid="true" aria-describedby="error-{{ $field['name'] }}" @endif><x-field-error :name="$field['name']" /></label>
+                    <label class="module-field"><span>{{ $field['label'] }}@if($field['required'] ?? false) <span class="required-marker" aria-hidden="true">*</span>@endif</span><input name="{{ $field['name'] }}" type="{{ $field['type'] ?? 'text' }}" value="{{ old($field['name']) }}" placeholder="{{ $field['placeholder'] ?? '' }}" @if(isset($field['step'])) step="{{ $field['step'] }}" min="0" @endif @required($field['required'] ?? false) @if($errors->has($field['name'])) aria-invalid="true" aria-describedby="error-{{ $field['name'] }}" @endif><x-field-error :name="$field['name']" /></label>
                 @endif
             @endforeach
             @if($title === 'Bahan Baku')

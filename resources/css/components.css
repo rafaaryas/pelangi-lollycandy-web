@@ -63,6 +63,23 @@
     box-shadow: 0 14px 28px rgba(18, 140, 126, .24), 0 4px 10px rgba(17, 24, 39, .14);
     transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
 }
+.floating-wa::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    right: calc(100% + 12px);
+    top: 50%;
+    width: max-content;
+    padding: .5rem .7rem;
+    border-radius: 6px;
+    background: #173047;
+    color: #fff;
+    font-size: .82rem;
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(4px, -50%);
+    transition: opacity 160ms ease, transform 160ms ease;
+}
 .floating-wa svg {
     width: 30px;
     height: 30px;
@@ -72,10 +89,15 @@
 .floating-wa:hover,
 .floating-wa:focus-visible {
     background: #20c261;
-    transform: translateY(-2px) scale(1.04);
+    transform: translateY(-2px);
     box-shadow: 0 18px 34px rgba(18, 140, 126, .3), 0 6px 14px rgba(17, 24, 39, .16);
 }
+.floating-wa:hover::after,
+.floating-wa:focus-visible::after { opacity: 1; transform: translate(0, -50%); }
 .floating-wa:focus-visible {
     outline: 3px solid rgba(37, 211, 102, .32);
     outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+    .nav-menu .nav-link, .btn, .floating-wa, .floating-wa::after { transition-duration: 0.01ms; }
 }

@@ -3,88 +3,69 @@
 @section('title', 'Home - Pelangi Lollycandy')
 
 @section('content')
-<section class="hero hero-like-reference">
+<section id="home-hero" class="hero hero-like-reference" aria-labelledby="home-title">
     <div class="container hero-grid hero-grid-ref">
         <div class="hero-illustration">
-            <img src="{{ asset('images/lollipop-banner.png') }}" alt="Lollipop Illustration" class="hero-lollipop">
+            <img src="{{ asset('images/pelangi-hero-candy.png') }}" alt="Colorful rainbow lollipops and candy" class="hero-lollipop" width="3168" height="1344" fetchpriority="high">
         </div>
         <div class="hero-copy">
-            <h1>PELANGI<br>LOLLYCANDY</h1>
-            <p>Hadirkan warna dan manis kebahagiaan dalam setiap gigitan.</p>
+            <h1 id="home-title">PELANGI<br>LOLLYCANDY</h1>
             <div class="hero-actions">
-                <a href="{{ route('products.index') }}" class="btn btn-outline-white hero-catalog-btn">Lihat Katalog</a>
-            </div>
-            <div class="stats">
-                <div class="stat">{{ $stats['products'] }} Produk</div>
-                <div class="stat">{{ $stats['categories'] }} Kategori</div>
+                <a href="{{ route('products.index') }}" class="btn btn-primary hero-catalog-btn"><span>Lihat Katalog</span><x-icon name="arrow-right" size="17" /></a>
             </div>
         </div>
     </div>
     <div class="wave-bottom"></div>
 </section>
 
-{{-- ABOUT US SECTION: edit placeholder cards/images here when brand content is ready. --}}
-<section id="about-brand" class="section home-about">
+<section id="about" class="section home-about">
     <div class="container">
         <div class="section-head">
             <h2>About Us</h2>
-            <p>Permen colorful dengan desain menarik, rasa lezat, dan varian beragam yang cocok untuk camilan, hadiah, maupun acara spesial..</p>
+            <p>Permen penuh warna dengan bentuk menarik dan pilihan yang cocok untuk camilan, hadiah, maupun acara spesial.</p>
         </div>
         <div class="about-grid">
             <article class="card about-card about-card-media">
                 {{-- Image wrapper keeps any uploaded/replaced image cropped neatly inside the card. --}}
                 <div class="about-card-image">
-                    <img src="{{ asset('images/kualitas.jpg') }}" alt="Placeholder produksi permen">
+                    <img src="{{ asset('images/kualitas.jpg') }}" alt="Proses pembuatan permen Pelangi Lollycandy" loading="lazy" width="560" height="350">
                 </div>
                 <div class="about-card-content">
                     <h3>Kualitas Terjaga</h3>
-                    <p>Pelangi Lollycandy dibuat dari bahan berkualitas dengan proses produksi yang higienis untuk menjaga rasa, warna, dan kualitas permen tetap konsisten..</p>
+                    <p>Pelangi Lollycandy dibuat dari bahan berkualitas dengan proses produksi yang higienis untuk menjaga rasa, warna, dan kualitas permen tetap konsisten.</p>
                 </div>
             </article>
             <article class="card about-card about-card-media">
                 <div class="about-card-image">
-                    <img src="{{ asset('images/ceria.jpg') }}" alt="Placeholder varian permen">
+                    <img src="{{ asset('images/ceria.jpg') }}" alt="Beragam warna dan bentuk permen" loading="lazy" width="560" height="350">
                 </div>
                 <div class="about-card-content">
                     <h3>Varian Ceria</h3>
-                    <p>Tersedia dalam berbagai bentuk, warna, dan rasa menarik yang cocok untuk anak-anak, remaja, hingga acara spesial dan hampers..</p>
+                    <p>Tersedia dalam berbagai bentuk, warna, dan rasa menarik untuk dinikmati sendiri atau dibagikan di acara spesial dan hampers.</p>
                 </div>
             </article>
             <article class="card about-card about-card-media">
                 <div class="about-card-image">
-                    <img src="{{ asset('images/pasar.jpg') }}" alt="Placeholder kemasan produk">
+                    <img src="{{ asset('images/pasar.jpg') }}" alt="Pilihan permen siap dipasarkan" loading="lazy" width="560" height="350">
                 </div>
                 <div class="about-card-content">
                     <h3>Siap Dipasarkan</h3>
-                    <p>Mendukung pembelian retail, grosir, hingga kebutuhan acara dengan pilihan kemasan menarik yang siap dijual kembali atau dijadikan hadiah..</p>
+                    <p>Mendukung pembelian retail, grosir, hingga kebutuhan acara dengan pilihan kemasan yang siap dijual kembali atau dijadikan hadiah.</p>
                 </div>
             </article>
         </div>
     </div>
 </section>
 
-<section class="section home-bestseller">
+<section id="featured-products" class="section home-bestseller">
     <div class="container">
         <div class="section-head section-head-inline">
-            <h2>Featured Products</h2>
-            <a class="btn btn-secondary" href="{{ route('products.index') }}">Lihat Semua</a>
+            <div><h2>Pilihan Manis Kami</h2><p>Kenalan dengan beberapa produk dari Pelangi Lollycandy.</p></div>
+            <a class="text-link" href="{{ route('products.index') }}">Lihat Semua <x-icon name="arrow-right" size="17" /></a>
         </div>
-        {{-- Product preview cards mirror the catalog cards: compact ecommerce hierarchy with details kept behind the CTA. --}}
         <div class="grid products-grid">
             @foreach($featuredProducts as $product)
-            @php($productImagePath = $product->images->first()?->storagePath())
-            <article class="card product-card product-card-refined">
-                <div class="product-media">
-                    <img loading="lazy" class="product-image" src="{{ $productImagePath ? asset('storage/'.$productImagePath) : asset(\App\Models\ProductImage::PLACEHOLDER) }}" alt="{{ $product->name }}">
-                    @if($product->badge === 'new') <span class="product-badge">NEW</span> @endif
-                    @if($product->badge === 'best_seller') <span class="product-badge">BEST SELLER</span> @endif
-                </div>
-                <div class="product-card-body">
-                    <h3>{{ $product->name }}</h3>
-                    <p class="product-price">Rp {{ number_format($product->price_from, 0, ',', '.') }}</p>
-                    <a class="btn product-cta" href="{{ route('products.show', $product->slug) }}">Lihat Produk</a>
-                </div>
-            </article>
+                @include('public.partials.product-card', ['product' => $product])
             @endforeach
         </div>
     </div>
@@ -94,16 +75,16 @@
     <div class="container">
         <div class="section-head">
             <h2>Temukan Kami di Marketplace</h2>
-            <p>Klik platform favoritmu untuk melihat katalog Pelangi Lollycandy.</p>
+            <p>Pilih cara paling nyaman untuk belanja atau menghubungi kami.</p>
         </div>
         <div class="marketplace-grid">
             @forelse($marketplaces as $marketplace)
-                <a class="card marketplace-card" href="{{ $marketplace->url }}" target="_blank" rel="noopener">
+                <a class="marketplace-card" href="{{ $marketplace->url }}" target="_blank" rel="noopener">
                     <span class="marketplace-icon-wrap">
-                        <img src="{{ asset($marketplace->iconPath()) }}" alt="" aria-hidden="true" loading="lazy">
+                        <img src="{{ asset($marketplace->iconPath()) }}" alt="" aria-hidden="true" width="28" height="28">
                     </span>
-                    <strong>{{ $marketplace->platform }}</strong>
-                    <span class="marketplace-visit">Kunjungi</span>
+                    <span class="marketplace-copy"><strong>{{ $marketplace->platform }}</strong><small>{{ str_contains(strtolower($marketplace->platform), 'whatsapp') ? 'Tanya produk atau pesan langsung' : 'Lihat produk di '.$marketplace->platform }}</small></span>
+                    <span class="marketplace-visit"><x-icon name="arrow-right" size="18" /></span>
                 </a>
             @empty
                 <div class="card marketplace-empty">Link marketplace belum tersedia.</div>
@@ -112,13 +93,13 @@
     </div>
 </section>
 
-<section class="section home-contact-cta">
+<section id="contact-cta" class="section home-contact-cta">
     <div class="container">
-        <div class="card cta-card">
-            <h2>Siap Kolaborasi dengan Pelangi Lollycandy?</h2>
-            <p>Hubungi tim kami untuk kebutuhan grosir, reseller, event, atau kolaborasi brand.</p>
+        <div class="cta-card">
+            <div><h2>Punya rencana manis bersama kami?</h2>
+            <p>Untuk grosir, reseller, hampers, event, atau kolaborasi, ceritakan kebutuhanmu kepada tim Pelangi Lollycandy.</p></div>
             <div class="cta-actions">
-                <a class="btn btn-primary" href="{{ route('contact.index') }}">Hubungi Kami</a>
+                <a class="btn btn-primary" href="{{ route('contact.index') }}">Hubungi Kami <x-icon name="arrow-right" size="17" /></a>
             </div>
         </div>
     </div>

@@ -13,14 +13,13 @@ use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\SaleController as AdminSaleController;
 use App\Http\Controllers\Admin\StockController as AdminStockController;
 use App\Http\Controllers\Admin\SupplierController as AdminSupplierController;
-use App\Http\Controllers\Public\AboutController;
 use App\Http\Controllers\Public\CatalogController;
 use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Public\HomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/about', [AboutController::class, 'index'])->name('about');
+Route::redirect('/about', '/#about', 301)->name('about');
 Route::get('/products', [CatalogController::class, 'index'])->name('products.index');
 Route::get('/products/{product:slug}', [CatalogController::class, 'show'])->name('products.show');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
@@ -57,6 +56,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('sales/{sale}/cancel', [AdminSaleController::class, 'cancel'])->name('sales.cancel');
 
         Route::get('stock', [AdminStockController::class, 'index'])->name('stock.index');
+        Route::post('stock/add-material', [AdminStockController::class, 'addMaterial'])->name('stock.add-material');
         Route::post('stock/adjust', [AdminStockController::class, 'adjust'])->name('stock.adjust');
         Route::get('stock/{type}/{id}', [AdminStockController::class, 'history'])->name('stock.history');
         Route::get('reports', [AdminReportController::class, 'index'])->name('reports.index');

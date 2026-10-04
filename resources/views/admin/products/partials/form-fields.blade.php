@@ -4,6 +4,7 @@
 @endphp
 
 {{-- Product identity fields: edit these to control what appears on the homepage/catalog. --}}
+<h4 class="form-section-title">Informasi Dasar</h4>
 <div class="form-group">
     <label for="product-name-{{ $product->id ?? 'new' }}">Nama Produk <span aria-hidden="true">*</span></label>
     <input id="product-name-{{ $product->id ?? 'new' }}" name="name" value="{{ old('name', $product->name ?? '') }}" required autocomplete="off" @if($errors->has('name')) aria-invalid="true" aria-describedby="error-name" @endif>
@@ -17,10 +18,6 @@
         @endforeach
     </select>
     <x-field-error name="category_id" />
-</div>
-<div class="form-group form-col-2">
-    <label for="product-description-{{ $product->id ?? 'new' }}">Deskripsi <span aria-hidden="true">*</span></label>
-    <textarea id="product-description-{{ $product->id ?? 'new' }}" class="admin-description-field" name="description" rows="5" required @if($errors->has('description')) aria-invalid="true" aria-describedby="error-description" @endif>{{ old('description', $product->description ?? '') }}</textarea><x-field-error name="description" />
 </div>
 <div class="form-group">
     <label for="product-price-{{ $product->id ?? 'new' }}">Harga Produk <span aria-hidden="true">*</span></label>
@@ -40,17 +37,30 @@
     </select>
     <x-field-error name="badge" />
 </div>
+<h4 class="form-section-title">Deskripsi Produk</h4>
+<div class="form-group form-col-2">
+    <label for="product-description-{{ $product->id ?? 'new' }}">Deskripsi <span aria-hidden="true">*</span></label>
+    <textarea id="product-description-{{ $product->id ?? 'new' }}" class="admin-description-field" name="description" rows="5" required @if($errors->has('description')) aria-invalid="true" aria-describedby="error-description" @endif>{{ old('description', $product->description ?? '') }}</textarea><x-field-error name="description" />
+</div>
+<h4 class="form-section-title">Marketplace</h4>
 <div class="form-group">
     <label for="product-marketplace-url-{{ $product->id ?? 'new' }}">Link Shopee</label>
     <input id="product-marketplace-url-{{ $product->id ?? 'new' }}" type="url" name="shopee_url" value="{{ old('shopee_url', $product->shopee_url ?? '') }}">
 </div>
 <div class="form-group">
+    <label for="product-whatsapp-url-{{ $product->id ?? 'new' }}">Link WhatsApp</label>
+    <input id="product-whatsapp-url-{{ $product->id ?? 'new' }}" type="url" name="whatsapp_url" value="{{ old('whatsapp_url', $product->whatsapp_url ?? '') }}" placeholder="Opsional, gunakan tautan default jika kosong">
+</div>
+<h4 class="form-section-title">Foto Produk</h4>
+<div class="form-group">
     <span class="field-label">Upload Gambar</span>
-    <label class="admin-file-picker">
-        <span>Pilih Foto</span>
+    <label class="admin-file-picker" data-dropzone>
+        <x-icon name="plus" size="18" />
+        <span>Tarik foto ke sini atau pilih foto</span>
         <input type="file" name="image" accept="image/*" data-image-preview-input="preview-{{ $product->id ?? 'new' }}">
     </label>
-    <img class="admin-image-preview" id="preview-{{ $product->id ?? 'new' }}" data-image-preview-img src="{{ $productImagePath ? asset('storage/'.$productImagePath) : asset(\App\Models\ProductImage::PLACEHOLDER) }}" alt="Preview gambar produk">
+    <img class="admin-image-preview" id="preview-{{ $product->id ?? 'new' }}" data-image-preview-img src="{{ $productImagePath ? asset('storage/'.$productImagePath) : '' }}" alt="Preview gambar produk" @if(!$productImagePath) hidden @endif>
+    <button type="button" class="btn btn-secondary image-remove" data-image-remove="preview-{{ $product->id ?? 'new' }}" hidden>Hapus pilihan foto</button>
 </div>
 <div class="form-group">
     <span class="field-label">Status Aktif</span>

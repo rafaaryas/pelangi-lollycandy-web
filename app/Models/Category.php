@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     // Admin category fields: used for sidebar filters and product grouping.
-    protected $fillable = ['name', 'slug', 'is_active'];
+    protected $fillable = ['name', 'slug', 'description', 'is_active'];
 
     public function products(): HasMany
     {

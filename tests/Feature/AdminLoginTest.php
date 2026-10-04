@@ -16,7 +16,8 @@ class AdminLoginTest extends TestCase
             ->assertOk()
             ->assertSee('Selamat datang kembali')
             ->assertSee('images/pelangi-logo.png')
-            ->assertSee('images/lollipop-banner.png')
+            ->assertSee('images/ceria.jpg')
+            ->assertDontSee('RUANG KERJA ADMIN')
             ->assertSee('autocomplete="email"', false)
             ->assertSee('autocomplete="current-password"', false)
             ->assertSee('Tampilkan password');

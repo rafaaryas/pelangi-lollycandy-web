@@ -9,20 +9,28 @@ use App\Models\Purchase;
 use App\Models\PurchaseDetail;
 use App\Models\Sale;
 use App\Models\SaleDetail;
-use App\Models\StockMovement;
+use App\Services\RawMaterialStockReport;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, RawMaterialStockReport $stockReport)
     {
         $validated = $request->validate([
             'from' => ['nullable', 'date'],
             'to' => ['nullable', 'date', 'after_or_equal:from'],
+            'month' => ['nullable', 'integer', 'between:1,12'],
+            'year' => ['nullable', 'integer', 'between:2000,2100'],
         ]);
         $tab = in_array($request->query('tab'), ['sales', 'purchases', 'productions', 'stock'], true) ? $request->query('tab') : 'sales';
-        $from = isset($validated['from']) ? date('Y-m-d', strtotime($validated['from'])) : now()->startOfMonth()->toDateString();
-        $to = isset($validated['to']) ? date('Y-m-d', strtotime($validated['to'])) : now()->toDateString();
+        $month = (int) ($validated['month'] ?? now()->month);
+        $year = (int) ($validated['year'] ?? now()->year);
+        $stockMonth = CarbonImmutable::create($year, $month, 1);
+        $from = $tab === 'stock' ? $stockMonth->startOfMonth()->toDateString() : (isset($validated['from']) ? date('Y-m-d', strtotime($validated['from'])) : now()->startOfMonth()->toDateString());
+        $to = $tab === 'stock' ? $stockMonth->endOfMonth()->toDateString() : (isset($validated['to']) ? date('Y-m-d', strtotime($validated['to'])) : now()->toDateString());
+        $mode = $request->query('mode') === 'detail' ? 'detail' : 'summary';
+        $stockRows = collect();
         $items = collect();
         $summary = ['count' => 0, 'amount' => 0, 'quantity' => 0, 'in' => 0, 'out' => 0];
 
@@ -44,12 +52,13 @@ class ReportController extends Controller
             $summary['quantity'] = ProductionResult::query()->join('productions', 'productions.id', '=', 'production_results.production_id')
                 ->whereBetween('productions.production_date', [$from, $to])->where('productions.status', 'confirmed')->sum('production_results.quantity_produced');
         } else {
-            $items = StockMovement::with(['stockable', 'source'])->whereBetween('movement_date', [$from.' 00:00:00', $to.' 23:59:59'])->latest('movement_date')->paginate(25)->withQueryString();
-            $summary['count'] = $items->total();
-            $summary['in'] = StockMovement::whereBetween('movement_date', [$from.' 00:00:00', $to.' 23:59:59'])->whereIn('movement_type', ['purchase_in', 'production_in', 'adjustment_in'])->count();
-            $summary['out'] = StockMovement::whereBetween('movement_date', [$from.' 00:00:00', $to.' 23:59:59'])->whereIn('movement_type', ['production_out', 'sale_out', 'adjustment_out'])->count();
+            $stockRows = $stockReport->summary($from, $to);
+            $summary['count'] = $stockRows->count();
+            $summary['in'] = $stockRows->filter(fn (array $row) => $row['incoming'] > 0)->count();
+            $summary['out'] = $stockRows->filter(fn (array $row) => $row['used'] > 0)->count();
+            if ($mode === 'detail') $items = $stockReport->details($from, $to);
         }
 
-        return view('admin.reports.index', compact('tab', 'from', 'to', 'items', 'summary'));
+        return view('admin.reports.index', compact('tab', 'from', 'to', 'month', 'year', 'mode', 'stockRows', 'items', 'summary'));
     }
 }

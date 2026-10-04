@@ -24,6 +24,16 @@ class ContactController extends Controller
             'phone' => ['required', 'string', 'max:30'],
             'subject' => ['nullable', 'string', 'max:180'],
             'message' => ['required', 'string', 'max:2000'],
+        ], [
+            'required' => ':attribute wajib diisi.',
+            'email' => 'Masukkan alamat email yang valid.',
+            'max' => ':attribute terlalu panjang.',
+        ], [
+            'name' => 'Nama',
+            'email' => 'Email',
+            'phone' => 'No. WhatsApp',
+            'subject' => 'Subjek',
+            'message' => 'Pesan',
         ]);
 
         $message = implode("\n", array_filter([
@@ -35,6 +45,12 @@ class ContactController extends Controller
             'Pesan: '.$validated['message'],
         ]));
 
-        return redirect()->away('https://wa.me/6285184005430?text='.urlencode($message));
+        $whatsAppUrl = 'https://wa.me/6285184005430?text='.urlencode($message);
+
+        if ($request->expectsJson()) {
+            return response()->json(['url' => $whatsAppUrl]);
+        }
+
+        return redirect()->away($whatsAppUrl);
     }
 }

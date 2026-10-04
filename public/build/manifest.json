@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-3IUwG7DO.css",
+    "file": "assets/app-v2Z208Fl.css",
     "name": "app",
     "names": [
       "app.css"
@@ -12,7 +12,8 @@
       "assets/centra1b-BHDDaSJn.otf",
       "assets/Bubblegum-CYz23yZd.ttf",
       "assets/dino-D3nyq5Rw.otf",
-      "assets/Gwenchana-BW7iYVev.ttf"
+      "assets/Gwenchana-BW7iYVev.ttf",
+      "assets/NunitoSans-Latin-BWQ3gi2K.woff2"
     ]
   },
   "resources/fonts/Bubblegum.ttf": {
@@ -27,6 +28,10 @@
     "file": "assets/Matcha-B4nJIQn8.otf",
     "src": "resources/fonts/Matcha.otf"
   },
+  "resources/fonts/NunitoSans-Latin.woff2": {
+    "file": "assets/NunitoSans-Latin-BWQ3gi2K.woff2",
+    "src": "resources/fonts/NunitoSans-Latin.woff2"
+  },
   "resources/fonts/centra1b.otf": {
     "file": "assets/centra1b-BHDDaSJn.otf",
     "src": "resources/fonts/centra1b.otf"
@@ -36,7 +41,7 @@
     "src": "resources/fonts/dino.otf"
   },
   "resources/js/app.js": {
-    "file": "assets/app-uCxuzPw4.js",
+    "file": "assets/app-m_6Gpcjg.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true

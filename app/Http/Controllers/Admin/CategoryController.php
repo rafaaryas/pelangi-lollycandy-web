@@ -24,11 +24,16 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:120'],
+            'description' => ['nullable', 'string', 'max:240'],
             'is_active' => ['nullable', 'boolean'],
         ]);
         $validated['slug'] = Str::slug($validated['name']);
         $validated['is_active'] = $request->boolean('is_active');
         Category::create($validated);
+
+        if ($request->expectsJson()) {
+            return response()->json(['message' => 'Kategori berhasil ditambahkan.']);
+        }
 
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil ditambahkan.');
     }
@@ -37,6 +42,7 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:120'],
+            'description' => ['nullable', 'string', 'max:240'],
             'is_active' => ['nullable', 'boolean'],
         ]);
         $validated['slug'] = Str::slug($validated['name']);
@@ -47,15 +53,26 @@ class CategoryController extends Controller
             $category->products()->update(['is_active' => false]);
         }
 
+        if ($request->expectsJson()) {
+            return response()->json(['message' => 'Kategori berhasil diperbarui.']);
+        }
+
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil diupdate.');
     }
 
     public function destroy(Category $category)
     {
         if ($category->products()->exists()) {
+            if (request()->expectsJson()) {
+                return response()->json(['message' => 'Kategori masih memiliki produk. Pindahkan produk ke kategori lain sebelum menghapus kategori ini.'], 422);
+            }
             return redirect()->route('admin.categories.index')->withErrors(['delete' => 'Kategori masih memiliki produk. Pindahkan produk ke kategori lain sebelum menghapus kategori ini.']);
         }
         $category->delete();
+
+        if (request()->expectsJson()) {
+            return response()->json(['message' => 'Kategori berhasil dihapus.']);
+        }
 
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil dihapus.');
     }

@@ -2,8 +2,6 @@
 .hero-grid { display:grid; grid-template-columns:1.2fr .8fr; gap:2rem; align-items:center; }
 .hero h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin:.2rem 0 1rem; }
 .hero p { color:var(--color-muted); max-width:58ch; }
-.stats { display:flex; gap:1rem; margin-top:1.4rem; }
-.stat { background:#fff; border-radius:14px; padding:.8rem 1rem; box-shadow: var(--shadow-soft); }
 .products-grid { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1.15rem; align-items: stretch; }
 .product-image { width:100%; aspect-ratio: 1/1; object-fit:cover; border-radius: 14px; background:#f1f5f9; }
 .wave { display:block; width:100%; height:50px; background: linear-gradient(180deg, transparent 0%, #f8fafc 100%); }
@@ -824,18 +822,51 @@
     min-height: 72vh;
     padding: 3.2rem 0 0;
     background-color: #3b82f6;
+    background-image:
+        radial-gradient(ellipse 44% 34% at 12% 27%, rgba(209, 236, 255, .62), rgba(178, 219, 255, .25) 48%, transparent 100%),
+        radial-gradient(ellipse 40% 30% at 46% 73%, rgba(255, 214, 231, .33), transparent 100%),
+        radial-gradient(ellipse 40% 54% at 20% 95%, rgba(148, 233, 243, .35), transparent 100%),
+        radial-gradient(ellipse 48% 50% at 94% 12%, rgba(177, 223, 255, .28), transparent 100%),
+        radial-gradient(ellipse 65% 72% at 78% 52%, rgba(20, 82, 174, .35), transparent 100%);
 }
-.hero-grid-ref { grid-template-columns: .9fr 1.1fr; min-height: 60vh; }
-.hero-copy h1 { color: #fff; font-size: clamp(2.2rem, 6vw, 5rem); font-weight: 900; letter-spacing: .03em; line-height: 1.3; margin-bottom: .8rem; font-family: 'Matcha', sans-serif; }
-.hero-copy p { color: rgba(255,255,255,.9); font-size: 1.1rem; max-width: 42ch; font-family: 'Centra', sans-serif; }
-.hero-illustration { position: relative; width: min(42vw, 500px); max-width: 100%; }
-.hero-illustration img { width: 100%; height: auto; display: block; }
-.hero-lollipop { width: min(42vw, 500px); max-width: 510px; }
-.hero-like-reference .stat { background: rgba(255,255,255,.16); color: #fff; border: 1px solid rgba(255,255,255,.26); }
+.hero-grid-ref { grid-template-columns: minmax(0, 43fr) minmax(0, 57fr); gap: 2rem; min-height: 60vh; }
+.hero-copy h1 { color: #fff; font-size: clamp(2.2rem, 6vw, 5rem); font-weight: 900; letter-spacing: .03em; line-height: 1.2; margin-bottom: .8rem; font-family: 'Matcha', sans-serif; }
+.hero-copy p { color: #071527; font-size: 1.1rem; font-weight: 400; line-height: 1.6; margin-top: 1rem; margin-bottom: 1.5rem; max-width: 42ch; font-family: 'Centra', sans-serif; }
+.hero-catalog-btn {
+    gap: .65rem;
+    min-height: 48px;
+    padding: .8rem 1.35rem;
+    border-radius: 10px;
+    background: #d42b59;
+    box-shadow: 0 6px 16px rgba(71, 23, 56, .2);
+    transition: background-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+}
+.hero-catalog-btn .ui-icon { flex: 0 0 17px; transition: transform 200ms ease; }
+.hero-catalog-btn:hover { background: #dc315f; transform: translateY(-2px); box-shadow: 0 9px 20px rgba(71, 23, 56, .25); }
+.hero-catalog-btn:hover .ui-icon { transform: translateX(3px); }
+.hero-catalog-btn:active { background: #c42651; transform: translateY(0); box-shadow: 0 3px 8px rgba(71, 23, 56, .18); }
+.hero-catalog-btn:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+    .hero-catalog-btn, .hero-catalog-btn .ui-icon { transition: none; }
+    .hero-catalog-btn:hover, .hero-catalog-btn:active, .hero-catalog-btn:hover .ui-icon { transform: none; }
+}
+.hero-illustration { position: relative; width: 100%; min-width: 0; max-width: 100%; align-self: center; justify-self: center; }
+.hero-illustration img {
+    display: block;
+    width: 145%;
+    max-width: none;
+    height: auto;
+    max-height: min(52vh, 460px);
+    margin-left: -22.5%;
+    object-fit: contain;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 83%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 83%, transparent 100%);
+}
+.hero-copy { min-width: 0; }
 .wave-bottom {
     margin-top: .8rem;
     height: 110px;
-    background: #f6f7fb;
+    background: var(--color-bg);
     border-top-left-radius: 55% 100%;
     border-top-right-radius: 55% 100%;
 }

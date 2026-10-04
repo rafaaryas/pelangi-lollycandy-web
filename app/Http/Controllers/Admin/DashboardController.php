@@ -156,7 +156,7 @@ class DashboardController extends Controller
 
         return $purchases->concat($productions)->concat($sales)
             ->sortByDesc('date')
-            ->take(6)
+            ->take(12)
             ->values();
     }
 }

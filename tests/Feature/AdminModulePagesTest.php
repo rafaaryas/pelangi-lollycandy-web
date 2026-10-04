@@ -77,23 +77,30 @@ class AdminModulePagesTest extends TestCase
     public function test_demo_business_data_seeder_is_consistent_and_idempotent(): void
     {
         $this->travelTo(now()->setDate(2026, 10, 3)->startOfDay());
+        $category = Category::create(['name' => 'Lollipop Asli', 'slug' => 'lollipop-asli']);
+        Product::create(['name' => 'Permen Asli', 'slug' => 'permen-asli', 'description' => 'Produk katalog asli.', 'category_id' => $category->id, 'price_from' => 10000, 'is_active' => true]);
         $seeder = app(DemoBusinessDataSeeder::class);
         $seeder->run();
         $seeder->run();
 
-        $this->assertDatabaseCount('purchases', 6);
-        $this->assertDatabaseCount('productions', 6);
-        $this->assertDatabaseCount('sales', 6);
-        $this->assertDatabaseCount('stock_movements', 48);
-        $this->assertDatabaseCount('purchase_details', 18);
-        $this->assertDatabaseCount('production_materials', 18);
-        $this->assertDatabaseCount('production_results', 6);
-        $this->assertDatabaseCount('sale_details', 6);
+        $this->assertDatabaseCount('products', 1);
+        $this->assertDatabaseCount('categories', 1);
+        $this->assertDatabaseCount('raw_materials', 8);
+        $this->assertDatabaseCount('suppliers', 4);
+        $this->assertDatabaseCount('customers', 12);
+        $this->assertDatabaseCount('purchases', 12);
+        $this->assertDatabaseCount('productions', 12);
+        $this->assertDatabaseCount('sales', 24);
+        $this->assertDatabaseCount('stock_movements', 234);
+        $this->assertDatabaseCount('purchase_details', 96);
+        $this->assertDatabaseCount('production_materials', 96);
+        $this->assertDatabaseCount('production_results', 12);
+        $this->assertDatabaseCount('sale_details', 24);
 
         $this->actingAs(User::factory()->create(['is_admin' => true]))
             ->get(route('admin.dashboard'))
             ->assertOk()
             ->assertSee('DEMO-PJ-202610')
-            ->assertSee('Rp576.000');
+            ->assertSee('Permen Asli');
     }
 }

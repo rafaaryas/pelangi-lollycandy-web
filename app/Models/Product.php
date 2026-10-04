@@ -12,7 +12,7 @@ class Product extends Model
 {
     protected $fillable = [
         'category_id', 'name', 'slug', 'description', 'price_from',
-        'badge', 'shopee_url', 'published_at', 'is_active', 'stock_quantity', 'minimum_stock',
+        'badge', 'shopee_url', 'whatsapp_url', 'published_at', 'is_active', 'stock_quantity', 'minimum_stock',
     ];
 
     protected function casts(): array

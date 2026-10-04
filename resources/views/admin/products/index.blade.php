@@ -22,7 +22,7 @@
                     <th>Aksi</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody data-admin-list>
                 @forelse($products as $product)
                     @php($productImagePath = $product->images->first()?->storagePath())
                     <tr>
@@ -61,21 +61,23 @@
             </tbody>
         </table>
 </div>
-<div class="module-pagination">{{ $products->links() }}</div>
+<div class="module-pagination" data-admin-pagination>{{ $products->links() }}</div>
 
+<div data-admin-modals>
 <div class="modal" id="product-create-modal" data-modal data-open-on-error="{{ $errors->any() && old('_form') === 'create' ? 'true' : 'false' }}">
     <div class="modal-backdrop" data-modal-close></div>
     <div class="modal-content product-modal-content">
         <div class="modal-head">
-            <h3>Tambah Produk</h3>
-            <button data-modal-close class="btn btn-outline">Tutup</button>
+            <div><h3>Tambah Produk</h3><p class="modal-subtitle">Tambahkan produk baru ke katalog Pelangi Lollycandy.</p></div>
+            <button type="button" data-modal-close class="modal-close" aria-label="Tutup dialog"><x-icon name="close" /></button>
         </div>
-        <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="admin-form-grid product-form-grid" data-loading-form>
+        <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="admin-form-grid product-form-grid" data-admin-ajax>
             @csrf
             <input type="hidden" name="_form" value="create">
             @include('admin.products.partials.form-fields', ['product' => null, 'categories' => $categories])
             <div class="form-actions">
-                <button class="btn btn-primary">Simpan Produk</button>
+                <button type="button" class="btn btn-secondary" data-modal-close>Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan Produk</button>
             </div>
         </form>
     </div>
@@ -87,15 +89,16 @@
         <div class="modal-content product-modal-content">
             <div class="modal-head">
                 <h3>Edit {{ $product->name }}</h3>
-                <button data-modal-close class="btn btn-outline">Tutup</button>
+                <button type="button" data-modal-close class="modal-close" aria-label="Tutup dialog"><x-icon name="close" /></button>
             </div>
-            <form action="{{ route('admin.products.update', $product) }}" method="POST" enctype="multipart/form-data" class="admin-form-grid product-form-grid" data-loading-form>
+            <form action="{{ route('admin.products.update', $product) }}" method="POST" enctype="multipart/form-data" class="admin-form-grid product-form-grid" data-admin-ajax>
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="_form" value="edit-{{ $product->id }}">
                 @include('admin.products.partials.form-fields', ['product' => $product, 'categories' => $categories])
                 <div class="form-actions">
-                    <button class="btn btn-secondary">Update Produk</button>
+                    <button type="button" class="btn btn-secondary" data-modal-close>Batal</button>
+                    <button type="submit" class="btn btn-primary">Update Produk</button>
                 </div>
             </form>
         </div>
@@ -104,10 +107,9 @@
     <div class="modal" id="delete-product-{{ $product->id }}" data-modal>
         <div class="modal-backdrop" data-modal-close></div>
         <div class="modal-content modal-small">
-            <h3>Hapus Produk</h3>
             <div class="modal-head"><h2>Hapus produk?</h2><button type="button" class="modal-close" data-modal-close aria-label="Tutup dialog"><x-icon name="close" /></button></div>
             <p>Produk <strong>{{ $product->name }}</strong> akan dihapus beserta gambar produknya.</p>
-            <form method="POST" action="{{ route('admin.products.destroy', $product) }}" class="modal-form-actions" data-loading-form>
+            <form method="POST" action="{{ route('admin.products.destroy', $product) }}" class="modal-form-actions" data-admin-ajax>
                 @csrf @method('DELETE')
                 <button type="button" data-modal-close class="btn btn-secondary">Batal</button>
                 <button type="submit" class="btn btn-danger"><x-icon name="trash" />Hapus produk</button>
@@ -115,4 +117,5 @@
         </div>
     </div>
 @endforeach
+</div>
 @endsection

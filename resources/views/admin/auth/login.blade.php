@@ -9,6 +9,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="login-page">
+<div class="route-progress" data-route-progress aria-hidden="true"><span></span></div>
 <main class="login-stage">
     <div class="login-container">
         <section class="login-panel" aria-labelledby="login-title">
@@ -17,7 +18,6 @@
             </a>
 
             <div class="login-intro">
-                <p class="login-eyebrow">RUANG KERJA ADMIN</p>
                 <h1 id="login-title">Selamat datang kembali</h1>
                 <p>Kelola operasional Pelangi Lollycandy melalui satu ruang kerja.</p>
             </div>
@@ -62,16 +62,8 @@
             <p class="login-footnote">Akses khusus untuk pengelola Pelangi Lollycandy.</p>
         </section>
 
-        <aside class="login-visual" aria-label="Ilustrasi permen Pelangi Lollycandy">
-            <div class="login-visual-topline"><span class="login-visual-mark" aria-hidden="true"></span><span>PELANGI LOLLYCANDY</span></div>
-            <div class="login-candy-art">
-                <img src="{{ asset('images/lollipop-banner.png') }}" alt="Tiga permen lollipop warna-warni">
-            </div>
-            <div class="login-visual-copy">
-                <h2>Manisnya produk,<br>rapinya operasional.</h2>
-                <p>Satu ruang untuk mengelola produk dan kegiatan harian.</p>
-            </div>
-            <span class="login-visual-caption">DIBUAT DENGAN CERIA</span>
+        <aside class="login-visual" aria-label="Foto Pelangi Lollycandy">
+            <img src="{{ asset('images/ceria.jpg') }}" alt="Suasana ceria Pelangi Lollycandy">
         </aside>
     </div>
 </main>

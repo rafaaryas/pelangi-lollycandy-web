@@ -46,7 +46,9 @@ function refreshTotal(form) {
     });
 }
 
-document.querySelectorAll('[data-transaction-form]').forEach((form) => {
+export function initTransactionForm(form) {
+    if (form.dataset.initialized === 'true') return;
+    form.dataset.initialized = 'true';
     form.querySelectorAll('[data-line]').forEach((row) => refreshLine(form, row));
     refreshTotal(form);
 
@@ -107,4 +109,6 @@ document.querySelectorAll('[data-transaction-form]').forEach((form) => {
             refreshTotal(form);
         }
     });
-});
+}
+
+document.querySelectorAll('[data-transaction-form]').forEach(initTransactionForm);

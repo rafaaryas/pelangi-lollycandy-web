@@ -1,46 +1,25 @@
 @extends('layouts.app')
 
-@section('title', 'Catalog - Pelangi Lollycandy')
+@section('title', 'Katalog Produk - Pelangi Lollycandy')
 
 @section('content')
-<section class="section">
+<section class="section catalog-page" aria-labelledby="catalog-title">
     <div class="container">
-        <h1>Katalog Produk</h1>
-        <form method="GET" data-filter-form class="card catalog-filter">
-            <input name="q" value="{{ request('q') }}" placeholder="Cari produk...">
-            <select name="category">
-                <option value="">Semua kategori</option>
-                @foreach($categories as $cat)
-                    <option value="{{ $cat->id }}" @selected(request('category') == $cat->id)>{{ $cat->name }}</option>
-                @endforeach
-            </select>
-            <select name="sort">
-                <option value="latest" @selected($sort === 'latest')>Terbaru</option>
-                <option value="cheapest" @selected($sort === 'cheapest')>Harga termurah</option>
-                <option value="highest" @selected($sort === 'highest')>Harga tertinggi</option>
-            </select>
-        </form>
-
-        <div class="grid products-grid catalog-products-grid">
-            @forelse($products as $product)
-            @php($productImagePath = $product->images->first()?->storagePath())
-            <article class="card product-card">
-                <div class="product-media">
-                    <img loading="lazy" class="product-image" src="{{ $productImagePath ? asset('storage/'.$productImagePath) : asset(\App\Models\ProductImage::PLACEHOLDER) }}" alt="{{ $product->name }}">
-                    @if($product->badge === 'new') <span class="product-badge">NEW</span> @endif
-                    @if($product->badge === 'best_seller') <span class="product-badge">BEST SELLER</span> @endif
-                </div>
-                <div class="product-card-body">
-                    <h3>{{ $product->name }}</h3>
-                    <p class="product-price">Rp {{ number_format($product->price_from, 0, ',', '.') }}</p>
-                    <a class="btn product-cta" href="{{ route('products.show', $product->slug) }}">Lihat Produk</a>
-                </div>
-            </article>
-            @empty
-            <div class="card">Produk tidak ditemukan.</div>
-            @endforelse
+        <div class="catalog-intro">
+            <p class="eyebrow">Katalog Pelangi Lollycandy</p>
+            <h1 id="catalog-title">Temukan permen favoritmu.</h1>
+            <p>Dari lolipop warna-warni sampai pilihan manis untuk hadiah dan hampers.</p>
         </div>
-        <div style="margin-top:1rem">{{ $products->links() }}</div>
+        <form method="GET" action="{{ route('products.index') }}" data-filter-form class="catalog-filter" role="search">
+            <div class="filter-field filter-search"><label for="catalog-search">Cari produk</label><div class="filter-input-wrap"><x-icon name="search" size="19" /><input id="catalog-search" name="q" type="search" value="{{ request('q') }}" placeholder="Cari nama permen…"></div></div>
+            <div class="filter-field"><label for="catalog-category">Kategori</label><select id="catalog-category" name="category"><option value="">Semua kategori</option>@foreach($categories as $cat)<option value="{{ $cat->id }}" @selected(request('category') == $cat->id)>{{ $cat->name }}</option>@endforeach</select></div>
+            <div class="filter-field"><label for="catalog-sort">Urutkan</label><select id="catalog-sort" name="sort"><option value="latest" @selected($sort === 'latest')>Terbaru</option><option value="cheapest" @selected($sort === 'cheapest')>Harga termurah</option><option value="highest" @selected($sort === 'highest')>Harga tertinggi</option></select></div>
+            <button class="btn btn-primary filter-submit" type="submit">Cari</button>
+        </form>
+        <div class="catalog-feedback" data-catalog-feedback role="status" aria-live="polite" hidden></div>
+        <div class="catalog-results-line" aria-live="polite"><p>{{ $products->total() }} produk ditemukan</p>@if(request()->filled('q') || request()->filled('category'))<a href="{{ route('products.index') }}">Bersihkan filter</a>@endif</div>
+        <div class="grid products-grid catalog-products-grid" aria-busy="false">@forelse($products as $product)@include('public.partials.product-card', ['product' => $product, 'headingLevel' => 2])@empty<div class="catalog-empty"><x-icon name="search" size="30" /><h2>Produk belum ditemukan</h2><p>Coba kata pencarian atau kategori lainnya.</p><a href="{{ route('products.index') }}">Lihat semua produk</a></div>@endforelse</div>
+        <div class="catalog-pagination">{{ $products->links() }}</div>
     </div>
 </section>
 @endsection

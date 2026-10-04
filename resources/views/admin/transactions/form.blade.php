@@ -37,11 +37,11 @@
             <div class="line-table-wrap"><table class="line-table"><thead><tr><th>Bahan baku</th><th>Jumlah</th><th>Satuan</th><th>Harga satuan</th><th>Subtotal</th><th></th></tr></thead><tbody data-lines>
                 @foreach($initialLines as $index => $line)
                     <tr data-line>
-                        <td><select name="items[{{ $index }}][raw_material_id]" data-material required><option value="">Pilih bahan baku</option>@foreach($materials as $material)<option value="{{ $material->id }}" data-unit="{{ $material->unit }}" @selected(old("items.$index.raw_material_id", $line?->raw_material_id) == $material->id)>{{ $material->name }}</option>@endforeach</select></td>
-                        <td><input name="items[{{ $index }}][quantity]" type="number" step="0.001" min="0.001" value="{{ old("items.$index.quantity", $line?->quantity) }}" data-quantity required></td>
-                        <td><span class="line-unit" data-unit-label>—</span></td>
-                        <td><input name="items[{{ $index }}][unit_price]" type="number" step="0.01" min="0" value="{{ old("items.$index.unit_price", $line?->unit_price) }}" data-price required></td>
-                        <td class="line-subtotal" data-subtotal>Rp0</td><td><button type="button" class="line-remove" data-remove-line aria-label="Hapus baris"><x-icon name="close" size="15" /></button></td>
+                        <td data-label="Bahan baku"><select name="items[{{ $index }}][raw_material_id]" data-material required><option value="">Pilih bahan baku</option>@foreach($materials as $material)<option value="{{ $material->id }}" data-unit="{{ $material->unit }}" @selected(old("items.$index.raw_material_id", $line?->raw_material_id) == $material->id)>{{ $material->name }}</option>@endforeach</select></td>
+                        <td data-label="Jumlah"><input name="items[{{ $index }}][quantity]" type="number" step="0.001" min="0.001" value="{{ old("items.$index.quantity", $line?->quantity) }}" data-quantity required></td>
+                        <td data-label="Satuan"><span class="line-unit" data-unit-label>—</span></td>
+                        <td data-label="Harga satuan"><input name="items[{{ $index }}][unit_price]" type="number" step="0.01" min="0" value="{{ old("items.$index.unit_price", $line?->unit_price) }}" data-price required></td>
+                        <td class="line-subtotal" data-subtotal data-label="Subtotal">Rp0</td><td class="line-remove-cell"><button type="button" class="line-remove" data-remove-line aria-label="Hapus baris"><x-icon name="close" size="15" /></button></td>
                     </tr>
                 @endforeach
             </tbody></table></div>
@@ -52,9 +52,9 @@
             <div class="form-section-heading"><div><h2>Bahan baku digunakan</h2><p>Stok yang tersedia ditampilkan saat konfirmasi.</p></div><button type="button" class="btn btn-secondary btn-compact" data-add-line><x-icon name="plus" />Tambah bahan</button></div>
             <div class="line-table-wrap"><table class="line-table"><thead><tr><th>Bahan baku</th><th>Jumlah digunakan</th><th>Satuan</th><th></th></tr></thead><tbody data-lines>
                 @foreach($initialLines as $index => $line)<tr data-line>
-                    <td><select name="materials[{{ $index }}][raw_material_id]" data-material required><option value="">Pilih bahan</option>@foreach($materials as $material)<option value="{{ $material->id }}" data-unit="{{ $material->unit }}" data-stock="{{ $material->current_stock }}" @selected(old("materials.$index.raw_material_id", $line?->raw_material_id) == $material->id)>{{ $material->name }} (tersedia {{ number_format($material->current_stock, 3, ',', '.') }} {{ $material->unit }})</option>@endforeach</select></td>
-                    <td><input name="materials[{{ $index }}][quantity_used]" type="number" step="0.001" min="0.001" value="{{ old("materials.$index.quantity_used", $line?->quantity_used) }}" data-quantity required></td>
-                    <td><span class="line-unit" data-unit-label>—</span></td><td><button type="button" class="line-remove" data-remove-line aria-label="Hapus baris"><x-icon name="close" size="15" /></button></td>
+                    <td data-label="Bahan baku"><select name="materials[{{ $index }}][raw_material_id]" data-material required><option value="">Pilih bahan</option>@foreach($materials as $material)<option value="{{ $material->id }}" data-unit="{{ $material->unit }}" data-stock="{{ $material->current_stock }}" @selected(old("materials.$index.raw_material_id", $line?->raw_material_id) == $material->id)>{{ $material->name }} (tersedia {{ number_format($material->current_stock, 3, ',', '.') }} {{ $material->unit }})</option>@endforeach</select></td>
+                    <td data-label="Jumlah digunakan"><input name="materials[{{ $index }}][quantity_used]" type="number" step="0.001" min="0.001" value="{{ old("materials.$index.quantity_used", $line?->quantity_used) }}" data-quantity required></td>
+                    <td data-label="Satuan"><span class="line-unit" data-unit-label>—</span></td><td class="line-remove-cell"><button type="button" class="line-remove" data-remove-line aria-label="Hapus baris"><x-icon name="close" size="15" /></button></td>
                 </tr>@endforeach
             </tbody></table></div>
             <p class="transaction-quantity-summary" data-production-summary="materials">Total bahan digunakan: —</p>
@@ -64,9 +64,9 @@
             <div class="line-table-wrap"><table class="line-table"><thead><tr><th>Produk</th><th>Jumlah dihasilkan</th><th>Satuan</th><th></th></tr></thead><tbody data-lines>
                 @php($resultLines = $record?->results ?? collect([null]))
                 @foreach($resultLines as $index => $line)<tr data-line>
-                    <td><select name="results[{{ $index }}][product_id]" data-product required><option value="">Pilih produk</option>@foreach($products as $product)<option value="{{ $product->id }}" @selected(old("results.$index.product_id", $line?->product_id) == $product->id)>{{ $product->name }}{{ $product->stock_quantity === null ? ' (stok belum dicatat)' : '' }}</option>@endforeach</select></td>
-                    <td><input name="results[{{ $index }}][quantity_produced]" type="number" step="0.001" min="0.001" value="{{ old("results.$index.quantity_produced", $line?->quantity_produced) }}" required></td>
-                    <td>pcs</td><td><button type="button" class="line-remove" data-remove-line aria-label="Hapus baris"><x-icon name="close" size="15" /></button></td>
+                    <td data-label="Produk"><select name="results[{{ $index }}][product_id]" data-product required><option value="">Pilih produk</option>@foreach($products as $product)<option value="{{ $product->id }}" @selected(old("results.$index.product_id", $line?->product_id) == $product->id)>{{ $product->name }}{{ $product->stock_quantity === null ? ' (stok belum dicatat)' : '' }}</option>@endforeach</select></td>
+                    <td data-label="Jumlah dihasilkan"><input name="results[{{ $index }}][quantity_produced]" type="number" step="0.001" min="0.001" value="{{ old("results.$index.quantity_produced", $line?->quantity_produced) }}" required></td>
+                    <td data-label="Satuan">pcs</td><td class="line-remove-cell"><button type="button" class="line-remove" data-remove-line aria-label="Hapus baris"><x-icon name="close" size="15" /></button></td>
                 </tr>@endforeach
             </tbody></table></div>
             <p class="transaction-quantity-summary" data-production-summary="results">Total hasil produksi: 0 pcs</p>
@@ -76,11 +76,11 @@
             <div class="form-section-heading"><div><h2>Produk terjual</h2><p>Harga dan jumlah membentuk total penjualan.</p></div><button type="button" class="btn btn-secondary btn-compact" data-add-line><x-icon name="plus" />Tambah produk</button></div>
             <div class="line-table-wrap"><table class="line-table"><thead><tr><th>Produk</th><th>Stok</th><th>Jumlah</th><th>Harga</th><th>Subtotal</th><th></th></tr></thead><tbody data-lines>
                 @foreach($initialLines as $index => $line)<tr data-line>
-                    <td><select name="items[{{ $index }}][product_id]" data-product required><option value="">Pilih produk</option>@foreach($products as $product)<option value="{{ $product->id }}" data-price="{{ $product->price_from }}" data-stock="{{ $product->stock_quantity }}" @selected(old("items.$index.product_id", $line?->product_id) == $product->id)>{{ $product->name }}{{ $product->stock_quantity === null ? ' (stok belum dicatat)' : '' }}</option>@endforeach</select></td>
-                    <td class="line-stock" data-stock-label>—</td>
-                    <td><input name="items[{{ $index }}][quantity]" type="number" step="0.001" min="0.001" value="{{ old("items.$index.quantity", $line?->quantity) }}" data-quantity required></td>
-                    <td><input name="items[{{ $index }}][unit_price]" type="number" step="0.01" min="0" value="{{ old("items.$index.unit_price", $line?->unit_price) }}" data-price required></td>
-                    <td class="line-subtotal" data-subtotal>Rp0</td><td><button type="button" class="line-remove" data-remove-line aria-label="Hapus baris"><x-icon name="close" size="15" /></button></td>
+                    <td data-label="Produk"><select name="items[{{ $index }}][product_id]" data-product required><option value="">Pilih produk</option>@foreach($products as $product)<option value="{{ $product->id }}" data-price="{{ $product->price_from }}" data-stock="{{ $product->stock_quantity }}" @selected(old("items.$index.product_id", $line?->product_id) == $product->id)>{{ $product->name }}{{ $product->stock_quantity === null ? ' (stok belum dicatat)' : '' }}</option>@endforeach</select></td>
+                    <td class="line-stock" data-stock-label data-label="Stok">—</td>
+                    <td data-label="Jumlah"><input name="items[{{ $index }}][quantity]" type="number" step="0.001" min="0.001" value="{{ old("items.$index.quantity", $line?->quantity) }}" data-quantity required></td>
+                    <td data-label="Harga"><input name="items[{{ $index }}][unit_price]" type="number" step="0.01" min="0" value="{{ old("items.$index.unit_price", $line?->unit_price) }}" data-price required></td>
+                    <td class="line-subtotal" data-subtotal data-label="Subtotal">Rp0</td><td class="line-remove-cell"><button type="button" class="line-remove" data-remove-line aria-label="Hapus baris"><x-icon name="close" size="15" /></button></td>
                 </tr>@endforeach
             </tbody></table></div>
             <div class="transaction-total"><span>Total penjualan</span><strong data-total>Rp0</strong></div>
