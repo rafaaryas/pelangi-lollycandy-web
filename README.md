@@ -1,58 +1,86 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Pelangi Lollycandy
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Website katalog dan aplikasi operasional untuk **Pelangi Lollycandy**. Aplikasi ini memadukan halaman publik untuk menampilkan produk dengan panel admin untuk mengelola katalog, persediaan, pembelian, produksi, penjualan, dan laporan.
 
-## About Laravel
+## Fitur
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Katalog produk publik dengan kategori, galeri, detail produk, serta tautan marketplace/WhatsApp.
+- Halaman beranda dan kontak yang responsif.
+- Login admin dan dashboard ringkasan operasional.
+- Manajemen produk, kategori, tautan marketplace, bahan baku, pemasok, dan pelanggan.
+- Pencatatan pembelian bahan, produksi, serta penjualan.
+- Stok produk dan bahan baku dengan riwayat pergerakan, penyesuaian, dan peringatan stok rendah.
+- Laporan operasional untuk membantu memantau persediaan dan transaksi.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Teknologi
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.3+
+- Laravel 13
+- Blade dan Vite 8
+- Database MySQL/MariaDB atau database yang didukung Laravel
+- PHPUnit untuk pengujian
 
-## Learning Laravel
+## Menjalankan secara lokal
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Prasyarat
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- PHP 8.3 atau lebih baru
+- Composer
+- Node.js dan npm
+- MySQL/MariaDB (atau driver database Laravel yang dipilih)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### Instalasi
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/rafaaryas/pelangi-lollycandy-web.git
+cd pelangi-lollycandy-web
+composer install
+npm install
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Buat konfigurasi lokal dari template, lalu isi nilai database dan layanan yang Anda gunakan.
 
-## Contributing
+```bash
+copy .env.example .env
+php artisan key:generate
+php artisan migrate
+npm run build
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Jalankan aplikasi dan Vite pada dua terminal terpisah:
 
-## Code of Conduct
+```bash
+php artisan serve
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+npm run dev
+```
 
-## Security Vulnerabilities
+Aplikasi akan tersedia di `http://127.0.0.1:8000` secara default. Panel admin tersedia pada `/admin/login`.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Data demo
 
-## License
+Seeder data demo tersedia untuk membantu pengembangan lokal:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+php artisan db:seed --class=DemoBusinessDataSeeder
+```
+
+Seeder ini sengaja menolak dijalankan pada lingkungan `production`. Pastikan produk katalog sudah tersedia sebelum menjalankannya.
+
+## Pengujian
+
+```bash
+php artisan test
+```
+
+## Keamanan konfigurasi
+
+- Jangan commit `.env`, database lokal, log, atau berkas cadangan.
+- Gunakan `.env.example` sebagai template; jangan menyimpan API key, kata sandi, atau data pelanggan asli di dalamnya.
+- Setelah kredensial pernah masuk ke riwayat Git, rotasi kredensial tersebut—menambah `.gitignore` tidak menghapus nilai dari commit lama.
+
+## Lisensi
+
+Kode ini dikelola untuk Pelangi Lollycandy. Semua hak cipta dan ketentuan penggunaan mengikuti kebijakan pemilik proyek.
