@@ -4,24 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin')</title>
+    <meta name="robots" content="noindex, nofollow">
     @include('partials.favicons')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="admin-body">
 <div class="route-progress" data-route-progress aria-hidden="true"><span></span></div>
-<div class="admin-topbanner">
-    <img src="{{ asset('images/pelangi-logo.png') }}" alt="Pelangi Logo">
-    <span class="admin-topbar-caption">Sistem Informasi Manajemen</span>
-    <span class="admin-topbar-user">{{ auth()->user()?->name ?? 'Administrator' }}</span>
-    <button class="btn admin-menu-toggle" type="button" data-admin-nav-toggle aria-expanded="false" aria-controls="admin-sidebar">
-        <x-icon name="menu" size="18" /><span>Menu</span>
+<header class="admin-mobile-header">
+    <button class="btn admin-menu-toggle" type="button" data-admin-nav-toggle aria-label="Buka navigasi" aria-expanded="false" aria-controls="admin-sidebar">
+        <x-icon name="menu" size="20" /><span>Menu</span>
     </button>
-</div>
+    <a class="admin-mobile-brand" href="{{ route('admin.dashboard') }}" aria-label="Pelangi Lollycandy — Dashboard">
+        <img src="{{ asset('images/pelangi-logo.png') }}" alt="Pelangi Lollycandy">
+    </a>
+</header>
 <div class="admin-shell">
     <aside class="admin-sidebar" id="admin-sidebar" data-admin-sidebar>
         <div class="admin-sidebar-inner">
-            <div class="admin-sidebar-mobile-head">
-                <span>Navigasi admin</span>
+            <div class="admin-sidebar-head">
+                <a class="admin-sidebar-brand" href="{{ route('admin.dashboard') }}" aria-label="Pelangi Lollycandy — Dashboard">
+                    <img src="{{ asset('images/pelangi-logo.png') }}" alt="Pelangi Lollycandy">
+                </a>
                 <button type="button" class="admin-sidebar-close" data-admin-nav-close aria-label="Tutup navigasi"><x-icon name="close" size="18" /></button>
             </div>
             <nav class="admin-nav" aria-label="Navigasi admin">
@@ -55,14 +58,10 @@
                 </div>
             </nav>
             <div class="admin-bottom-actions">
-            <div class="admin-account">
-                <span class="admin-account-avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr(auth()->user()?->name ?? 'A', 0, 1)) }}</span>
-                <span class="admin-account-copy"><strong>{{ auth()->user()?->name ?? 'Administrator' }}</strong><small>Administrator</small></span>
-            </div>
-            <form class="admin-logout" method="POST" action="{{ route('admin.logout') }}">
-                @csrf
-                <button class="btn admin-logout-button"><x-icon name="logout" />Keluar</button>
-            </form>
+                <form class="admin-logout" method="POST" action="{{ route('admin.logout') }}">
+                    @csrf
+                    <button class="btn admin-logout-button" type="submit"><x-icon name="logout" />Keluar</button>
+                </form>
             </div>
         </div>
     </aside>

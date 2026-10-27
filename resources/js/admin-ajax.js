@@ -43,6 +43,7 @@ async function refreshCollection() {
         current.replaceWith(replacement);
     }
     document.querySelectorAll('[data-image-preview-img]').forEach((image) => { image.dataset.originalSrc = image.getAttribute('src') || ''; });
+    document.dispatchEvent(new CustomEvent('admin:collection-refreshed'));
 }
 
 document.querySelectorAll('form[data-admin-ajax]').forEach((form) => { form.dataset.noLoading = 'true'; });

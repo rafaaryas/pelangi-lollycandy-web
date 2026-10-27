@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+        'model' => env('GEMINI_MODEL', 'gemini-3.5-flash-lite'),
+        'ai_autofill_enabled' => env('AI_AUTOFILL_ENABLED', true),
+    ],
 
     /*
     |--------------------------------------------------------------------------

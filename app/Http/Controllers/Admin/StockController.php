@@ -25,9 +25,10 @@ class StockController extends Controller
                 } elseif ($request->status === 'low') {
                     $stock = $isProducts ? 'stock_quantity' : 'current_stock';
                     $query->where($stock, '>', 0)->where('minimum_stock', '>', 0)->whereColumn($stock, '<=', 'minimum_stock');
+                } elseif ($request->status === 'unknown' && $isProducts) {
+                    $query->whereNull('stock_quantity');
                 }
             })
-            ->when($isProducts, fn ($query) => $query->whereNotNull('stock_quantity'))
             ->orderBy($isProducts ? 'name' : 'name')->paginate(15)->withQueryString();
 
         $productQuery = Product::where('is_active', true)->whereNotNull('stock_quantity');
@@ -40,7 +41,7 @@ class StockController extends Controller
             + RawMaterial::where('is_active', true)->count();
         $untrackedProducts = Product::where('is_active', true)->whereNull('stock_quantity')->count();
         $materialCount = RawMaterial::where('is_active', true)->count();
-        $productCount = Product::where('is_active', true)->whereNotNull('stock_quantity')->count();
+        $productCount = Product::where('is_active', true)->count();
 
         $materialOptions = RawMaterial::where('is_active', true)->orderBy('name')->get(['id', 'name', 'unit']);
 
@@ -52,7 +53,7 @@ class StockController extends Controller
         $data = $request->validate([
             'stock_type' => ['required', 'in:product,material'], 'stock_id' => ['required', 'integer'],
             'direction' => ['required', 'in:in,out'], 'quantity' => ['required', 'numeric', 'gt:0'],
-            'notes' => ['nullable', 'string', 'max:500'],
+            'notes' => ['required', 'string', 'min:5', 'max:500'],
         ]);
 
         DB::transaction(function () use ($data): void {
@@ -78,7 +79,7 @@ class StockController extends Controller
                 'quantity' => $data['quantity'],
                 'unit' => $data['stock_type'] === 'material' ? $stock->unit : 'pcs',
                 'movement_date' => now(),
-                'notes' => $data['notes'] ?: 'Penyesuaian stok manual',
+                'notes' => $data['notes'],
             ]);
         });
 
@@ -115,7 +116,11 @@ class StockController extends Controller
         $modelClass = $type === 'products' ? Product::class : RawMaterial::class;
         $item = $modelClass::findOrFail($id);
         $movements = $item->stockMovements()->with('source')->orderBy('movement_date')->orderBy('id')->get();
-        $balance = 0;
+        $currentStock = $type === 'products' ? $item->stock_quantity : $item->current_stock;
+        $netMovements = $movements->sum(fn (StockMovement $movement): float => in_array($movement->movement_type, ['purchase_in', 'production_in', 'adjustment_in'], true)
+            ? (float) $movement->quantity : -(float) $movement->quantity);
+        $openingBalance = $currentStock === null ? null : (float) $currentStock - $netMovements;
+        $balance = $openingBalance ?? 0;
         $history = $movements->map(function (StockMovement $movement) use (&$balance): array {
             $incoming = in_array($movement->movement_type, ['purchase_in', 'production_in', 'adjustment_in'], true) ? (float) $movement->quantity : 0;
             $outgoing = in_array($movement->movement_type, ['production_out', 'sale_out', 'adjustment_out'], true) ? (float) $movement->quantity : 0;
@@ -126,7 +131,8 @@ class StockController extends Controller
 
         return view('admin.stock.history', [
             'item' => $item, 'type' => $type, 'history' => $history,
-            'currentStock' => $type === 'products' ? $item->stock_quantity : $item->current_stock,
+            'currentStock' => $currentStock,
+            'openingBalance' => $openingBalance,
             'minimumStock' => $item->minimum_stock,
             'unit' => $type === 'products' ? 'pcs' : $item->unit,
         ]);

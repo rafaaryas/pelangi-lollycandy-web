@@ -11,6 +11,12 @@ class CatalogController extends Controller
 {
     public function index(Request $request)
     {
+        $filters = $request->validate([
+            'q' => ['nullable', 'string', 'max:120'],
+            'category' => ['nullable', 'integer', 'min:1'],
+            'min_price' => ['nullable', 'numeric', 'min:0'],
+            'max_price' => ['nullable', 'numeric', 'min:0', 'gte:min_price'],
+        ]);
         $sort = match ($request->query('sort')) {
             'cheapest', 'highest' => $request->query('sort'),
             default => 'latest',
@@ -19,10 +25,10 @@ class CatalogController extends Controller
         $products = Product::query()
             ->visible()
             ->with(['category', 'images'])
-            ->when($request->filled('q'), fn ($query) => $query->where('name', 'like', '%'.$request->q.'%'))
-            ->when($request->filled('category'), fn ($query) => $query->where('category_id', $request->integer('category')))
-            ->when($request->filled('min_price'), fn ($query) => $query->where('price_from', '>=', $request->min_price))
-            ->when($request->filled('max_price'), fn ($query) => $query->where('price_from', '<=', $request->max_price))
+            ->when(! empty($filters['q']), fn ($query) => $query->where('name', 'like', '%'.$filters['q'].'%'))
+            ->when(! empty($filters['category']), fn ($query) => $query->where('category_id', $filters['category']))
+            ->when(isset($filters['min_price']), fn ($query) => $query->where('price_from', '>=', $filters['min_price']))
+            ->when(isset($filters['max_price']), fn ($query) => $query->where('price_from', '<=', $filters['max_price']))
             ->when($sort === 'cheapest', fn ($query) => $query->orderBy('price_from')->orderByDesc('id'))
             ->when($sort === 'highest', fn ($query) => $query->orderByDesc('price_from')->orderByDesc('id'))
             ->when($sort === 'latest', fn ($query) => $query->latest())
@@ -40,6 +46,7 @@ class CatalogController extends Controller
 
     public function show(Product $product)
     {
+        abort_unless(Product::query()->visible()->whereKey($product->getKey())->exists(), 404);
         $product->load(['images', 'category']);
         $relatedProducts = Product::query()
             ->visible()

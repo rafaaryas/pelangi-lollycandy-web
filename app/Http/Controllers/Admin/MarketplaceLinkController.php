@@ -19,7 +19,7 @@ class MarketplaceLinkController extends Controller
     {
         $validated = $request->validate([
             'platform' => ['required', 'string', 'max:80', 'unique:marketplace_links,platform'],
-            'url' => ['required', 'url', 'max:255'],
+            'url' => ['required', 'url:http,https', 'max:255'],
             'is_active' => ['nullable', 'boolean'],
         ]);
         $validated['is_active'] = $request->boolean('is_active');
@@ -32,7 +32,7 @@ class MarketplaceLinkController extends Controller
     {
         $validated = $request->validate([
             'platform' => ['required', 'string', 'max:80', 'unique:marketplace_links,platform,'.$marketplace_link->id],
-            'url' => ['required', 'url', 'max:255'],
+            'url' => ['required', 'url:http,https', 'max:255'],
             'is_active' => ['nullable', 'boolean'],
         ]);
         $validated['is_active'] = $request->boolean('is_active');

@@ -1,11 +1,12 @@
 @extends('layouts.app')
 
 @section('title', $product->name . ' - Pelangi Lollycandy')
+@section('meta_description', \Illuminate\Support\Str::limit(strip_tags($product->description ?: 'Lihat detail '.$product->name.' di katalog Pelangi Lollycandy.'), 155))
 
 @section('content')
 @php
     $whatsAppMessage = 'Halo, saya tertarik dengan produk '.$product->name;
-    $whatsAppUrl = $product->whatsapp_url ?: 'https://wa.me/6285184005430?text='.urlencode($whatsAppMessage);
+    $whatsAppUrl = $product->whatsapp_url ?: \App\Support\BusinessContact::whatsAppUrl($whatsAppMessage);
     $gallery = $product->images->filter(fn ($image) => $image->storagePath())->values();
 @endphp
 <section class="section product-page" aria-labelledby="product-title">
@@ -27,9 +28,10 @@
                 <div class="product-detail-price"><span>Harga mulai dari</span><strong>Rp {{ number_format($product->price_from, 0, ',', '.') }}</strong></div>
                 <div class="product-detail-actions">
                     @if($product->shopee_url)<a class="btn btn-shopee" href="{{ $product->shopee_url }}" target="_blank" rel="noopener"><img src="{{ asset('images/marketplace-icons/shopee.svg') }}" alt="" width="20" height="20">Beli di Shopee <x-icon name="external" size="16" /></a>@endif
-                    <a class="btn btn-whatsapp" href="{{ $whatsAppUrl }}" target="_blank" rel="noopener"><img src="{{ asset('images/marketplace-icons/whatsapp.svg') }}" alt="" width="20" height="20">Pesan via WhatsApp <x-icon name="arrow-right" size="16" /></a>
+                    @if($whatsAppUrl)<a class="btn btn-whatsapp" href="{{ $whatsAppUrl }}" target="_blank" rel="noopener"><img src="{{ asset('images/marketplace-icons/whatsapp.svg') }}" alt="" width="20" height="20">Pesan via WhatsApp <x-icon name="arrow-right" size="16" /></a>@endif
                 </div>
-                <p class="product-help">Ada pertanyaan tentang produk ini? Kami siap bantu lewat WhatsApp.</p>
+                @if(! $whatsAppUrl && ! $product->shopee_url)<p class="product-help">Tautan pemesanan produk ini belum tersedia. Lihat halaman kontak untuk pilihan lain.</p>@endif
+                @if($whatsAppUrl)<p class="product-help">Ada pertanyaan tentang produk ini? Kami siap bantu lewat WhatsApp.</p>@endif
             </div>
         </div>
     </div>

@@ -71,7 +71,7 @@
             <div><h3>Tambah Produk</h3><p class="modal-subtitle">Tambahkan produk baru ke katalog Pelangi Lollycandy.</p></div>
             <button type="button" data-modal-close class="modal-close" aria-label="Tutup dialog"><x-icon name="close" /></button>
         </div>
-        <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="admin-form-grid product-form-grid" data-admin-ajax>
+        <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="admin-form-grid product-form-grid" data-admin-ajax data-ai-product-form data-ai-endpoint="{{ route('admin.products.ai-autofill') }}" data-ai-user="{{ auth()->id() }}">
             @csrf
             <input type="hidden" name="_form" value="create">
             @include('admin.products.partials.form-fields', ['product' => null, 'categories' => $categories])
@@ -91,7 +91,7 @@
                 <h3>Edit {{ $product->name }}</h3>
                 <button type="button" data-modal-close class="modal-close" aria-label="Tutup dialog"><x-icon name="close" /></button>
             </div>
-            <form action="{{ route('admin.products.update', $product) }}" method="POST" enctype="multipart/form-data" class="admin-form-grid product-form-grid" data-admin-ajax>
+            <form action="{{ route('admin.products.update', $product) }}" method="POST" enctype="multipart/form-data" class="admin-form-grid product-form-grid" data-admin-ajax data-ai-product-form data-ai-endpoint="{{ route('admin.products.ai-autofill') }}" data-ai-user="{{ auth()->id() }}">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="_form" value="edit-{{ $product->id }}">

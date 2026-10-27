@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MarketplaceLinkController as AdminMarketplaceLinkController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\ProductAiController;
 use App\Http\Controllers\Admin\ProductionController as AdminProductionController;
 use App\Http\Controllers\Admin\PurchaseController as AdminPurchaseController;
 use App\Http\Controllers\Admin\RawMaterialController as AdminRawMaterialController;
@@ -32,6 +33,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::post('products/ai-autofill', ProductAiController::class)->middleware('throttle:10,1')->name('products.ai-autofill');
         Route::resource('products', AdminProductController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::get('products/{product}', [AdminProductController::class, 'show'])->name('products.show');
         Route::resource('categories', AdminCategoryController::class)->only(['index', 'store', 'update', 'destroy']);
@@ -60,5 +62,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('stock/adjust', [AdminStockController::class, 'adjust'])->name('stock.adjust');
         Route::get('stock/{type}/{id}', [AdminStockController::class, 'history'])->name('stock.history');
         Route::get('reports', [AdminReportController::class, 'index'])->name('reports.index');
+        Route::get('reports/export', [AdminReportController::class, 'export'])->name('reports.export');
     });
 });

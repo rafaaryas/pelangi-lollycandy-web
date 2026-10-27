@@ -12,34 +12,14 @@
 .admin-shell {
     display: grid;
     grid-template-columns: 325px minmax(0, 1fr);
-    min-height: calc(100vh - 70px);
+    min-height: 100vh;
     background: #fff;
-}
-
-.admin-topbanner {
-    width: 100%;
-    height: 70px;
-    background: #e4506f;
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    color: white;
-    font-weight: bold;
-    font-size: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    justify-content: space-between;
-}
-
-.admin-topbanner img {
-    height: 60px;
-    margin-right: 12px;
-    margin-top: 5px;
 }
 
 .admin-sidebar {
     position: sticky;
     top: 0;
-    height: calc(100vh - 70px);
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -64,26 +44,6 @@
     color: #fff;
     background: rgba(255, 255, 255, .12);
     box-shadow: none;
-}
-
-.admin-brand {
-    display: grid;
-    gap: .25rem;
-    margin-bottom: 1.25rem;
-    font-family: 'centra', sans-serif;
-}
-
-
-.admin-brand strong {
-    color: #fff;
-    font-size: 1.55rem;
-    font-weight: 900;
-    line-height: 1.1;
-}
-
-.admin-brand small {
-    color: rgba(255, 255, 255, .92);
-    font-size: 1rem;
 }
 
 .admin-nav {
@@ -516,27 +476,15 @@
 
 /* Operational admin refresh: brand colors and local rounded typography stay in place. */
 .admin-body { background: #f6f8fc; }
-.admin-topbanner {
-    height: 66px;
-    padding: 0 1.5rem;
-    background: #e4506f;
-    box-shadow: 0 2px 10px rgba(31, 41, 55, .08);
-}
-.admin-topbanner img { height: 52px; }
-.admin-topbar-caption { margin-left: auto; color: rgba(255,255,255,.88); font-size: .88rem; font-weight: 600; }
-.admin-topbar-user { margin-left: 1.1rem; padding: .5rem .8rem; border: 1px solid rgba(255,255,255,.34); border-radius: 999px; color: #fff; font-size: .85rem; }
-.admin-shell { grid-template-columns: 258px minmax(0, 1fr); min-height: calc(100vh - 66px); background: #f6f8fc; }
+.admin-shell { grid-template-columns: 258px minmax(0, 1fr); min-height: 100vh; background: #f6f8fc; }
 .admin-sidebar {
     top: 0;
-    height: calc(100vh - 66px);
+    height: 100vh;
     overflow-y: auto;
     padding: 1.3rem 1rem 1rem;
     background: #253b58;
     box-shadow: inset -1px 0 rgba(255,255,255,.08);
 }
-.admin-brand { display: flex; align-items: center; gap: .75rem; margin: .2rem .55rem 1.3rem; }
-.admin-brand strong { display: block; font-size: 1rem; letter-spacing: .01em; }
-.admin-brand small { display: block; margin-top: .15rem; color: rgba(255,255,255,.68); font-size: .72rem; }
 .admin-nav { display: grid; gap: .2rem; }
 .admin-nav-group { display: grid; gap: .15rem; margin-top: 1rem; }
 .admin-nav-group > p { margin: 0 0 .3rem .75rem; color: rgba(255,255,255,.6); font-size: .63rem; font-weight: 800; letter-spacing: .13em; }

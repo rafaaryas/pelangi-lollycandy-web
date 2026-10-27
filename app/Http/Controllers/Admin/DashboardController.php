@@ -48,12 +48,17 @@ class DashboardController extends Controller
         $months = collect(range(0, 5))->map(function (int $offset) use ($rangeStart, $salesByMonth, $productionByMonth): array {
             $month = $rangeStart->addMonths($offset);
             $key = $month->format('Y-m');
+            $monthSales = $salesByMonth->get($key, collect());
+            $monthProduction = $productionByMonth->get($key, collect());
 
             return [
                 'key' => $key,
                 'label' => $month->locale('id')->translatedFormat('M'),
-                'sales' => $salesByMonth->get($key, collect())->sum(fn (Sale $sale): float => (float) $sale->total_amount),
-                'production' => $productionByMonth->get($key, collect())->sum(fn (ProductionResult $result): float => (float) $result->quantity_produced),
+                'period' => $month->locale('id')->translatedFormat('F Y'),
+                'sales' => $monthSales->sum(fn (Sale $sale): float => (float) $sale->total_amount),
+                'salesCount' => $monthSales->count(),
+                'production' => $monthProduction->sum(fn (ProductionResult $result): float => (float) $result->quantity_produced),
+                'productionCount' => $monthProduction->pluck('production_id')->unique()->count(),
             ];
         });
 

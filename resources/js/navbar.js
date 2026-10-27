@@ -51,6 +51,7 @@ if (adminNavToggle && adminSidebar) {
         adminSidebar.classList.toggle('is-open', isOpen);
         document.body.classList.toggle('admin-nav-open', isOpen);
         adminNavToggle.setAttribute('aria-expanded', String(isOpen));
+        adminNavToggle.setAttribute('aria-label', isOpen ? 'Tutup navigasi' : 'Buka navigasi');
         overlay?.setAttribute('tabindex', isOpen ? '0' : '-1');
         if (!isOpen && restoreFocus) adminNavToggle.focus();
         if (isOpen) window.requestAnimationFrame(() => closeButton?.focus());

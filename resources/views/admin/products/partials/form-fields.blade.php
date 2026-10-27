@@ -13,6 +13,7 @@
 <div class="form-group">
     <label for="product-category-{{ $product->id ?? 'new' }}">Kategori <span aria-hidden="true">*</span></label>
     <select id="product-category-{{ $product->id ?? 'new' }}" name="category_id" required @if($errors->has('category_id')) aria-invalid="true" aria-describedby="error-category_id" @endif>
+        @if(! $editing)<option value="" disabled @selected(old('category_id', '') === '')>Pilih kategori</option>@endif
         @foreach($categories as $category)
             <option value="{{ $category->id }}" @selected(old('category_id', $product->category_id ?? '') == $category->id)>{{ $category->name }}</option>
         @endforeach
@@ -57,10 +58,21 @@
     <label class="admin-file-picker" data-dropzone>
         <x-icon name="plus" size="18" />
         <span>Tarik foto ke sini atau pilih foto</span>
-        <input type="file" name="image" accept="image/*" data-image-preview-input="preview-{{ $product->id ?? 'new' }}">
+        <input type="file" name="image" accept="image/jpeg,image/png,image/webp" data-image-preview-input="preview-{{ $product->id ?? 'new' }}">
     </label>
     <img class="admin-image-preview" id="preview-{{ $product->id ?? 'new' }}" data-image-preview-img src="{{ $productImagePath ? asset('storage/'.$productImagePath) : '' }}" alt="Preview gambar produk" @if(!$productImagePath) hidden @endif>
     <button type="button" class="btn btn-secondary image-remove" data-image-remove="preview-{{ $product->id ?? 'new' }}" hidden>Hapus pilihan foto</button>
+    <div class="ai-autofill" data-ai-controls>
+        <label class="ai-autofill-label" for="ai-toggle-{{ $product->id ?? 'new' }}">
+            <span><strong>✨ AI Autofill</strong><small data-ai-subtitle>Isi informasi produk secara manual.</small></span>
+            <input id="ai-toggle-{{ $product->id ?? 'new' }}" type="checkbox" role="switch" data-ai-toggle>
+        </label>
+        <div class="ai-autofill-actions" data-ai-actions hidden>
+            <button type="button" class="btn btn-secondary" data-ai-analyze>✨ Analisis Foto Sekarang</button>
+            <button type="button" class="btn btn-secondary" data-ai-retry hidden>✨ Analisis Ulang</button>
+        </div>
+        <p class="ai-autofill-status" data-ai-status role="status" aria-live="polite" hidden></p>
+    </div>
 </div>
 <div class="form-group">
     <span class="field-label">Status Aktif</span>

@@ -54,7 +54,7 @@
 <footer class="transaction-form-footer">
     <a class="text-action" href="{{ route('admin.'.$kind.'.index') }}">Kembali ke daftar</a>
     <div>
-        @if($record->status === 'draft')<a class="btn btn-secondary" href="{{ route('admin.'.$kind.'.edit', $record) }}"><x-icon name="pencil" />Edit Draft</a><form method="POST" action="{{ route('admin.'.$kind.'.confirm', $record) }}" data-loading-form>@csrf<button class="btn btn-primary" type="submit"><x-icon name="check" />Konfirmasi</button></form>@endif
+        @if($record->status === 'draft')<a class="btn btn-secondary" href="{{ route('admin.'.$kind.'.edit', $record) }}"><x-icon name="pencil" />Edit Draft</a><form method="POST" action="{{ route('admin.'.$kind.'.confirm', $record) }}" data-loading-form data-confirm-title="Konfirmasi transaksi?" data-confirm-message="{{ match($kind) { 'purchases' => 'Stok bahan baku akan bertambah.', 'productions' => 'Stok bahan baku akan berkurang dan stok produk akan bertambah.', 'sales' => 'Stok produk akan berkurang.' } }}" data-confirm-label="Konfirmasi">@csrf<button class="btn btn-primary" type="submit"><x-icon name="check" />Konfirmasi</button></form>@endif
         @if($record->status !== 'cancelled')<form method="POST" action="{{ route('admin.'.$kind.'.cancel', $record) }}" data-confirm-title="Batalkan transaksi?" data-confirm-message="Transaksi {{ $reference }} akan dibatalkan. Stok akan disesuaikan jika transaksi ini sudah dikonfirmasi." data-confirm-label="Batalkan" data-loading-form>@csrf<button class="btn btn-danger-outline" type="submit"><x-icon name="close" />Batalkan</button></form>@endif
     </div>
 </footer>

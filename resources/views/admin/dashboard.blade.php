@@ -52,13 +52,13 @@
             <span class="panel-mark panel-mark-pink" aria-hidden="true"></span>
         </div>
         @if($months->sum('sales') > 0)
-            <div class="mini-chart" role="img" aria-label="Grafik nilai penjualan enam bulan terakhir">
+            <div class="mini-chart" role="group" aria-label="Grafik nilai penjualan enam bulan terakhir. Fokus pada batang untuk melihat rincian tiap bulan.">
                 <div class="chart-grid-lines"><i></i><i></i><i></i></div>
                 <div class="chart-columns">
                     @foreach($months as $month)
                         <div class="chart-column">
                             <div class="chart-bar-wrap">
-                                <span class="chart-bar chart-bar-sales" style="--bar-height: {{ ($month['sales'] / $salesMax) * 100 }}%" title="Rp{{ number_format($month['sales'], 0, ',', '.') }}"></span>
+                                <button type="button" class="chart-bar chart-bar-sales" style="--bar-height: {{ ($month['sales'] / $salesMax) * 100 }}%" data-chart-bar data-chart-period="{{ $month['period'] }}" data-chart-label="Total Penjualan" data-chart-value="Rp{{ number_format($month['sales'], 0, ',', '.') }}" data-chart-count="{{ number_format($month['salesCount'], 0, ',', '.') }} transaksi" aria-label="{{ $month['period'] }}: penjualan Rp{{ number_format($month['sales'], 0, ',', '.') }}, {{ number_format($month['salesCount'], 0, ',', '.') }} transaksi"></button>
                             </div>
                             <span class="chart-month">{{ $month['label'] }}</span>
                         </div>
@@ -77,13 +77,13 @@
             <span class="panel-mark panel-mark-blue" aria-hidden="true"></span>
         </div>
         @if($months->sum('production') > 0)
-            <div class="mini-chart" role="img" aria-label="Grafik jumlah produksi enam bulan terakhir">
+            <div class="mini-chart" role="group" aria-label="Grafik jumlah produksi enam bulan terakhir. Fokus pada batang untuk melihat rincian tiap bulan.">
                 <div class="chart-grid-lines"><i></i><i></i><i></i></div>
                 <div class="chart-columns">
                     @foreach($months as $month)
                         <div class="chart-column">
                             <div class="chart-bar-wrap">
-                                <span class="chart-bar chart-bar-production" style="--bar-height: {{ ($month['production'] / $productionMax) * 100 }}%" title="{{ number_format($month['production'], 0, ',', '.') }} produk"></span>
+                                <button type="button" class="chart-bar chart-bar-production" style="--bar-height: {{ ($month['production'] / $productionMax) * 100 }}%" data-chart-bar data-chart-period="{{ $month['period'] }}" data-chart-label="Hasil Produksi" data-chart-value="{{ number_format($month['production'], 0, ',', '.') }} produk" data-chart-count="{{ number_format($month['productionCount'], 0, ',', '.') }} batch" aria-label="{{ $month['period'] }}: produksi {{ number_format($month['production'], 0, ',', '.') }} produk dari {{ number_format($month['productionCount'], 0, ',', '.') }} batch"></button>
                             </div>
                             <span class="chart-month">{{ $month['label'] }}</span>
                         </div>

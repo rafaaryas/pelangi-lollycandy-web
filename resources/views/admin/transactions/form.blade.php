@@ -87,6 +87,7 @@
         </section>
     @endif
 
-    <footer class="transaction-form-footer"><a class="text-action" href="{{ route('admin.'.$resource.'.index') }}"><x-icon name="arrow-left" size="16" />Kembali</a><div><button class="btn btn-secondary" name="submit_action" value="draft" type="submit"><x-icon name="save" />Simpan Draft</button><button class="btn btn-primary" name="submit_action" value="confirm" type="submit"><x-icon name="check" />Simpan &amp; Konfirmasi</button></div></footer>
+    <p class="transaction-stock-impact">{{ match($kind) { 'purchases' => 'Konfirmasi menambah stok bahan baku.', 'productions' => 'Konfirmasi mengurangi stok bahan baku dan menambah stok produk.', 'sales' => 'Konfirmasi mengurangi stok produk.' } }} Draft dapat diperiksa dan diubah sebelum dikonfirmasi.</p>
+    <footer class="transaction-form-footer"><a class="text-action" href="{{ route('admin.'.$resource.'.index') }}"><x-icon name="arrow-left" size="16" />Kembali</a><div><button class="btn btn-secondary" name="submit_action" value="draft" type="submit"><x-icon name="save" />Simpan Draft</button><button class="btn btn-primary" name="submit_action" value="confirm" type="submit" data-confirm-title="Konfirmasi transaksi?" data-confirm-message="{{ match($kind) { 'purchases' => 'Stok bahan baku akan bertambah setelah pembelian dikonfirmasi.', 'productions' => 'Stok bahan baku akan berkurang dan stok produk akan bertambah setelah produksi dikonfirmasi.', 'sales' => 'Stok produk akan berkurang setelah penjualan dikonfirmasi.' } }}" data-confirm-label="Simpan & Konfirmasi"><x-icon name="check" />Simpan &amp; Konfirmasi</button></div></footer>
 </form>
 @endsection

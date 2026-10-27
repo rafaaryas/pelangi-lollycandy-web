@@ -21,7 +21,7 @@
 <section id="about" class="section home-about">
     <div class="container">
         <div class="section-head">
-            <h2>About Us</h2>
+            <h2>Tentang Kami</h2>
             <p>Permen penuh warna dengan bentuk menarik dan pilihan yang cocok untuk camilan, hadiah, maupun acara spesial.</p>
         </div>
         <div class="about-grid">
@@ -31,8 +31,8 @@
                     <img src="{{ asset('images/kualitas.jpg') }}" alt="Proses pembuatan permen Pelangi Lollycandy" loading="lazy" width="560" height="350">
                 </div>
                 <div class="about-card-content">
-                    <h3>Kualitas Terjaga</h3>
-                    <p>Pelangi Lollycandy dibuat dari bahan berkualitas dengan proses produksi yang higienis untuk menjaga rasa, warna, dan kualitas permen tetap konsisten.</p>
+                    <h3>Kenali Pelangi Lollycandy</h3>
+                    <p>Lihat pilihan produk di katalog dan hubungi kami untuk bertanya tentang varian yang tersedia.</p>
                 </div>
             </article>
             <article class="card about-card about-card-media">
@@ -49,8 +49,8 @@
                     <img src="{{ asset('images/pasar.jpg') }}" alt="Pilihan permen siap dipasarkan" loading="lazy" width="560" height="350">
                 </div>
                 <div class="about-card-content">
-                    <h3>Siap Dipasarkan</h3>
-                    <p>Mendukung pembelian retail, grosir, hingga kebutuhan acara dengan pilihan kemasan yang siap dijual kembali atau dijadikan hadiah.</p>
+                    <h3>Untuk Berbagai Kebutuhan</h3>
+                    <p>Punya kebutuhan untuk acara, hampers, atau pembelian dalam jumlah banyak? Ceritakan rencanamu kepada kami.</p>
                 </div>
             </article>
         </div>
@@ -64,9 +64,11 @@
             <a class="text-link" href="{{ route('products.index') }}">Lihat Semua <x-icon name="arrow-right" size="17" /></a>
         </div>
         <div class="grid products-grid">
-            @foreach($featuredProducts as $product)
+            @forelse($featuredProducts as $product)
                 @include('public.partials.product-card', ['product' => $product])
-            @endforeach
+            @empty
+                <p class="catalog-empty">Produk akan muncul di sini setelah tersedia di katalog.</p>
+            @endforelse
         </div>
     </div>
 </section>

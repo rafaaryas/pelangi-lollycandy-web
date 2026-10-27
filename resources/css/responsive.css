@@ -85,13 +85,6 @@
     }
     .section-head-inline .btn { width: auto; }
 
-    .admin-topbanner {
-        position: sticky;
-        top: 0;
-        z-index: 70;
-        height: 66px;
-    }
-    .admin-topbanner img { height: 54px; }
     .admin-menu-toggle { display: inline-flex; }
     .admin-shell {
         grid-template-columns: 1fr;
@@ -99,7 +92,7 @@
     }
     .admin-sidebar {
         position: sticky;
-        top: 66px;
+        top: var(--admin-mobile-header-height);
         z-index: 60;
         height: auto;
         min-height: 0;
@@ -113,7 +106,6 @@
         max-height: 540px;
         padding: 1rem;
     }
-    .admin-brand { margin-bottom: .8rem; }
     .admin-nav {
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: .5rem;
@@ -231,7 +223,6 @@
         height: 27px;
     }
 
-    .admin-topbanner { padding: 0 .85rem; }
     .admin-menu-toggle {
         min-width: 92px;
         padding: .52rem .72rem;
@@ -324,10 +315,9 @@
 }
 
 @media (max-width: 900px) {
-    .admin-topbar-caption, .admin-topbar-user { display: none; }
     .admin-shell { grid-template-columns: minmax(0, 1fr); }
     .admin-sidebar { max-height: 0; }
-    .admin-sidebar.is-open { max-height: calc(100vh - 66px); overflow-y: auto; }
+    .admin-sidebar.is-open { max-height: calc(100vh - var(--admin-mobile-header-height)); overflow-y: auto; }
     .admin-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
     .admin-nav > .admin-nav-link { grid-column: 1 / -1; }
     .admin-nav-group { align-content: start; }

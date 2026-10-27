@@ -11,6 +11,7 @@ if (contactForm && window.fetch) {
     const messageFor = (field) => {
         if (field.validity.valueMissing) return `${field.labels?.[0]?.textContent.replace('*', '').replace('(opsional)', '').trim() || 'Kolom ini'} wajib diisi.`;
         if (field.validity.typeMismatch) return 'Masukkan alamat email yang valid.';
+        if (field.validity.patternMismatch) return 'Masukkan nomor WhatsApp Indonesia yang valid, misalnya 081234567890.';
         if (field.validity.tooLong) return 'Isi kolom ini terlalu panjang.';
         return '';
     };

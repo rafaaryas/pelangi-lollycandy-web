@@ -87,17 +87,19 @@ document.addEventListener('submit', (event) => {
     const form = event.target;
     if (!(form instanceof HTMLFormElement) || !document.body.classList.contains('admin-body')) return;
 
-    if (form.dataset.confirmMessage && form.dataset.confirmApproved !== 'true') {
+    const confirmationMessage = event.submitter?.dataset.confirmMessage || form.dataset.confirmMessage;
+    if (confirmationMessage && form.dataset.confirmApproved !== 'true') {
         event.preventDefault();
+        event.stopImmediatePropagation();
         pendingForm = form;
         pendingSubmitter = event.submitter;
         const modal = document.querySelector('[data-confirm-dialog]');
         const title = modal.querySelector('#confirm-title');
         const message = modal.querySelector('#confirm-message');
         const accept = modal.querySelector('[data-confirm-accept]');
-        title.textContent = form.dataset.confirmTitle || 'Konfirmasi tindakan';
-        message.textContent = form.dataset.confirmMessage;
-        accept.textContent = form.dataset.confirmLabel || 'Konfirmasi';
+        title.textContent = event.submitter?.dataset.confirmTitle || form.dataset.confirmTitle || 'Konfirmasi tindakan';
+        message.textContent = confirmationMessage;
+        accept.textContent = event.submitter?.dataset.confirmLabel || form.dataset.confirmLabel || 'Konfirmasi';
         openModal(modal, event.submitter || document.activeElement);
         return;
     }

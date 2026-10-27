@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\MarketplaceLink;
+use App\Support\BusinessContact;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\View as ViewInstance;
 use Illuminate\Support\ServiceProvider;
@@ -27,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
                 ->where('is_active', true)
                 ->where('platform', 'like', '%shopee%')
                 ->value('url'));
+            $view->with('businessWhatsAppUrl', BusinessContact::whatsAppUrl());
         });
     }
 }

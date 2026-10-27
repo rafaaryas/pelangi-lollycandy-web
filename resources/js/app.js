@@ -1,6 +1,8 @@
 import './navbar';
 import './modal';
 import './admin-ajax';
+import './dashboard-charts';
+import './product-ai-autofill';
 import './filter';
 import './slider';
 import './smooth-scroll';
