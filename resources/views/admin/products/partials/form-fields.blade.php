@@ -38,6 +38,10 @@
     </select>
     <x-field-error name="badge" />
 </div>
+<div class="form-group">
+    <span class="field-label">Status Aktif</span>
+    <label class="admin-status-toggle"><input type="checkbox" name="is_active" value="1" @checked(old('is_active', $product->is_active ?? true))> Aktif</label>
+</div>
 <h4 class="form-section-title">Deskripsi Produk</h4>
 <div class="form-group form-col-2">
     <label for="product-description-{{ $product->id ?? 'new' }}">Deskripsi <span aria-hidden="true">*</span></label>
@@ -52,8 +56,8 @@
     <label for="product-whatsapp-url-{{ $product->id ?? 'new' }}">Link WhatsApp</label>
     <input id="product-whatsapp-url-{{ $product->id ?? 'new' }}" type="url" name="whatsapp_url" value="{{ old('whatsapp_url', $product->whatsapp_url ?? '') }}" placeholder="Opsional, gunakan tautan default jika kosong">
 </div>
-<h4 class="form-section-title">Foto Produk</h4>
-<div class="form-group">
+<h4 class="form-section-title">Media Produk</h4>
+<div class="form-group form-col-2">
     <span class="field-label">Upload Gambar</span>
     <label class="admin-file-picker" data-dropzone>
         <x-icon name="plus" size="18" />
@@ -62,21 +66,18 @@
     </label>
     <img class="admin-image-preview" id="preview-{{ $product->id ?? 'new' }}" data-image-preview-img src="{{ $productImagePath ? asset('storage/'.$productImagePath) : '' }}" alt="Preview gambar produk" @if(!$productImagePath) hidden @endif>
     <button type="button" class="btn btn-secondary image-remove" data-image-remove="preview-{{ $product->id ?? 'new' }}" hidden>Hapus pilihan foto</button>
+ </div>
+<h4 class="form-section-title">AI Assistance</h4>
+<div class="form-group form-col-2">
     <div class="ai-autofill" data-ai-controls>
         <label class="ai-autofill-label" for="ai-toggle-{{ $product->id ?? 'new' }}">
-            <span><strong>✨ AI Autofill</strong><small data-ai-subtitle>Isi informasi produk secara manual.</small></span>
+            <span><strong>AI Autofill</strong><small data-ai-subtitle>Analisis foto untuk membantu mengisi informasi produk. Hasilnya dapat diedit sebelum disimpan.</small></span>
             <input id="ai-toggle-{{ $product->id ?? 'new' }}" type="checkbox" role="switch" data-ai-toggle>
         </label>
         <div class="ai-autofill-actions" data-ai-actions hidden>
-            <button type="button" class="btn btn-secondary" data-ai-analyze>✨ Analisis Foto Sekarang</button>
-            <button type="button" class="btn btn-secondary" data-ai-retry hidden>✨ Analisis Ulang</button>
+            <button type="button" class="btn btn-secondary" data-ai-analyze>Analisis Foto Sekarang</button>
+            <button type="button" class="btn btn-secondary" data-ai-retry hidden>Analisis Ulang</button>
         </div>
         <p class="ai-autofill-status" data-ai-status role="status" aria-live="polite" hidden></p>
     </div>
-</div>
-<div class="form-group">
-    <span class="field-label">Status Aktif</span>
-    <label style="display:flex;align-items:center;gap:.5rem">
-        <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $product->is_active ?? true))> Aktif
-    </label>
 </div>

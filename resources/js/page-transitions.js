@@ -47,6 +47,19 @@ function syncAdminNavigation(nextDocument) {
         if (matching?.hasAttribute('aria-current')) link.setAttribute('aria-current', 'page');
         else link.removeAttribute('aria-current');
     });
+    document.querySelectorAll('[data-nav-group]').forEach((group) => {
+        const next = nextDocument.querySelector(`[data-nav-group="${group.dataset.navGroup}"]`);
+        const active = next?.dataset.active === 'true';
+        group.dataset.active = String(active);
+        const parent = group.querySelector('.admin-nav-parent');
+        parent.classList.toggle('is-active', active);
+        if (active) {
+            parent.setAttribute('aria-expanded', 'true');
+            group.querySelector('.admin-nav-children').inert = false;
+        }
+    });
+    const context = document.querySelector('.admin-topbar-context');
+    if (context) context.textContent = nextDocument.querySelector('.admin-topbar-context')?.textContent || nextDocument.title;
 }
 
 function initializeInsertedAdminContent(main) {
@@ -99,7 +112,7 @@ async function loadAdminPage(url, { push = true, focus = true } = {}) {
         syncAdminNavigation(nextDocument);
         if (push) window.history.pushState({ adminPartial: true }, '', resolvedUrl);
         if (focus) {
-            window.scrollTo({ top: 0, behavior: 'instant' });
+            main.scrollTo({ top: 0, behavior: 'instant' });
             main.focus({ preventScroll: true });
         }
         main.classList.remove('admin-content-enter');

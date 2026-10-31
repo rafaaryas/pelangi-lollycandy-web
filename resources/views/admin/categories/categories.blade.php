@@ -10,6 +10,7 @@
 @php($filtersActive = request()->filled('q') || request()->filled('status'))
 <form method="GET" class="table-toolbar" role="search"><label class="search-field"><x-icon name="search" /><input name="q" value="{{ request('q') }}" placeholder="Cari kategori" aria-label="Cari kategori"></label><select name="status" aria-label="Status"><option value="">Semua status</option><option value="active" @selected(request('status') === 'active')>Aktif</option><option value="inactive" @selected(request('status') === 'inactive')>Nonaktif</option></select><button class="btn btn-secondary" type="submit"><x-icon name="sliders" />{{ $filtersActive ? 'Filter aktif' : 'Filter' }}</button></form>
 
+@include('admin.partials.export-menu', ['module' => 'categories'])
 <div class="card">
     <div class="admin-table-wrap">
         <table class="admin-table">
@@ -47,7 +48,7 @@
             <input type="hidden" name="_form" value="create">
             <div class="form-group form-col-2"><label for="category-create-name">Nama kategori <span aria-hidden="true">*</span></label><input id="category-create-name" name="name" value="{{ old('name') }}" required autocomplete="off" @if($errors->has('name')) aria-invalid="true" aria-describedby="error-name" @endif><x-field-error name="name" /></div>
             <div class="form-group form-col-2"><label for="category-create-description">Deskripsi singkat <span class="field-optional">(opsional)</span></label><textarea id="category-create-description" name="description" rows="3" maxlength="240">{{ old('description') }}</textarea></div>
-            <div class="form-group form-col-2"><label><input type="checkbox" name="is_active" value="1" checked> Aktif</label></div>
+            <div class="form-group form-col-2"><label class="admin-status-toggle"><input type="checkbox" name="is_active" value="1" checked> Aktif</label></div>
             <div class="form-actions"><button type="button" class="btn btn-secondary" data-modal-close>Batal</button><button type="submit" class="btn btn-primary">Tambah Kategori</button></div>
         </form>
     </div>
@@ -57,14 +58,14 @@
 <div class="modal" id="edit-category-{{ $category->id }}" data-modal data-open-on-error="{{ $errors->any() && old('_form') === 'edit-'.$category->id ? 'true' : 'false' }}">
     <div class="modal-backdrop" data-modal-close></div>
     <div class="modal-content modal-small">
-        <div class="modal-head"><h3>Edit Kategori</h3><button type="button" data-modal-close class="modal-close" aria-label="Tutup dialog"><x-icon name="close" /></button></div>
+        <div class="modal-head"><div><h3>Edit Kategori</h3><p class="modal-subtitle">Perbarui pengelompokan produk dalam katalog.</p></div><button type="button" data-modal-close class="modal-close" aria-label="Tutup dialog"><x-icon name="close" /></button></div>
         <form method="POST" action="{{ route('admin.categories.update', $category) }}" class="admin-form-grid" data-admin-ajax>
             @csrf @method('PUT')
             <input type="hidden" name="_form" value="edit-{{ $category->id }}">
             <div class="form-group form-col-2"><label for="category-edit-name-{{ $category->id }}">Nama kategori <span aria-hidden="true">*</span></label><input id="category-edit-name-{{ $category->id }}" name="name" value="{{ old('name', $category->name) }}" required @if($errors->has('name')) aria-invalid="true" aria-describedby="error-name" @endif><x-field-error name="name" /></div>
             <div class="form-group form-col-2"><label for="category-edit-description-{{ $category->id }}">Deskripsi singkat <span class="field-optional">(opsional)</span></label><textarea id="category-edit-description-{{ $category->id }}" name="description" rows="3" maxlength="240">{{ old('description', $category->description) }}</textarea></div>
             <p class="form-help form-col-2">Jika kategori dibuat nonaktif, semua produk di dalam kategori ini otomatis ikut nonaktif.</p>
-            <div class="form-group form-col-2"><label><input type="checkbox" name="is_active" value="1" @checked($category->is_active)> Aktif</label></div>
+            <div class="form-group form-col-2"><label class="admin-status-toggle"><input type="checkbox" name="is_active" value="1" @checked($category->is_active)> Aktif</label></div>
             <div class="form-actions"><button type="button" class="btn btn-secondary" data-modal-close>Batal</button><button type="submit" class="btn btn-primary">Update Kategori</button></div>
         </form>
     </div>

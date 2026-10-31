@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class StockMovement extends Model
@@ -24,5 +25,25 @@ class StockMovement extends Model
     public function source(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function scopeWithSourceDocument(Builder $query): Builder
+    {
+        return $query->with(['source' => fn (MorphTo $source) => $source->morphWith([
+            PurchaseDetail::class => ['purchase'],
+            SaleDetail::class => ['sale'],
+            ProductionMaterial::class => ['production'],
+            ProductionResult::class => ['production'],
+        ])]);
+    }
+
+    public function getReferenceAttribute(): string
+    {
+        return match (true) {
+            $this->source instanceof PurchaseDetail => $this->source->purchase?->reference_number,
+            $this->source instanceof SaleDetail => $this->source->sale?->invoice_number,
+            $this->source instanceof ProductionMaterial, $this->source instanceof ProductionResult => $this->source->production?->production_number,
+            default => null,
+        } ?? 'Penyesuaian stok';
     }
 }

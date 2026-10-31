@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="admin-app">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,13 +10,10 @@
 </head>
 <body class="admin-body">
 <div class="route-progress" data-route-progress aria-hidden="true"><span></span></div>
-<header class="admin-mobile-header">
-    <button class="btn admin-menu-toggle" type="button" data-admin-nav-toggle aria-label="Buka navigasi" aria-expanded="false" aria-controls="admin-sidebar">
-        <x-icon name="menu" size="20" /><span>Menu</span>
-    </button>
-    <a class="admin-mobile-brand" href="{{ route('admin.dashboard') }}" aria-label="Pelangi Lollycandy — Dashboard">
-        <img src="{{ asset('images/pelangi-logo.png') }}" alt="Pelangi Lollycandy">
-    </a>
+<header class="admin-topbar">
+    <button class="admin-topbar-toggle" type="button" data-admin-nav-toggle aria-label="Perkecil navigasi" aria-expanded="true" aria-controls="admin-sidebar" title="Tampilkan atau sembunyikan navigasi"><x-icon name="menu" size="22" /></button>
+    <span class="admin-topbar-context">@yield('title', 'Dashboard')</span>
+    <a class="admin-topbar-website" href="{{ route('home') }}"><x-icon name="house" size="17" /><span>Lihat website</span></a>
 </header>
 <div class="admin-shell">
     <aside class="admin-sidebar" id="admin-sidebar" data-admin-sidebar>
@@ -28,39 +25,31 @@
                 <button type="button" class="admin-sidebar-close" data-admin-nav-close aria-label="Tutup navigasi"><x-icon name="close" size="18" /></button>
             </div>
             <nav class="admin-nav" aria-label="Navigasi admin">
-                <a class="admin-nav-link {{ request()->routeIs('admin.dashboard') ? 'is-active' : '' }}" href="{{ route('admin.dashboard') }}" @if(request()->routeIs('admin.dashboard')) aria-current="page" @endif><x-icon name="dashboard" />Dashboard</a>
-                <div class="admin-nav-group">
-                    <p>MASTER DATA</p>
-                    <a class="admin-nav-link {{ request()->routeIs('admin.categories.*') ? 'is-active' : '' }}" href="{{ route('admin.categories.index') }}" @if(request()->routeIs('admin.categories.*')) aria-current="page" @endif><x-icon name="tags" />Kategori Produk</a>
-                    <a class="admin-nav-link {{ request()->routeIs('admin.products.*') ? 'is-active' : '' }}" href="{{ route('admin.products.index') }}" @if(request()->routeIs('admin.products.*')) aria-current="page" @endif><x-icon name="package" />Produk</a>
-                    <a class="admin-nav-link {{ request()->routeIs('admin.raw-materials.*') ? 'is-active' : '' }}" href="{{ route('admin.raw-materials.index') }}" @if(request()->routeIs('admin.raw-materials.*')) aria-current="page" @endif><x-icon name="boxes" />Bahan Baku</a>
-                    <a class="admin-nav-link {{ request()->routeIs('admin.suppliers.*') ? 'is-active' : '' }}" href="{{ route('admin.suppliers.index') }}" @if(request()->routeIs('admin.suppliers.*')) aria-current="page" @endif><x-icon name="truck" />Supplier</a>
-                    <a class="admin-nav-link {{ request()->routeIs('admin.customers.*') ? 'is-active' : '' }}" href="{{ route('admin.customers.index') }}" @if(request()->routeIs('admin.customers.*')) aria-current="page" @endif><x-icon name="users" />Pelanggan</a>
-                </div>
-                <div class="admin-nav-group">
-                    <p>TRANSAKSI</p>
-                    <a class="admin-nav-link {{ request()->routeIs('admin.purchases.*') ? 'is-active' : '' }}" href="{{ route('admin.purchases.index') }}" @if(request()->routeIs('admin.purchases.*')) aria-current="page" @endif><x-icon name="cart" />Pembelian</a>
-                    <a class="admin-nav-link {{ request()->routeIs('admin.productions.*') ? 'is-active' : '' }}" href="{{ route('admin.productions.index') }}" @if(request()->routeIs('admin.productions.*')) aria-current="page" @endif><x-icon name="factory" />Produksi</a>
-                    <a class="admin-nav-link {{ request()->routeIs('admin.sales.*') ? 'is-active' : '' }}" href="{{ route('admin.sales.index') }}" @if(request()->routeIs('admin.sales.*')) aria-current="page" @endif><x-icon name="receipt" />Penjualan</a>
-                </div>
-                <div class="admin-nav-group">
-                    <p>PERSEDIAAN</p>
-                    <a class="admin-nav-link {{ request()->routeIs('admin.stock.*') ? 'is-active' : '' }}" href="{{ route('admin.stock.index') }}" @if(request()->routeIs('admin.stock.*')) aria-current="page" @endif><x-icon name="warehouse" />Stok</a>
-                </div>
-                <div class="admin-nav-group">
-                    <p>LAPORAN</p>
-                    <a class="admin-nav-link {{ request()->routeIs('admin.reports.*') ? 'is-active' : '' }}" href="{{ route('admin.reports.index') }}" @if(request()->routeIs('admin.reports.*')) aria-current="page" @endif><x-icon name="chart" />Rekap &amp; Laporan</a>
-                </div>
-                <div class="admin-nav-group">
-                    <p>LAINNYA</p>
-                    <a class="admin-nav-link {{ request()->routeIs('admin.marketplace-links.*') ? 'is-active' : '' }}" href="{{ route('admin.marketplace-links.index') }}" @if(request()->routeIs('admin.marketplace-links.*')) aria-current="page" @endif><x-icon name="store" />Marketplace</a>
-                    <a class="admin-nav-link" href="{{ route('home') }}"><x-icon name="house" />Lihat Website</a>
-                </div>
+                <a class="admin-nav-link {{ request()->routeIs('admin.dashboard') ? 'is-active' : '' }}" href="{{ route('admin.dashboard') }}" title="Dashboard" aria-label="Dashboard" @if(request()->routeIs('admin.dashboard')) aria-current="page" @endif><x-icon name="dashboard" /><span class="admin-nav-label">Dashboard</span></a>
+                @php($navGroups = [
+                    ['key' => 'master', 'label' => 'Master Data', 'icon' => 'boxes', 'links' => [['categories', 'Kategori Produk', 'tags'], ['products', 'Produk', 'package'], ['raw-materials', 'Bahan Baku', 'boxes'], ['suppliers', 'Supplier', 'truck'], ['customers', 'Pelanggan', 'users']]],
+                    ['key' => 'transactions', 'label' => 'Transaksi', 'icon' => 'receipt', 'links' => [['purchases', 'Pembelian', 'cart'], ['productions', 'Produksi', 'factory'], ['sales', 'Penjualan', 'receipt']]],
+                    ['key' => 'stock', 'label' => 'Persediaan', 'icon' => 'warehouse', 'links' => [['stock', 'Stok', 'warehouse']]],
+                    ['key' => 'reports', 'label' => 'Laporan', 'icon' => 'chart', 'links' => [['reports', 'Rekap & Laporan', 'chart']]],
+                    ['key' => 'other', 'label' => 'Lainnya', 'icon' => 'store', 'links' => [['marketplace-links', 'Marketplace', 'store']]],
+                ])
+                @foreach($navGroups as $group)
+                    @php($groupActive = collect($group['links'])->contains(fn ($link) => request()->routeIs('admin.'.$link[0].'.*')))
+                    <div class="admin-nav-group" data-nav-group="{{ $group['key'] }}" data-active="{{ $groupActive ? 'true' : 'false' }}">
+                        <button class="admin-nav-parent {{ $groupActive ? 'is-active' : '' }}" type="button" aria-expanded="{{ $groupActive ? 'true' : 'false' }}" aria-controls="nav-{{ $group['key'] }}" title="{{ $group['label'] }}" aria-label="{{ $group['label'] }}"><x-icon :name="$group['icon']" /><span class="admin-nav-label">{{ $group['label'] }}</span><x-icon name="chevron-down" size="15" class="admin-nav-chevron" /></button>
+                        <div class="admin-nav-children" id="nav-{{ $group['key'] }}" @if(!$groupActive) inert @endif><div class="admin-nav-children-inner">
+                            @foreach($group['links'] as [$resource, $label, $icon])
+                                <a class="admin-nav-link {{ request()->routeIs('admin.'.$resource.'.*') ? 'is-active' : '' }}" href="{{ route('admin.'.$resource.'.index') }}" title="{{ $label }}" aria-label="{{ $label }}" @if(request()->routeIs('admin.'.$resource.'.*')) aria-current="page" @endif><x-icon :name="$icon" /><span class="admin-nav-label">{{ $label }}</span></a>
+                            @endforeach
+                            @if($group['key'] === 'stock' && request()->routeIs('admin.stock.history'))<a class="admin-nav-link is-active" href="{{ url()->current() }}" aria-current="page" title="Riwayat Stok"><x-icon name="warehouse" /><span class="admin-nav-label">Riwayat Stok</span></a>@endif
+                        </div></div>
+                    </div>
+                @endforeach
             </nav>
             <div class="admin-bottom-actions">
                 <form class="admin-logout" method="POST" action="{{ route('admin.logout') }}">
                     @csrf
-                    <button class="btn admin-logout-button" type="submit"><x-icon name="logout" />Keluar</button>
+                    <button class="btn admin-logout-button" type="submit" title="Keluar" aria-label="Keluar"><x-icon name="logout" /><span class="admin-nav-label">Keluar</span></button>
                 </form>
             </div>
         </div>

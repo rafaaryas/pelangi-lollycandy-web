@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Support\InventoryNumbers;
 use App\Models\Purchase;
 use App\Models\PurchaseDetail;
 use App\Models\RawMaterial;
@@ -44,7 +45,7 @@ class PurchaseController extends Controller
             'supplier_id' => ['required', 'exists:suppliers,id'], 'reference_number' => ['nullable', 'string', 'max:80', 'unique:purchases,reference_number'],
             'purchase_date' => ['required', 'date'], 'notes' => ['nullable', 'string'],
             'items' => ['required', 'array', 'min:1'], 'items.*.raw_material_id' => ['required', 'distinct', 'exists:raw_materials,id'],
-            'items.*.quantity' => ['required', 'numeric', 'gt:0'], 'items.*.unit_price' => ['required', 'numeric', 'min:0'],
+            'items.*.quantity' => InventoryNumbers::quantityRules(), 'items.*.unit_price' => InventoryNumbers::moneyRules(),
         ]);
         $header = collect($validated)->only(['supplier_id', 'reference_number', 'purchase_date', 'notes'])->all();
         $lines = collect($validated['items'])->map(fn (array $item): array => [
@@ -83,7 +84,7 @@ class PurchaseController extends Controller
             'supplier_id' => ['required', 'exists:suppliers,id'], 'reference_number' => ['nullable', 'string', 'max:80', 'unique:purchases,reference_number,'.$purchase->id],
             'purchase_date' => ['required', 'date'], 'notes' => ['nullable', 'string'],
             'items' => ['required', 'array', 'min:1'], 'items.*.raw_material_id' => ['required', 'distinct', 'exists:raw_materials,id'],
-            'items.*.quantity' => ['required', 'numeric', 'gt:0'], 'items.*.unit_price' => ['required', 'numeric', 'min:0'],
+            'items.*.quantity' => InventoryNumbers::quantityRules(), 'items.*.unit_price' => InventoryNumbers::moneyRules(),
         ]);
         $header = collect($validated)->only(['supplier_id', 'reference_number', 'purchase_date', 'notes'])->all();
         $lines = collect($validated['items'])->map(fn (array $item): array => [

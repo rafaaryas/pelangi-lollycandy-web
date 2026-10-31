@@ -7,6 +7,7 @@ use App\Models\Production;
 use App\Models\Purchase;
 use App\Models\RawMaterial;
 use App\Models\Sale;
+use App\Support\InventoryNumbers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -16,6 +17,7 @@ class InventoryTransactionService
 {
     public function savePurchase(?Purchase $purchase, array $header, array $lines, bool $confirm = false): Purchase
     {
+        $this->validatePricedLines($lines);
         return DB::transaction(function () use ($purchase, $header, $lines, $confirm): Purchase {
             $header['reference_number'] = $header['reference_number'] ?? $purchase?->reference_number ?? 'TMP-'.Str::uuid();
             $purchase = $purchase
@@ -97,6 +99,12 @@ class InventoryTransactionService
 
     public function saveProduction(?Production $production, array $header, array $materials, array $results, bool $confirm = false): Production
     {
+        validator(compact('materials', 'results'), [
+            'materials' => ['required', 'array', 'min:1'],
+            'materials.*.quantity_used' => InventoryNumbers::quantityRules(),
+            'results' => ['required', 'array', 'min:1'],
+            'results.*.quantity_produced' => InventoryNumbers::quantityRules(),
+        ])->validate();
         return DB::transaction(function () use ($production, $header, $materials, $results, $confirm): Production {
             $header['production_number'] = $header['production_number'] ?? $production?->production_number ?? 'TMP-'.Str::uuid();
             $production = $production
@@ -190,6 +198,7 @@ class InventoryTransactionService
 
     public function saveSale(?Sale $sale, array $header, array $lines, bool $confirm = false): Sale
     {
+        $this->validatePricedLines($lines);
         return DB::transaction(function () use ($sale, $header, $lines, $confirm): Sale {
             $header['invoice_number'] = $header['invoice_number'] ?? $sale?->invoice_number ?? 'TMP-'.Str::uuid();
             $sale = $sale ? Sale::query()->lockForUpdate()->findOrFail($sale->id) : new Sale;
@@ -283,5 +292,19 @@ class InventoryTransactionService
         if ($status !== 'draft') {
             throw ValidationException::withMessages(['status' => 'Hanya transaksi draft yang dapat diubah atau dikonfirmasi.']);
         }
+    }
+
+    private function validatePricedLines(array $lines): void
+    {
+        validator(['items' => $lines], [
+            'items' => ['required', 'array', 'min:1'],
+            'items.*.quantity' => InventoryNumbers::quantityRules(),
+            'items.*.unit_price' => InventoryNumbers::moneyRules(),
+        ])->validate();
+
+        $total = array_sum(array_map(fn (array $line): float => round((float) $line['quantity'] * (float) $line['unit_price'], 2), $lines));
+        validator(['total_amount' => $total], [
+            'total_amount' => ['numeric', 'max:999999999999.99'],
+        ])->validate();
     }
 }

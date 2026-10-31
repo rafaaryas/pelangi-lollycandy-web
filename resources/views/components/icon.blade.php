@@ -32,8 +32,12 @@
         @case('check')<path d="m5 12 4 4L19 6"/>@break
         @case('close')<path d="m18 6-12 12M6 6l12 12"/>@break
         @case('save')<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/>@break
+        @case('download')<path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/>@break
+        @case('file-spreadsheet')<path d="M6 2h9l5 5v14a1 1 0 0 1-1 1H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z"/><path d="M15 2v5h5M7 11h10M7 15h10M11 11v8"/>@break
+        @case('file-text')<path d="M6 2h9l5 5v14a1 1 0 0 1-1 1H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z"/><path d="M15 2v5h5M8 12h8M8 16h8"/>@break
         @case('external')<path d="M14 3h7v7M10 14 21 3"/><path d="M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"/>@break
         @case('chevron-right')<path d="m9 18 6-6-6-6"/>@break
+        @case('chevron-down')<path d="m6 9 6 6 6-6"/>@break
         @case('alert')<path d="M10.3 3.9 2.6 17.3A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.7L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/>@break
         @default<circle cx="12" cy="12" r="8"/>
     @endswitch

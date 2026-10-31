@@ -527,7 +527,7 @@
 .dashboard-panel { min-width: 0; padding: 1rem !important; border: 1px solid #e1e6ed !important; border-radius: 9px !important; background: #fff; box-shadow: none !important; }
 .panel-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: .75rem; }
 .panel-heading h2 { margin: 0; color: #253954; font: 750 .95rem/1.35 'Centra', 'Segoe UI', sans-serif; }
-.panel-heading p { margin: .22rem 0 0; color: #96a1b1; font-size: .7rem; }
+.panel-heading p { margin: .22rem 0 0; color: #596b80; font-size: .7rem; }
 .panel-mark { width: 9px; height: 9px; margin-top: .3rem; border-radius: 3px; }
 .panel-mark-pink { background: var(--color-pink); }
 .panel-mark-blue { background: var(--color-blue); }
@@ -690,7 +690,7 @@
 .admin-logout-button .ui-icon { width:17px; height:17px; }
 .admin-shell .btn { min-width:0; min-height:37px; padding:.48rem .8rem; border-radius:8px; box-shadow:none; font-size:.76rem; transition:background-color .16s ease,color .16s ease,border-color .16s ease,transform .12s ease; }
 .admin-shell .btn .ui-icon { width:16px; height:16px; }
-.admin-shell .btn-primary { background:#db4667; color:#fff; }
+.admin-shell .btn-primary { background:#bc3456; color:#fff; }
 .admin-shell .btn-primary:hover { background:#c93b5c; box-shadow:none; }
 .admin-shell .btn-secondary { border-color:#d8e0eb; background:#fff; color:#425976; }
 .admin-shell .btn-secondary:hover { border-color:#bfcbdc; background:#f3f6fa; color:#293f5d; }
@@ -814,7 +814,7 @@
 .wave-bottom {
     margin-top: .8rem;
     height: 110px;
-    background: var(--color-bg);
+    background: #fffafb;
     border-top-left-radius: 55% 100%;
     border-top-right-radius: 55% 100%;
 }
@@ -1266,7 +1266,7 @@
     padding: 12px;
     border: none;
     border-radius: 999px;
-    background: #e4506f;   
+    background: #bc3456;
     color: #fff;
     font-family: 'centra', sans-serif;
     font-size: 1rem;

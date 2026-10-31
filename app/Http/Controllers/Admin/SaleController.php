@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Support\InventoryNumbers;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Sale;
@@ -99,7 +100,7 @@ class SaleController extends Controller
             'invoice_number' => ['nullable', 'string', 'max:80', 'unique:sales,invoice_number'.($sale ? ','.$sale->id : '')],
             'sale_date' => ['required', 'date'], 'notes' => ['nullable', 'string'],
             'items' => ['required', 'array', 'min:1'], 'items.*.product_id' => ['required', 'distinct', 'exists:products,id'],
-            'items.*.quantity' => ['required', 'numeric', 'gt:0'], 'items.*.unit_price' => ['required', 'numeric', 'min:0'],
+            'items.*.quantity' => InventoryNumbers::quantityRules(), 'items.*.unit_price' => InventoryNumbers::moneyRules(),
         ]);
     }
 }

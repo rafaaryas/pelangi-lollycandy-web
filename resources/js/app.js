@@ -15,6 +15,7 @@ import './transaction-form';
 import './transaction-modal';
 import './login';
 import './page-transitions';
+import './export-menu';
 
 document.addEventListener('click', (event) => {
     const trigger = event.target.closest('[data-stock-material]');

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -28,6 +29,7 @@ class CategoryController extends Controller
             'is_active' => ['nullable', 'boolean'],
         ]);
         $validated['slug'] = Str::slug($validated['name']);
+        $this->validateSlug($validated['slug']);
         $validated['is_active'] = $request->boolean('is_active');
         Category::create($validated);
 
@@ -46,6 +48,7 @@ class CategoryController extends Controller
             'is_active' => ['nullable', 'boolean'],
         ]);
         $validated['slug'] = Str::slug($validated['name']);
+        $this->validateSlug($validated['slug'], $category);
         $validated['is_active'] = $request->boolean('is_active');
         $category->update($validated);
 
@@ -75,5 +78,15 @@ class CategoryController extends Controller
         }
 
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil dihapus.');
+    }
+
+    private function validateSlug(string $slug, ?Category $category = null): void
+    {
+        validator(['name' => $slug], [
+            'name' => ['required', Rule::unique('categories', 'slug')->ignore($category?->id)],
+        ], [
+            'name.required' => 'Nama kategori harus memuat huruf atau angka.',
+            'name.unique' => 'Nama kategori ini menghasilkan alamat yang sudah digunakan. Gunakan nama lain.',
+        ])->validate();
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Support\InventoryNumbers;
 use App\Models\Product;
 use App\Models\RawMaterial;
 use App\Models\StockMovement;
@@ -52,7 +53,7 @@ class StockController extends Controller
     {
         $data = $request->validate([
             'stock_type' => ['required', 'in:product,material'], 'stock_id' => ['required', 'integer'],
-            'direction' => ['required', 'in:in,out'], 'quantity' => ['required', 'numeric', 'gt:0'],
+            'direction' => ['required', 'in:in,out'], 'quantity' => InventoryNumbers::quantityRules(),
             'notes' => ['required', 'string', 'min:5', 'max:500'],
         ]);
 
@@ -90,7 +91,7 @@ class StockController extends Controller
     {
         $data = $request->validate([
             'raw_material_id' => ['required', 'exists:raw_materials,id'],
-            'quantity' => ['required', 'numeric', 'gt:0'],
+            'quantity' => InventoryNumbers::quantityRules(),
             'movement_date' => ['required', 'date'],
             'notes' => ['nullable', 'string', 'max:500'],
         ]);
@@ -103,7 +104,7 @@ class StockController extends Controller
                 'quantity' => $data['quantity'],
                 'unit' => $material->unit,
                 'movement_date' => $data['movement_date'].' 12:00:00',
-                'notes' => $data['notes'] ?: 'Penambahan stok bahan baku',
+                'notes' => ($data['notes'] ?? null) ?: 'Penambahan stok bahan baku',
             ]);
         });
 
@@ -115,7 +116,7 @@ class StockController extends Controller
         abort_unless(in_array($type, ['products', 'materials'], true), 404);
         $modelClass = $type === 'products' ? Product::class : RawMaterial::class;
         $item = $modelClass::findOrFail($id);
-        $movements = $item->stockMovements()->with('source')->orderBy('movement_date')->orderBy('id')->get();
+        $movements = $item->stockMovements()->withSourceDocument()->orderBy('movement_date')->orderBy('id')->get();
         $currentStock = $type === 'products' ? $item->stock_quantity : $item->current_stock;
         $netMovements = $movements->sum(fn (StockMovement $movement): float => in_array($movement->movement_type, ['purchase_in', 'production_in', 'adjustment_in'], true)
             ? (float) $movement->quantity : -(float) $movement->quantity);

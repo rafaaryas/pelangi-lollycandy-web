@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Support\InventoryNumbers;
 use App\Models\Product;
 use App\Models\Production;
 use App\Models\ProductionMaterial;
@@ -54,9 +55,13 @@ class ProductionController extends Controller
     public function show(Production $production)
     {
         $production->load(['materials.rawMaterial', 'results.product']);
-        $sourceIds = $production->materials->pluck('id')->merge($production->results->pluck('id'));
-        $movements = StockMovement::whereIn('source_type', [ProductionMaterial::class, ProductionResult::class])
-            ->whereIn('source_id', $sourceIds)->with('stockable')->latest('movement_date')->get();
+        $movements = StockMovement::where(function ($query) use ($production): void {
+            $query->where('source_type', ProductionMaterial::class)
+                ->whereIn('source_id', $production->materials->pluck('id'));
+        })->orWhere(function ($query) use ($production): void {
+            $query->where('source_type', ProductionResult::class)
+                ->whereIn('source_id', $production->results->pluck('id'));
+        })->with('stockable')->latest('movement_date')->get();
 
         return view('admin.transactions.show', ['kind' => 'productions', 'title' => 'Detail Produksi', 'record' => $production, 'movements' => $movements]);
     }
@@ -98,9 +103,9 @@ class ProductionController extends Controller
             'production_number' => ['nullable', 'string', 'max:80', 'unique:productions,production_number'.($production ? ','.$production->id : '')],
             'production_date' => ['required', 'date'], 'notes' => ['nullable', 'string'],
             'materials' => ['required', 'array', 'min:1'], 'materials.*.raw_material_id' => ['required', 'distinct', 'exists:raw_materials,id'],
-            'materials.*.quantity_used' => ['required', 'numeric', 'gt:0'],
+            'materials.*.quantity_used' => InventoryNumbers::quantityRules(),
             'results' => ['required', 'array', 'min:1'], 'results.*.product_id' => ['required', 'distinct', 'exists:products,id'],
-            'results.*.quantity_produced' => ['required', 'numeric', 'gt:0'],
+            'results.*.quantity_produced' => InventoryNumbers::quantityRules(),
         ]);
     }
 }

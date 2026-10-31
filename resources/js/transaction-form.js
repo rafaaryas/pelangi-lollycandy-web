@@ -35,7 +35,7 @@ function refreshTotal(form) {
         const section = summary.closest('[data-line-section]');
         const totals = new Map();
         section.querySelectorAll('[data-line]').forEach((row) => {
-            const quantity = Number(row.querySelector('[data-quantity]')?.value || 0);
+            const quantity = Number(row.querySelector('[data-quantity], [name$="[quantity_produced]"]')?.value || 0);
             const selector = row.querySelector('[data-material], [data-product]');
             if (quantity <= 0 || !selector?.value) return;
             const unit = selector.selectedOptions[0]?.dataset.unit || 'pcs';
@@ -80,13 +80,17 @@ export function initTransactionForm(form) {
             const section = add.closest('[data-line-section]');
             const rows = section.querySelector('[data-lines]');
             const clone = rows.querySelector('[data-line]').cloneNode(true);
-            const index = rows.querySelectorAll('[data-line]').length;
+            const indices = [...rows.querySelectorAll('[name]')].map((input) => Number(input.name.match(/\[(\d+)\]/)?.[1] ?? -1));
+            const index = Math.max(-1, ...indices) + 1;
             clone.querySelectorAll('[name]').forEach((input) => {
                 input.name = input.name.replace(/\[\d+\]/g, `[${index}]`);
                 if (input.tagName === 'SELECT') input.selectedIndex = 0;
                 else input.value = '';
                 delete input.dataset.edited;
+                input.removeAttribute('aria-invalid');
+                input.removeAttribute('aria-describedby');
             });
+            clone.querySelectorAll('.transaction-field-error, .field-error').forEach((error) => error.remove());
             clone.querySelectorAll('[data-subtotal]').forEach((cell) => { cell.textContent = rupiah.format(0); });
             clone.querySelectorAll('[data-unit-label], [data-stock-label]').forEach((cell) => { cell.textContent = '—'; });
             rows.append(clone);

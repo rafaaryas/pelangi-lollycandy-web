@@ -19,6 +19,7 @@
     <select name="status" aria-label="Filter status stok"><option value="">Semua status</option><option value="low" @selected(request('status') === 'low')>Stok rendah</option><option value="out" @selected(request('status') === 'out')>Habis</option>@if($tab === 'products')<option value="unknown" @selected(request('status') === 'unknown')>Belum dicatat</option>@endif</select>
     <button class="btn btn-secondary" type="submit"><x-icon name="sliders" />{{ request()->filled('q') || request()->filled('status') ? 'Filter aktif' : 'Filter' }}</button>
 </form>
+@include('admin.partials.export-menu', ['module' => 'stock'])
 <div class="admin-table-wrap module-table-wrap">
     <table class="admin-table module-table"><thead><tr><th>Kode</th><th>Nama</th>@if($tab === 'products')<th>Kategori</th>@endif<th class="numeric-cell">Stok</th><th class="numeric-cell">Minimum</th><th>Satuan</th><th>Status</th><th>Aksi</th></tr></thead><tbody>
         @forelse($items as $item)

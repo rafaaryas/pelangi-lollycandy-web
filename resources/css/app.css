@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import './variables.css';
 @import './layout.css';
 @import './components.css';
@@ -10,3 +10,5 @@
 @import './readme-updates.css';
 @import './polish.css';
 @import './product-ai-autofill.css';
+@import './admin-refinement.css';
+@import './landing-enrichment.css';

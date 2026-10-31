@@ -16,6 +16,7 @@
     @if(request()->hasAny(['q', 'status']))<a class="toolbar-clear" href="{{ route($route.'.index') }}">Bersihkan</a>@endif
 </form>
 
+@include('admin.partials.export-menu', ['module' => str_replace('admin.', '', $route)])
 <div class="table-meta"><span>{{ $items->total() }} data</span></div>
 <div class="admin-table-wrap module-table-wrap">
     <table class="admin-table module-table">
@@ -41,17 +42,6 @@
                     <x-icon-button icon="pencil" label="Edit {{ $item->name }}" data-modal-open="master-edit-{{ $item->id }}" />
                     @if($canDelete($item))
                         <x-icon-button icon="trash" label="Hapus {{ $item->name }}" variant="danger" data-modal-open="master-delete-{{ $item->id }}" />
-                    @else
-                        <span class="text-action-muted" title="Data yang memiliki riwayat terkait tidak dapat dihapus">{{ match ($title) {
-                                'Supplier' => number_format($item->purchases_count, 0, ',', '.').' pembelian terkait',
-                                'Pelanggan' => number_format($item->sales_count, 0, ',', '.').' penjualan terkait',
-                                'Bahan Baku' => collect([
-                                    $item->purchase_details_count.' pembelian',
-                                    $item->production_materials_count.' pemakaian produksi',
-                                    $item->stock_movements_count.' pergerakan stok',
-                                ])->filter(fn ($value) => !str_starts_with($value, '0 '))->implode(' · '),
-                                default => 'Memiliki riwayat terkait',
-                            } }}</span>
                     @endif
                 </div></td>
             </tr>
@@ -67,7 +57,7 @@
 <div class="modal" id="master-edit-{{ $item->id }}" data-modal data-open-on-error="{{ $errors->any() && old('_form') === 'edit-'.$item->id ? 'true' : 'false' }}">
     <div class="modal-backdrop" data-modal-close></div>
     <section class="modal-content modal-small">
-        <div class="modal-head"><h2>Edit {{ $title }}</h2><button class="modal-close" type="button" data-modal-close aria-label="Tutup"><x-icon name="close" /></button></div>
+        <div class="modal-head"><div><h2>Edit {{ $title }}</h2><p class="modal-subtitle">Perbarui informasi {{ strtolower($title) }}.</p></div><button class="modal-close" type="button" data-modal-close aria-label="Tutup"><x-icon name="close" /></button></div>
         <form method="POST" action="{{ route($route.'.update', $item) }}" class="module-form-grid" data-loading-form>
             @csrf @method('PUT')
             <input type="hidden" name="_form" value="edit-{{ $item->id }}">
@@ -107,7 +97,7 @@
 <div class="modal" id="master-create-modal" data-modal data-open-on-error="{{ $errors->any() && old('_form') === 'create' ? 'true' : 'false' }}">
     <div class="modal-backdrop" data-modal-close></div>
     <section class="modal-content modal-small">
-        <div class="modal-head"><h2>Tambah {{ $title }}</h2><button class="modal-close" type="button" data-modal-close aria-label="Tutup"><x-icon name="close" /></button></div>
+        <div class="modal-head"><div><h2>Tambah {{ $title }}</h2><p class="modal-subtitle">{{ $description }}</p></div><button class="modal-close" type="button" data-modal-close aria-label="Tutup"><x-icon name="close" /></button></div>
         <form method="POST" action="{{ route($route.'.store') }}" class="module-form-grid" data-loading-form>
             @csrf
             <input type="hidden" name="_form" value="create">

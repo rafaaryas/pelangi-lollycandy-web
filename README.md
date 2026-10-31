@@ -75,6 +75,15 @@ Seeder ini sengaja menolak dijalankan pada lingkungan `production`. Pastikan pro
 php artisan test
 ```
 
+## Ekspor admin
+
+Halaman dashboard, master data, transaksi, stok, riwayat stok, laporan, dan marketplace menyediakan menu **Ekspor** untuk Excel, CSV, serta PDF. Ekspor mengikuti pencarian dan filter aktif pada halaman, mengambil semua baris yang cocok termasuk halaman pagination lain. Pembelian, produksi, dan penjualan diekspor sebagai **satu baris per transaksi** supaya nilai total tidak terhitung ganda.
+
+- CSV memakai UTF-8 dengan BOM, pemisah titik koma (`;`), tanggal `YYYY-MM-DD`, dan angka tanpa simbol mata uang. Teks yang dapat dibaca spreadsheet sebagai formula diawali apostrof.
+- Excel memakai satu worksheet dengan header, filter kolom, dan sel angka numerik. Teks disimpan sebagai string sehingga tidak dieksekusi sebagai formula.
+- PDF memuat judul, cakupan/periode, tanggal pembuatan, dan tabel. Tabel dengan lebih dari lima kolom menggunakan halaman A4 lanskap.
+- Excel dibatasi 50.000 baris dan PDF 10.000 baris agar unduhan tetap terkendali. Untuk data lebih besar gunakan CSV yang ditulis secara bertahap.
+
 ## Keamanan konfigurasi
 
 - Jangan commit `.env`, database lokal, log, atau berkas cadangan.

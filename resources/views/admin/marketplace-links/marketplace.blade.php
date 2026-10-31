@@ -7,6 +7,7 @@
     <button class="btn btn-primary" type="button" data-modal-open="marketplace-create-modal"><x-icon name="plus" />Tambah Link</button>
 </div>
 
+@include('admin.partials.export-menu', ['module' => 'marketplace-links'])
 <div class="card">
     <div class="admin-table-wrap">
         <table class="admin-table">

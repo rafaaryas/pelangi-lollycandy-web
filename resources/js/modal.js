@@ -3,6 +3,9 @@ let activeModal = null;
 let returnFocus = null;
 let pendingForm = null;
 let pendingSubmitter = null;
+const formSnapshots = new WeakMap();
+const formState = (form) => [...new FormData(form).entries()].map(([key, value]) => [key, value instanceof File ? (value.name ? `${value.name}:${value.size}:${value.lastModified}` : '') : String(value)]);
+const captureForms = (modal) => modal.querySelectorAll('form').forEach((form) => formSnapshots.set(form, JSON.stringify(formState(form))));
 
 function modalDialog(modal) {
     const dialog = modal.querySelector('.modal-content');
@@ -22,7 +25,7 @@ function modalDialog(modal) {
 
 function openModal(modal, trigger = document.activeElement) {
     if (!modal) return;
-    if (activeModal && activeModal !== modal) closeModal(activeModal, false);
+    if (activeModal && activeModal !== modal && !closeModal(activeModal, false)) return;
     activeModal = modal;
     returnFocus = trigger;
     modal.setAttribute('aria-hidden', 'false');
@@ -30,21 +33,26 @@ function openModal(modal, trigger = document.activeElement) {
     document.body.classList.add('modal-open');
 
     const dialog = modalDialog(modal);
+    captureForms(modal);
     const initialFocus = dialog?.querySelector('[data-initial-focus], [aria-invalid="true"], [autofocus]')
-        || dialog?.querySelector('button[data-modal-close]')
-        || dialog?.querySelector('input:not([type="hidden"]),select,textarea,button:not([data-modal-close])');
+        || dialog?.querySelector('input:not([type="hidden"]),select,textarea')
+        || dialog?.querySelector('button[data-modal-close]');
     requestAnimationFrame(() => (initialFocus || dialog)?.focus());
 }
 
 function closeModal(modal = activeModal, restore = true) {
-    if (!modal) return;
+    if (!modal) return true;
+    const dirty = [...modal.querySelectorAll('form')].some((form) => form.dataset.saved !== 'true' && formSnapshots.has(form) && JSON.stringify(formState(form)) !== formSnapshots.get(form));
+    if (dirty && !window.confirm('Perubahan belum disimpan. Tutup formulir ini?')) return false;
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
     if (activeModal === modal) activeModal = null;
     if (!activeModal) document.body.classList.remove('modal-open');
     if (restore && returnFocus?.isConnected) returnFocus.focus();
     returnFocus = null;
+    return true;
 }
+document.addEventListener('admin:modal-form-ready', (event) => captureForms(event.detail.modal));
 
 document.addEventListener('click', (event) => {
     const opener = event.target.closest('[data-modal-open]');

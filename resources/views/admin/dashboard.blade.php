@@ -9,7 +9,7 @@
         <h1>Dashboard</h1>
         <p>Ringkasan kondisi operasional Pelangi Lollycandy.</p>
     </div>
-    <div class="period-chip"><span class="period-dot"></span>{{ $periodLabel }}</div>
+    <div class="dashboard-head-actions"><div class="period-chip"><span class="period-dot"></span>{{ $periodLabel }}</div>@include('admin.partials.export-menu', ['module' => 'dashboard', 'scope' => 'Ringkasan operasional bulan ini'])</div>
 </div>
 
 <section class="admin-kpi-grid business-kpi-grid" aria-label="Ringkasan usaha">

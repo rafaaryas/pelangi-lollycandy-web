@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\MarketplaceLink;
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -19,13 +18,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::query()->updateOrCreate(['email' => 'rafa2006sep@gmail.com'], [
-            'name' => 'tes1234567',
-            'password' => 'password',
-            'is_admin' => true,
-        ]);
+        // Demo catalog data only. Administrators are provisioned explicitly with
+        // `php artisan admin:create`; seeding must never reset a user's credentials.
+        if (! app()->environment(['local', 'testing'])) {
+            return;
+        }
 
-        $category = Category::query()->updateOrCreate(['slug' => 'lollipop'], [
+        $category = Category::query()->firstOrCreate(['slug' => 'lollipop'], [
             'name' => 'Lollipop',
             'is_active' => true,
         ]);
@@ -38,7 +37,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($products as $name) {
-            Product::query()->updateOrCreate(['slug' => Str::slug($name)], [
+            Product::query()->firstOrCreate(['slug' => Str::slug($name)], [
                 'category_id' => $category->id,
                 'name' => $name,
                 'description' => 'Permen premium colorful dengan rasa manis yang konsisten.',
@@ -49,7 +48,7 @@ class DatabaseSeeder extends Seeder
         }
 
         foreach (['Shopee', 'TikTok Shop', 'Tokopedia', 'Instagram', 'WhatsApp', 'Facebook'] as $platform) {
-            MarketplaceLink::query()->updateOrCreate(['platform' => $platform], [
+            MarketplaceLink::query()->firstOrCreate(['platform' => $platform], [
                 'url' => 'https://example.com/'.Str::slug($platform),
                 'is_active' => true,
             ]);

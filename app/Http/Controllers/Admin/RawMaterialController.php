@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Support\InventoryNumbers;
 use App\Models\RawMaterial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -40,10 +41,10 @@ class RawMaterialController extends Controller
 
     public function show(RawMaterial $rawMaterial)
     {
-        $rawMaterial->loadCount(['purchaseDetails', 'productionMaterials']);
-        $rows = $rawMaterial->stockMovements()->with('source')->latest('movement_date')->limit(20)->get()
+        $rawMaterial->loadCount(['purchaseDetails', 'productionMaterials', 'stockMovements']);
+        $rows = $rawMaterial->stockMovements()->withSourceDocument()->latest('movement_date')->limit(20)->get()
             ->map(fn ($movement): array => [
-                'reference' => $movement->source?->reference_number ?? $movement->source?->production_number ?? $movement->source?->invoice_number ?? 'Penyesuaian stok',
+                'reference' => $movement->reference,
                 'date' => $movement->movement_date,
                 'description' => str_replace('_', ' ', ucfirst($movement->movement_type)),
                 'quantity' => number_format((float) $movement->quantity, 3, ',', '.').' '.($movement->unit ?: $rawMaterial->unit),
@@ -56,7 +57,7 @@ class RawMaterialController extends Controller
                 'Stok saat ini' => number_format((float) $rawMaterial->current_stock, 3, ',', '.').' '.$rawMaterial->unit,
                 'Batas minimum' => number_format((float) $rawMaterial->minimum_stock, 3, ',', '.').' '.$rawMaterial->unit,
                 'Status' => $rawMaterial->is_active ? 'Aktif' : 'Nonaktif', 'Catatan' => $rawMaterial->description ?: '—'],
-            'summary' => [['label' => 'Rincian pembelian', 'value' => $rawMaterial->purchase_details_count], ['label' => 'Pemakaian produksi', 'value' => $rawMaterial->production_materials_count]],
+            'summary' => [['label' => 'Rincian pembelian', 'value' => $rawMaterial->purchase_details_count], ['label' => 'Pemakaian produksi', 'value' => $rawMaterial->production_materials_count], ['label' => 'Pergerakan stok', 'value' => $rawMaterial->stock_movements_count]],
             'rows' => $rows, 'rowHeading' => 'Histori stok', 'emptyMessage' => 'Belum ada pergerakan stok untuk bahan ini.',
             'backRoute' => 'admin.raw-materials.index',
         ]);
@@ -68,8 +69,8 @@ class RawMaterialController extends Controller
             'code' => ['required', 'string', 'max:40', 'unique:raw_materials,code'],
             'name' => ['required', 'string', 'max:190'],
             'unit' => ['required', 'string', 'max:40'],
-            'minimum_stock' => ['required', 'numeric', 'min:0'],
-            'opening_stock' => ['nullable', 'numeric', 'min:0'],
+            'minimum_stock' => InventoryNumbers::quantityRules(true),
+            'opening_stock' => ['nullable', 'numeric', 'decimal:0,3', 'min:0', 'max:99999999999.999'],
             'description' => ['nullable', 'string'],
             'is_active' => ['nullable', 'boolean'],
         ]);
@@ -98,7 +99,7 @@ class RawMaterialController extends Controller
             'code' => ['required', 'string', 'max:40', Rule::unique('raw_materials', 'code')->ignore($rawMaterial->id)],
             'name' => ['required', 'string', 'max:190'],
             'unit' => ['required', 'string', 'max:40'],
-            'minimum_stock' => ['required', 'numeric', 'min:0'],
+            'minimum_stock' => InventoryNumbers::quantityRules(true),
             'description' => ['nullable', 'string'],
             'is_active' => ['nullable', 'boolean'],
         ]);

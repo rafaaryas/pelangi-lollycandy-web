@@ -50,7 +50,7 @@
 .admin-body .report-mode-tabs { display: flex; flex-wrap: wrap; gap: .55rem; margin: 1rem 0 .35rem; }
 .admin-body .report-mode-tabs a { padding: .58rem .85rem; border: 1px solid #dfe5ec; border-radius: 8px; background: #fff; color: #5a6c82; font-size: .78rem; font-weight: 700; transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease; }
 .admin-body .report-mode-tabs a:hover, .admin-body .report-mode-tabs a.is-active { border-color: #e8b7c6; background: #fce9ef; color: #aa3155; }
-.admin-body .stock-unit { display: block; color: #8794a5; font-size: .69rem; font-weight: 400; }
+.admin-body .stock-unit { display: block; color: #596b80; font-size: .69rem; font-weight: 400; }
 .admin-body .module-table .table-actions { gap: .6rem; }
 .admin-body .module-table .text-action { display: inline-flex; align-items: center; gap: .22rem; white-space: nowrap; }
 .admin-body .report-stock-note { margin: .55rem 0 1rem; color: #718197; font-size: .75rem; }

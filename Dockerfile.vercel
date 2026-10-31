@@ -1,0 +1,53 @@
+# Container deployment for Vercel's Container runtime.
+# Vercel detects this filename automatically and routes all requests to it.
+
+FROM composer:2 AS vendor
+WORKDIR /app
+
+COPY composer.json composer.lock ./
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --no-progress \
+    --prefer-dist \
+    --optimize-autoloader \
+    --no-scripts
+
+FROM node:22-bookworm-slim AS frontend
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY vite.config.js ./
+COPY resources ./resources
+COPY public ./public
+RUN npm run build
+
+FROM dunglas/frankenphp:php8.4-bookworm
+WORKDIR /app
+
+COPY . ./
+COPY --from=vendor /app/vendor ./vendor
+COPY --from=frontend /app/public/build ./public/build
+COPY Caddyfile /etc/frankenphp/Caddyfile
+
+# Laravel must not write to Vercel's read-only deployment filesystem.
+# Persistent sessions, caches, uploads, queues, and the database stay external.
+ENV APP_ENV=production \
+    APP_DEBUG=false \
+    CACHE_STORE=array \
+    LOG_CHANNEL=stderr \
+    QUEUE_CONNECTION=sync \
+    SESSION_DRIVER=cookie \
+    VIEW_COMPILED_PATH=/tmp \
+    APP_CONFIG_CACHE=/tmp/config.php \
+    APP_EVENTS_CACHE=/tmp/events.php \
+    APP_PACKAGES_CACHE=/tmp/packages.php \
+    APP_ROUTES_CACHE=/tmp/routes.php \
+    APP_SERVICES_CACHE=/tmp/services.php
+
+RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
+    && php artisan package:discover --ansi
+
+EXPOSE 80

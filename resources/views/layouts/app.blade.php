@@ -51,7 +51,7 @@
                 <a href="{{ route('home') }}" aria-label="Pelangi Lollycandy, halaman utama"><img src="{{ asset('images/pelangi-logo.png') }}" alt="Pelangi Lollycandy" width="200" height="65" loading="lazy"></a>
                 <p>Permen penuh warna untuk momen yang lebih manis.</p>
             </div>
-            <div class="footer-links"><h2>Navigasi</h2><a href="{{ route('home') }}">Home</a><a href="{{ route('home') }}#about">About Us</a><a href="{{ route('products.index') }}">Products</a><a href="{{ route('home') }}#marketplace-hub">Marketplace</a><a href="{{ route('contact.index') }}">Contact</a></div>
+            <div class="footer-links"><h2>Navigasi</h2><a href="{{ route('home') }}">Beranda</a><a href="{{ route('home') }}#about">Tentang Kami</a><a href="{{ route('products.index') }}">Produk</a><a href="{{ route('home') }}#marketplace-hub">Marketplace</a><a href="{{ route('contact.index') }}">Kontak</a></div>
             <div class="footer-links"><h2>Belanja &amp; tanya</h2>@if($footerShopeeUrl)<a href="{{ $footerShopeeUrl }}" target="_blank" rel="noopener"><img src="{{ asset('images/marketplace-icons/shopee.svg') }}" alt="" width="18" height="18"> Shopee <x-icon name="external" size="14" /></a>@endif @if($businessWhatsAppUrl)<a href="{{ $businessWhatsAppUrl }}" target="_blank" rel="noopener">WhatsApp <x-icon name="external" size="14" /></a>@endif</div>
         </div>
         <div class="container footer-bottom">&copy; {{ now()->year }} Pelangi Lollycandy</div>

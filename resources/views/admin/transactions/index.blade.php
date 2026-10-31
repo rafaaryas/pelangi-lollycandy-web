@@ -17,6 +17,7 @@
     @if(isset($customers))<select name="customer_id" aria-label="Pelanggan"><option value="">Semua pelanggan</option>@foreach($customers as $customer)<option value="{{ $customer->id }}" @selected((string) request('customer_id') === (string) $customer->id)>{{ $customer->name }}</option>@endforeach</select>@endif
     <button class="btn btn-secondary" type="submit"><x-icon name="sliders" />{{ $filtersActive ? 'Filter aktif' : 'Filter' }}</button>
 </form>
+@include('admin.partials.export-menu', ['module' => $kind, 'scope' => 'Seluruh transaksi sesuai filter; satu baris per transaksi'])
 <div class="table-meta"><span>{{ $items->total() }} transaksi</span><span>Status confirmed memengaruhi saldo stok.</span></div>
 <div class="admin-table-wrap module-table-wrap">
     <table class="admin-table module-table">
@@ -42,7 +43,7 @@
                     <span class="transaction-status status-{{ $item->status }}">{{ match($item->status) { 'confirmed' => 'Terkonfirmasi', 'cancelled' => 'Dibatalkan', default => 'Draft' } }}</span>
                 </td>
                 <td><div class="table-actions"><x-icon-link icon="eye" label="Lihat detail {{ $rowReference }}" href="{{ route('admin.'.$kind.'.show', $item) }}" />
-                    @if($item->status === 'draft')<a class="icon-action" href="{{ route('admin.'.$kind.'.edit', $item) }}" data-modal-open="transaction-modal" data-transaction-url="{{ route('admin.'.$kind.'.edit', $item) }}" aria-label="Edit draft"><x-icon name="pencil" size="16" /></a>
+                    @if($item->status === 'draft')<a class="icon-action" href="{{ route('admin.'.$kind.'.edit', $item) }}" data-modal-open="transaction-modal" data-transaction-url="{{ route('admin.'.$kind.'.edit', $item) }}" aria-label="Edit draft {{ $rowReference }}" title="Edit draft {{ $rowReference }}"><x-icon name="pencil" size="16" /></a>
                     <form method="POST" action="{{ route('admin.'.$kind.'.confirm', $item) }}" data-loading-form>@csrf<button class="text-action text-confirm" type="submit"><x-icon name="check" size="16" />Konfirmasi</button></form>@endif
                     @if($item->status !== 'cancelled')<form method="POST" action="{{ route('admin.'.$kind.'.cancel', $item) }}" data-confirm-title="Batalkan transaksi?" data-confirm-message="Transaksi {{ $kind === 'purchases' ? $item->reference_number : ($kind === 'productions' ? $item->production_number : $item->invoice_number) }} akan dibatalkan. Stok akan disesuaikan jika transaksi ini sudah dikonfirmasi." data-confirm-label="Batalkan" data-loading-form>@csrf<x-icon-button icon="close" label="Batalkan transaksi" variant="danger" type="submit" /></form>@endif
                 </div></td>

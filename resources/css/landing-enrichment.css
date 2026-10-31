@@ -1,0 +1,109 @@
+/* Shared palette ties every illustration to the storefront, with three levels of emphasis. */
+.home-page {
+    --candy-pink: #ef83aa;
+    --candy-blue: #8db8ed;
+    --candy-lavender: #baa3e1;
+    --candy-peach: #ffd2a6;
+    --candy-mint: #9bd8c3;
+    --candy-stick: #bacbd9;
+    --candy-ease: cubic-bezier(.22,.7,.3,1);
+}
+.home-page :is(.home-about,.home-bestseller,.home-marketplace,.home-contact-cta) {
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+}
+.home-page :is(.home-about,.home-bestseller,.home-marketplace,.home-contact-cta) > .container { position: relative; z-index: 1; }
+.landing-art { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: clip; }
+.candy-art { display: block; position: absolute; pointer-events: none; width: 160px; height: auto; }
+.home-page .hero-like-reference { position: relative; isolation: isolate; }
+.hero-art { z-index: 1; }
+.hero-sugar { width: 100px; left: 3%; top: 15%; opacity: .6; transform: rotate(-15deg); }
+/* Atmospheric color starts and ends at the same tone across each section boundary. */
+.home-page .home-about {
+    background: radial-gradient(ellipse at 6% 58%, #ffe1ec99, transparent 53%),
+        radial-gradient(ellipse at 93% 34%, #ffe8d599, transparent 44%),
+        linear-gradient(180deg,#fffafb 0%,#fff4f8 48%,#f3f5ff 100%);
+}
+.home-page .home-bestseller {
+    background: radial-gradient(ellipse at 3% 40%, #dceaffb0, transparent 48%),
+        radial-gradient(ellipse at 94% 65%, #eadfff99, transparent 48%),
+        linear-gradient(180deg,#f3f5ff,#f8f3fb 65%,#f0edfc);
+}
+.home-page .home-marketplace {
+    background: radial-gradient(ellipse at 16% 55%,#dceaffbb,transparent 60%),
+        radial-gradient(ellipse at 89% 42%,#ffe1ec99,transparent 56%),
+        linear-gradient(180deg,#f0edfc,#f1effc 65%,#fff4f9);
+}
+.home-page .home-contact-cta { background: linear-gradient(180deg,#fff4f9,#fffafb); }
+/* About: a visible candy duo above the cards, a softer ribbon framing the left. */
+.about-lolly { width: 172px; right: max(180px,calc((100% - 1080px)/2)); top: -6px; opacity: .8; transform: rotate(-17deg); }
+.about-twist { width: 116px; right: max(95px,calc((100% - 1250px)/2)); top: 12px; opacity: .7; transform: rotate(23deg); }
+.about-sugar { width: 155px; right: max(275px,calc((100% - 880px)/2)); top: -15px; opacity: .5; }
+.about-ribbon { width: 165px; left: -66px; top: 43%; opacity: .35; transform: rotate(-18deg); }
+/* Products stay dominant; cropped sweets occupy the margins and the closing pause. */
+.products-lolly { width: 158px; left: -72px; top: 25%; opacity: .58; transform: rotate(20deg); }
+.products-ribbon { width: 170px; right: -103px; top: 42%; opacity: .45; transform: rotate(13deg); }
+.products-sugar { width: 115px; left: 49%; top: -25px; opacity: .5; transform: rotate(-14deg); }
+.products-sweet { width: 125px; left: 55%; bottom: -29px; opacity: .7; transform: rotate(7deg); }
+/* Marketplace is a cooler pause, with an asymmetrical pair of different sweets. */
+.marketplace-twist { width: 125px; left: -27px; bottom: -30px; opacity: .6; transform: rotate(-24deg); }
+.marketplace-sweet { width: 170px; right: 13%; top: -30px; opacity: .72; transform: rotate(13deg); }
+.marketplace-sugar { width: 128px; right: 5%; top: -8px; opacity: .45; }
+.home-page .cta-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 95% 10%,#eadfff99,transparent 60%),linear-gradient(115deg,#ffe3ed,#fff0f5 58%,#f8e9f7);
+}
+.home-page .cta-card > div { position: relative; z-index: 1; }
+.cta-ribbon { width: 170px; right: 22%; top: -74px; opacity: .33; transform: rotate(35deg); }
+.contact-sugar { width: 105px; left: 4%; top: -28px; opacity: .5; transform: rotate(30deg); }
+/* Content is always visible: no scroll observer is needed to see the storefront. */
+.home-page .is-reveal-pending:not(.is-revealed) { opacity: 1; transform: none; }
+.home-page :is(.product-card,.marketplace-card,.btn) {
+    transition: transform 220ms var(--candy-ease),border-color 220ms ease,box-shadow 220ms ease,background-color 180ms ease;
+}
+.home-page .product-image { transition: transform 350ms var(--candy-ease); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .home-page .product-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(73,49,88,.1); }
+    .home-page .product-card:hover .product-image { transform: scale(1.025); }
+    .home-page .marketplace-card:hover { transform: translateY(-2px); border-color: #d6bbd5; box-shadow: 0 7px 18px rgba(73,49,88,.07); }
+    .home-page .btn:active { transform: translateY(1px); }
+}
+@media (max-width: 1100px) {
+    .about-lolly { right: 80px; width: 140px; top: 0; }
+    .about-twist { right: 22px; width: 95px; top: 5px; }
+    .about-sugar { right: 160px; width: 100px; }
+    .about-ribbon { left: -90px; }
+    .marketplace-sweet { right: 6%; width: 140px; top: -40px; }
+    .marketplace-sugar { right: 0; width: 80px; }
+    .products-lolly { left: -100px; }
+    .products-sugar { left: auto; right: 20px; }
+    .cta-ribbon { top: auto; bottom: -130px; right: -35px; }
+}
+@media (max-width: 760px) {
+    .home-page .home-about { padding-top: 6.5rem; }
+    .about-lolly { width: 100px; right: 55px; top: 0; }
+    .about-twist { width: 76px; right: 8px; top: 12px; }
+    .about-sugar { width: 90px; right: 132px; top: 0; }
+    .about-ribbon { display: none; }
+    .products-lolly,.products-ribbon { display: none; }
+    .products-sugar { left: auto; right: 8px; top: -24px; width: 88px; opacity: .4; }
+    .products-sweet { width: 96px; left: 53%; bottom: -29px; }
+    .home-page .home-marketplace { padding-top: 5.5rem; }
+    .marketplace-sweet { width: 140px; right: 12%; top: -36px; }
+    .marketplace-sugar { right: 3%; top: -15px; width: 90px; }
+    .marketplace-twist { width: 76px; bottom: -28px; left: -22px; opacity: .4; }
+    .cta-ribbon { right: -82px; top: auto; bottom: -85px; width: 180px; opacity: .27; }
+    .contact-sugar { width: 75px; left: 4%; top: -25px; }
+    .hero-sugar { display: none; }
+}
+@media (hover: none) {
+    .home-page .product-card:hover,.home-page .product-card:hover .product-image { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .home-page :is(.product-card,.product-image,.product-card-action,.marketplace-card,.btn) { transition: none; }
+    .home-page :is(.product-card,.product-card.is-revealed,.marketplace-card,.marketplace-card.is-revealed,.btn):is(:hover,:active),
+    .home-page .product-card:hover :is(.product-image,.product-card-action) { transform: none; }
+}

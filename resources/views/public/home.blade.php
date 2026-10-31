@@ -4,6 +4,7 @@
 
 @section('content')
 <section id="home-hero" class="hero hero-like-reference" aria-labelledby="home-title">
+    <div class="landing-art hero-art" aria-hidden="true"><x-candy-art kind="sprinkles" class="hero-sugar" /></div>
     <div class="container hero-grid hero-grid-ref">
         <div class="hero-illustration">
             <img src="{{ asset('images/pelangi-hero-candy.png') }}" alt="Colorful rainbow lollipops and candy" class="hero-lollipop" width="3168" height="1344" fetchpriority="high">
@@ -19,6 +20,12 @@
 </section>
 
 <section id="about" class="section home-about">
+    <div class="landing-art about-art" aria-hidden="true">
+        <x-candy-art class="about-lolly" />
+        <x-candy-art kind="twist" class="about-twist" />
+        <x-candy-art kind="sprinkles" class="about-sugar" />
+        <x-candy-art kind="ribbon" class="about-ribbon" />
+    </div>
     <div class="container">
         <div class="section-head">
             <h2>Tentang Kami</h2>
@@ -58,6 +65,12 @@
 </section>
 
 <section id="featured-products" class="section home-bestseller">
+    <div class="landing-art products-art" aria-hidden="true">
+        <x-candy-art class="products-lolly" />
+        <x-candy-art kind="ribbon" class="products-ribbon" />
+        <x-candy-art kind="sprinkles" class="products-sugar" />
+        <x-candy-art kind="jellies" class="products-sweet" />
+    </div>
     <div class="container">
         <div class="section-head section-head-inline">
             <div><h2>Pilihan Manis Kami</h2><p>Kenalan dengan beberapa produk dari Pelangi Lollycandy.</p></div>
@@ -74,6 +87,11 @@
 </section>
 
 <section id="marketplace-hub" class="section home-marketplace">
+    <div class="landing-art marketplace-art" aria-hidden="true">
+        <x-candy-art kind="twist" class="marketplace-twist" />
+        <x-candy-art kind="wrapped" class="marketplace-sweet" />
+        <x-candy-art kind="sprinkles" class="marketplace-sugar" />
+    </div>
     <div class="container">
         <div class="section-head">
             <h2>Temukan Kami di Marketplace</h2>
@@ -96,8 +114,10 @@
 </section>
 
 <section id="contact-cta" class="section home-contact-cta">
+    <div class="landing-art contact-art" aria-hidden="true"><x-candy-art kind="sprinkles" class="contact-sugar" /></div>
     <div class="container">
         <div class="cta-card">
+            <x-candy-art kind="ribbon" class="cta-ribbon" />
             <div><h2>Punya rencana manis bersama kami?</h2>
             <p>Untuk grosir, reseller, hampers, event, atau kolaborasi, ceritakan kebutuhanmu kepada tim Pelangi Lollycandy.</p></div>
             <div class="cta-actions">
