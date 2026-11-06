@@ -59,9 +59,12 @@
 }
 .public-page .hero-copy h1 { margin-bottom: 1.25rem; }
 .public-page .hero-actions { margin-top: 0; }
-.public-page .hero-catalog-btn { background: #d42b59; color: #fff; border: 1px solid #b72b4f; box-shadow: 0 5px 14px rgba(31,61,111,.13); }
-.public-page .hero-catalog-btn:hover { background: #bc3456; color: #fff; box-shadow: 0 8px 18px rgba(31,61,111,.17); }
-.public-page .hero-catalog-btn:active { background: #a7284b; }
+.public-page .hero-catalog-btn,
+.public-page .cta-card .btn-primary { background: var(--color-pink); color: #fff; border: 1px solid var(--color-pink); box-shadow: 0 5px 14px rgba(31,61,111,.13); }
+.public-page .hero-catalog-btn:hover,
+.public-page .cta-card .btn-primary:hover { background: #bc3456; color: #fff; border-color: #bc3456; box-shadow: 0 8px 18px rgba(31,61,111,.17); }
+.public-page .hero-catalog-btn:active,
+.public-page .cta-card .btn-primary:active { background: #a7284b; border-color: #a7284b; }
 
 .public-page .product-card { border-color: #e9e5e9; border-radius: 17px; box-shadow: 0 5px 16px rgba(28,45,70,.055); }
 .public-page .product-card:hover { border-color: #e4cbd4; box-shadow: 0 14px 28px rgba(28,45,70,.105); }

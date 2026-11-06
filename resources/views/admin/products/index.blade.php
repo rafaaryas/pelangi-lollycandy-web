@@ -10,7 +10,6 @@
 @php($filtersActive = request()->filled('q') || request()->filled('category_id') || request()->filled('status'))
 <form method="GET" class="table-toolbar" role="search"><label class="search-field"><x-icon name="search" /><input name="q" value="{{ request('q') }}" placeholder="Cari produk" aria-label="Cari produk"></label><select name="category_id" aria-label="Kategori"><option value="">Semua kategori</option>@foreach($categories as $category)<option value="{{ $category->id }}" @selected((string) request('category_id') === (string) $category->id)>{{ $category->name }}</option>@endforeach</select><select name="status" aria-label="Status"><option value="">Semua status</option><option value="active" @selected(request('status') === 'active')>Aktif</option><option value="inactive" @selected(request('status') === 'inactive')>Nonaktif</option></select><button class="btn btn-secondary" type="submit"><x-icon name="sliders" />{{ $filtersActive ? 'Filter aktif' : 'Filter' }}</button></form>
 
-@include('admin.partials.export-menu', ['module' => 'products'])
 <div class="admin-table-wrap module-table-wrap">
         <table class="admin-table module-table">
             <thead>

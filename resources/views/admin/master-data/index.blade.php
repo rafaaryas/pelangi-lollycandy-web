@@ -16,7 +16,6 @@
     @if(request()->hasAny(['q', 'status']))<a class="toolbar-clear" href="{{ route($route.'.index') }}">Bersihkan</a>@endif
 </form>
 
-@include('admin.partials.export-menu', ['module' => str_replace('admin.', '', $route)])
 <div class="table-meta"><span>{{ $items->total() }} data</span></div>
 <div class="admin-table-wrap module-table-wrap">
     <table class="admin-table module-table">

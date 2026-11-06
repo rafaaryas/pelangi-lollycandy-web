@@ -57,6 +57,10 @@
     background: radial-gradient(ellipse at 95% 10%,#eadfff99,transparent 60%),linear-gradient(115deg,#ffe3ed,#fff0f5 58%,#f8e9f7);
 }
 .home-page .cta-card > div { position: relative; z-index: 1; }
+.public-page .footer-nav a { gap: .65rem; min-height: 38px; padding: .35rem .5rem; margin-left: -.5rem; border-radius: 8px; text-decoration: none; transition: background-color 180ms ease, color 180ms ease, transform 180ms ease; }
+.public-page .footer-nav a .ui-icon { flex: 0 0 17px; color: #f3a6bc; }
+.public-page .footer-nav a:hover, .public-page .footer-nav a:focus-visible { background: rgba(255,255,255,.1); color: #fff; text-decoration: none; transform: translateX(3px); }
+.public-page .footer-nav a:active { transform: translateX(1px); }
 .cta-ribbon { width: 170px; right: 22%; top: -74px; opacity: .33; transform: rotate(35deg); }
 .contact-sugar { width: 105px; left: 4%; top: -28px; opacity: .5; transform: rotate(30deg); }
 /* Content is always visible: no scroll observer is needed to see the storefront. */

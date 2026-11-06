@@ -82,7 +82,7 @@ final class TabularExport
         return $name;
     }
 
-    private static function zip(array $files): string
+    public static function zip(array $files): string
     {
         $data = ''; $directory = ''; $offset = 0;
         foreach ($files as $name => $content) {

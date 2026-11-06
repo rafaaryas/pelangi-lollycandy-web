@@ -1,7 +1,7 @@
-:root { --admin-topbar-height: 66px; --admin-sidebar-width: 258px; --admin-sidebar-compact: 70px; --admin-navy: #253b58; --admin-pink: #bc3456; }
+:root { --admin-topbar-height: 66px; --admin-sidebar-width: 258px; --admin-sidebar-compact: 70px; --admin-navy: #253b58; --admin-pink: #bc3456; --admin-pink-hover: #a92a4c; --admin-pink-soft: #fff3f6; --admin-table-ink: #263b59; }
 .admin-app { height: 100%; overflow: hidden; }
 .admin-body { display: grid; grid-template-rows: var(--admin-topbar-height) minmax(0, 1fr); height: 100vh; height: 100dvh; min-height: 0; padding-top: 0; overflow: hidden; }
-.admin-topbar { position: relative; z-index: 100; display: flex; align-items: center; gap: 1rem; height: var(--admin-topbar-height); padding: 0 clamp(1rem, 2vw, 2rem); background: var(--admin-pink); color: #fff; box-shadow: 0 1px 4px rgba(35, 42, 62, .12); }
+.admin-topbar { position: relative; z-index: 100; display: flex; align-items: center; gap: 1rem; height: var(--admin-topbar-height); padding: 0 clamp(1rem, 2vw, 2rem); background: var(--color-pink); color: #fff; box-shadow: 0 1px 4px rgba(35, 42, 62, .12); }
 .admin-body .modal { z-index: 200; }
 .admin-topbar-toggle { display: grid; place-items: center; flex: 0 0 44px; width: 44px; height: 44px; border: 0; border-radius: 9px; background: transparent; color: #fff; cursor: pointer; }
 .admin-topbar-toggle:hover, .admin-topbar-toggle:focus-visible { background: rgba(255,255,255,.17); }
@@ -75,7 +75,16 @@
 .admin-body .modal-content .modal-head { margin-bottom: 1rem; }
 .admin-body .module-field textarea, .admin-body .form-group textarea { line-height: 1.5; }
 .admin-body .module-table tbody tr:hover { background: #fafbfe; }
-.admin-body .module-table th { background: #f6f8fb; color: #51627a; font-size: .73rem; }
+.admin-body .admin-table thead th, .admin-body .module-table thead th, .admin-body .line-table thead th { background: var(--admin-navy); color: #fff; border-bottom: 2px solid var(--color-pink); font-size: 15px; font-weight: 750; letter-spacing: 0; text-transform: none; }
+.admin-body .module-table thead th { height: 46px; }
+.admin-body .admin-table thead th.numeric-cell, .admin-body .module-table thead th.numeric-cell { text-align: right; }
+.admin-body .admin-table tbody td { border-bottom-color: #e9edf3; }
+.admin-body .admin-topbar-website:focus-visible { outline: 3px solid #ffd4df; outline-offset: 2px; }
+.admin-body .report-export-action { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin: .65rem 0 1.1rem; }
+.admin-body .report-export-action .btn { display: inline-flex; align-items: center; gap: .45rem; background: var(--admin-pink); color: #fff; }
+.admin-body .report-export-action .btn:hover { background: var(--admin-pink-hover); }
+.admin-body .report-export-action .btn:focus-visible { outline: 3px solid #f4a7bb; outline-offset: 2px; }
+.admin-body .report-export-action small { color: #65758d; }
 .admin-body .module-table td, .admin-body .module-table th { padding: .68rem .75rem; vertical-align: middle; }
 .admin-body .module-table .table-actions { flex-wrap: nowrap; gap: .45rem; white-space: nowrap; }
 .admin-body .module-table .table-action-heading { white-space: nowrap; }
@@ -106,9 +115,33 @@
   .admin-body .module-table td, .admin-body .module-table th { padding: .68rem .65rem; }
 }
 @media (prefers-reduced-motion: reduce) { .admin-body .admin-shell, .admin-body .admin-sidebar, .admin-nav-children, .admin-nav-chevron { transition: none !important; } }
-/* Keep navigation typography unchanged; Plus Jakarta Sans is scoped to admin content only. */
-.admin-body .admin-main,
-.admin-body .admin-main * {
-    font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+/* One locally served variable font for the complete business interface. */
+@font-face {
+    font-family: 'Inter Admin';
+    src: url('../fonts/InterAdmin-Latin.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+}
+.admin-body { --admin-font: 'Inter Admin', 'Segoe UI', Arial, sans-serif; }
+.admin-body, .admin-body * { font-family: var(--admin-font); }
+.admin-body .admin-main, .admin-body .admin-shell { background: #f4f5f7; }
+.admin-body .admin-main h1 { font: 750 clamp(24px, 2vw, 30px)/1.25 var(--admin-font); color: #1e3048; }
+.admin-body .admin-main h2, .admin-body .admin-main h3 { font-family: var(--admin-font); font-weight: 700; color: #1e3048; }
+.admin-body .admin-nav-parent, .admin-body .admin-nav-link, .admin-body .admin-topbar-context,
+.admin-body .admin-table th, .admin-body .admin-main *, .admin-body .admin-nav-tooltip { font-family: var(--admin-font); }
+.admin-body .admin-table tbody td { font-size: 14px; line-height: 1.5; padding: 14px 16px; }
+.admin-body .admin-table thead th, .admin-body .line-table thead th { padding: 15px 16px; line-height: 1.35; }
+.admin-body .admin-table tbody strong { font-weight: 600; }
+.admin-body .numeric-cell, .admin-body .report-summary strong, .admin-body input[type=number] { font-variant-numeric: tabular-nums; }
+.admin-body .card { box-shadow: none; border: 1px solid #dde2e8; border-radius: 12px; }
+.admin-body .module-page-head p, .admin-body .table-meta, .admin-body .report-period-label { color: #526174; }
+.admin-body .admin-nav-parent, .admin-body .admin-nav-link { color: #e4eaf1; }
+.admin-body .admin-topbar-context { font-size: 16px; font-weight: 750; }
+.admin-body .admin-topbar-website { font-size: 14px; font-weight: 750; }
+@media (max-width: 640px) {
+    .admin-body .admin-table thead th, .admin-body .line-table thead th { padding: 13px 12px; font-size: 15px; }
+    .admin-body .admin-table tbody td { padding: 12px; }
+    .admin-body .admin-topbar-context { font-size: 14px; }
 }
 
