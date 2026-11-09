@@ -24,11 +24,11 @@
             </thead>
             <tbody data-admin-list>
                 @forelse($products as $product)
-                    @php($productImagePath = $product->images->first()?->storagePath())
+                    @php($productImageUrl = $product->images->first()?->publicUrl())
                     <tr>
                         <td>
                             <div class="product-row">
-                                <img src="{{ $productImagePath ? asset('storage/'.$productImagePath) : asset(\App\Models\ProductImage::PLACEHOLDER) }}" alt="{{ $product->name }}">
+                                <img src="{{ $productImageUrl ?: asset(\App\Models\ProductImage::PLACEHOLDER) }}" alt="{{ $product->name }}">
                                 <div>
                                     <strong>{{ $product->name }}</strong>
                                     <small>{{ $product->category->name ?? '-' }}</small>

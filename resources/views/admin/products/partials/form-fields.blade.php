@@ -1,6 +1,6 @@
 @php
     $editing = $product !== null;
-    $productImagePath = $editing ? $product->images->first()?->storagePath() : null;
+    $productImageUrl = $editing ? $product->images->first()?->publicUrl() : null;
 @endphp
 
 {{-- Product identity fields: edit these to control what appears on the homepage/catalog. --}}
@@ -64,7 +64,7 @@
         <span>Tarik foto ke sini atau pilih foto</span>
         <input type="file" name="image" accept="image/jpeg,image/png,image/webp" data-image-preview-input="preview-{{ $product->id ?? 'new' }}">
     </label>
-    <img class="admin-image-preview" id="preview-{{ $product->id ?? 'new' }}" data-image-preview-img src="{{ $productImagePath ? asset('storage/'.$productImagePath) : '' }}" alt="Preview gambar produk" @if(!$productImagePath) hidden @endif>
+    <img class="admin-image-preview" id="preview-{{ $product->id ?? 'new' }}" data-image-preview-img src="{{ $productImageUrl ?: '' }}" alt="Preview gambar produk" @if(!$productImageUrl) hidden @endif>
     <button type="button" class="btn btn-secondary image-remove" data-image-remove="preview-{{ $product->id ?? 'new' }}" hidden>Hapus pilihan foto</button>
  </div>
 <h4 class="form-section-title">AI Assistance</h4>

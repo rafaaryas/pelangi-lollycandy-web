@@ -17,8 +17,8 @@
 </section>
 
 <section class="document-section product-detail-content">
-    @php($imagePath = $product->images->first()?->storagePath())
-    <div class="product-detail-image"><img src="{{ $imagePath ? asset('storage/'.$imagePath) : asset(\App\Models\ProductImage::PLACEHOLDER) }}" alt="{{ $product->name }}"></div>
+    @php($imageUrl = $product->images->first()?->publicUrl())
+    <div class="product-detail-image"><img src="{{ $imageUrl ?: asset(\App\Models\ProductImage::PLACEHOLDER) }}" alt="{{ $product->name }}"></div>
     <div><h2>Informasi produk</h2><p>{{ $product->description }}</p><dl class="product-detail-meta"><dt>Kategori</dt><dd>{{ $product->category->name }}</dd><dt>Status</dt><dd>{{ $product->is_active ? 'Aktif' : 'Nonaktif' }}</dd><dt>Label</dt><dd>{{ $product->badge === 'none' ? 'Tanpa label' : str_replace('_', ' ', ucfirst($product->badge)) }}</dd><dt>Diperbarui</dt><dd>{{ $product->updated_at->format('d M Y, H:i') }}</dd></dl></div>
 </section>
 
