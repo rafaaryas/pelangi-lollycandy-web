@@ -1,8 +1,8 @@
-@php($productImagePath = $product->images->first()?->storagePath())
+@php($productImageUrl = $product->images->first()?->publicUrl())
 <article class="product-card">
     <a class="product-card-link" href="{{ route('products.show', $product->slug) }}" aria-label="Lihat {{ $product->name }}">
         <span class="product-media">
-            <img loading="lazy" class="product-image" src="{{ $productImagePath ? asset('storage/'.$productImagePath) : asset(\App\Models\ProductImage::PLACEHOLDER) }}" alt="{{ $product->name }}" width="560" height="560">
+            <img loading="lazy" class="product-image" src="{{ $productImageUrl ?: asset(\App\Models\ProductImage::PLACEHOLDER) }}" alt="{{ $product->name }}" width="560" height="560">
             @if($product->badge === 'new') <span class="product-badge">BARU</span> @endif
             @if($product->badge === 'best_seller') <span class="product-badge">FAVORIT</span> @endif
         </span>

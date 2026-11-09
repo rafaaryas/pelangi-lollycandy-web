@@ -28,6 +28,25 @@ class ProductImage extends Model
         return $path && Storage::disk('public')->exists($path) ? $path : null;
     }
 
+    public function publicUrl(): ?string
+    {
+        $path = self::normalizeStoragePath($this->image_path);
+
+        if (! $path) {
+            return null;
+        }
+
+        if (Storage::disk('public')->exists($path)) {
+            return asset('storage/'.$path);
+        }
+
+        if (str_starts_with($path, 'products/') && is_file(public_path('images/'.$path))) {
+            return asset('images/'.$path);
+        }
+
+        return null;
+    }
+
     public static function normalizeStoragePath(?string $path): ?string
     {
         if (! $path) {

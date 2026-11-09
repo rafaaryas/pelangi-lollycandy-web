@@ -7,19 +7,19 @@
 @php
     $whatsAppMessage = 'Halo, saya tertarik dengan produk '.$product->name;
     $whatsAppUrl = $product->whatsapp_url ?: \App\Support\BusinessContact::whatsAppUrl($whatsAppMessage);
-    $gallery = $product->images->filter(fn ($image) => $image->storagePath())->values();
+    $gallery = $product->images->filter(fn ($image) => $image->publicUrl())->values();
 @endphp
 <section class="section product-page" aria-labelledby="product-title">
     <div class="container">
         <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="{{ route('home') }}">Home</a><x-icon name="chevron-right" size="15" /><a href="{{ route('products.index') }}">Produk</a><x-icon name="chevron-right" size="15" /><span aria-current="page">{{ $product->name }}</span></nav>
         <div class="product-detail-grid">
             <div class="product-gallery">
-                @php($mainImageUrl = $gallery->isNotEmpty() ? asset('storage/'.$gallery->first()->storagePath()) : asset(\App\Models\ProductImage::PLACEHOLDER))
+                @php($mainImageUrl = $gallery->isNotEmpty() ? $gallery->first()->publicUrl() : asset(\App\Models\ProductImage::PLACEHOLDER))
                 <div class="product-gallery-main product-detail-media" data-gallery-media>
                     <img class="product-gallery-backdrop" data-gallery-backdrop src="{{ $mainImageUrl }}" alt="" aria-hidden="true" width="900" height="900">
                     <img class="product-gallery-foreground" data-gallery-main src="{{ $mainImageUrl }}" alt="{{ $product->name }}" width="900" height="900" fetchpriority="high">
                 </div>
-                @if($gallery->count() > 1)<div class="product-thumbnails" aria-label="Foto produk">@foreach($gallery as $image)<button type="button" class="product-thumbnail {{ $loop->first ? 'is-active' : '' }}" data-gallery-thumb data-image="{{ asset('storage/'.$image->storagePath()) }}" data-alt="{{ $product->name }} — foto {{ $loop->iteration }}" aria-label="Tampilkan foto {{ $loop->iteration }}" aria-pressed="{{ $loop->first ? 'true' : 'false' }}"><img src="{{ asset('storage/'.$image->storagePath()) }}" alt="" loading="lazy" width="96" height="96"></button>@endforeach</div>@endif
+                @if($gallery->count() > 1)<div class="product-thumbnails" aria-label="Foto produk">@foreach($gallery as $image)<button type="button" class="product-thumbnail {{ $loop->first ? 'is-active' : '' }}" data-gallery-thumb data-image="{{ $image->publicUrl() }}" data-alt="{{ $product->name }} — foto {{ $loop->iteration }}" aria-label="Tampilkan foto {{ $loop->iteration }}" aria-pressed="{{ $loop->first ? 'true' : 'false' }}"><img src="{{ $image->publicUrl() }}" alt="" loading="lazy" width="96" height="96"></button>@endforeach</div>@endif
             </div>
             <div class="product-detail-info">
                 <p class="eyebrow">{{ $product->category?->name ?? 'Pelangi Lollycandy' }}</p>
