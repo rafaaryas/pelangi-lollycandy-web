@@ -26,6 +26,7 @@
         @case('trash')<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v5M14 11v5"/>@break
         @case('eye')<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>@break
         @case('eye-off')<path d="m3 3 18 18M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.9 5.2A11.4 11.4 0 0 1 12 5c6.5 0 10 7 10 7a13.5 13.5 0 0 1-3.1 3.8M6.2 6.2C3.5 8 2 12 2 12s3.5 7 10 7c1.1 0 2.1-.2 3-.5"/>@break
+        @case('arrow-up-right')<path d="M7 17 17 7M7 7h10v10"/>@break
         @case('arrow-left')<path d="m12 19-7-7 7-7M5 12h14"/>@break
         @case('arrow-right')<path d="m12 5 7 7-7 7M19 12H5"/>@break
         @case('calendar')<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/>@break

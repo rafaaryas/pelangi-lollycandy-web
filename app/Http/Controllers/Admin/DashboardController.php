@@ -13,33 +13,38 @@ use App\Models\Sale;
 use App\Models\Supplier;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $now = CarbonImmutable::now();
-        $monthStart = $now->startOfMonth();
+        $request->validate(['month' => ['nullable', 'date_format:Y-m', 'before_or_equal:'.$now->format('Y-m')]]);
+        $monthStart = $request->filled('month')
+            ? CarbonImmutable::createFromFormat('!Y-m', $request->input('month'))
+            : $now->startOfMonth();
+        $periodEnd = $monthStart->isSameMonth($now) ? $now : $monthStart->endOfMonth();
         $rangeStart = $monthStart->subMonths(5);
-        $rangeEnd = $now->endOfMonth();
+        $rangeEnd = $periodEnd;
 
         $sales = Sale::query()
             ->where('status', 'confirmed')
-            ->whereBetween('sale_date', [$monthStart->toDateString(), $now->toDateString()]);
+            ->whereBetween('sale_date', [$monthStart->toDateString(), $periodEnd->endOfDay()->toDateTimeString()]);
         $productions = Production::query()
             ->where('status', 'confirmed')
-            ->whereBetween('production_date', [$monthStart->toDateString(), $now->toDateString()]);
+            ->whereBetween('production_date', [$monthStart->toDateString(), $periodEnd->endOfDay()->toDateTimeString()]);
 
         $salesByMonth = Sale::query()
             ->where('status', 'confirmed')
-            ->whereBetween('sale_date', [$rangeStart->toDateString(), $rangeEnd->toDateString()])
+            ->whereBetween('sale_date', [$rangeStart->toDateString(), $rangeEnd->endOfDay()->toDateTimeString()])
             ->get(['sale_date', 'total_amount'])
             ->groupBy(fn (Sale $sale): string => $sale->sale_date->format('Y-m'));
 
         $productionResults = ProductionResult::query()
             ->whereHas('production', fn ($query) => $query
                 ->where('status', 'confirmed')
-                ->whereBetween('production_date', [$rangeStart->toDateString(), $rangeEnd->toDateString()]))
+                ->whereBetween('production_date', [$rangeStart->toDateString(), $rangeEnd->endOfDay()->toDateTimeString()]))
             ->with('production:id,production_date,status')
             ->get(['id', 'production_id', 'quantity_produced']);
         $productionByMonth = $productionResults
@@ -53,6 +58,7 @@ class DashboardController extends Controller
 
             return [
                 'key' => $key,
+                'filters' => ['from' => $month->toDateString(), 'to' => $month->endOfMonth()->min(CarbonImmutable::now())->toDateString(), 'status' => 'confirmed'],
                 'label' => $month->locale('id')->translatedFormat('M'),
                 'period' => $month->locale('id')->translatedFormat('F Y'),
                 'sales' => $monthSales->sum(fn (Sale $sale): float => (float) $sale->total_amount),
@@ -76,7 +82,7 @@ class DashboardController extends Controller
                 'productionCount' => (clone $productions)->count(),
                 'productionQuantity' => (float) ProductionResult::whereHas('production', fn ($query) => $query
                     ->where('status', 'confirmed')
-                    ->whereBetween('production_date', [$monthStart->toDateString(), $now->toDateString()]))
+                    ->whereBetween('production_date', [$monthStart->toDateString(), $periodEnd->endOfDay()->toDateTimeString()]))
                     ->sum('quantity_produced'),
             ],
             'months' => $months,
@@ -85,6 +91,9 @@ class DashboardController extends Controller
             'attentionStock' => $attentionStock,
             'untrackedProductStock' => $untrackedProductStock,
             'activities' => $this->recentActivities(),
+            'selectedMonth' => $monthStart->format('Y-m'),
+            'currentMonth' => $now->format('Y-m'),
+            'periodFilters' => ['from' => $monthStart->toDateString(), 'to' => $periodEnd->toDateString(), 'status' => 'confirmed'],
             'periodLabel' => $monthStart->locale('id')->translatedFormat('F Y'),
         ]);
     }
@@ -107,7 +116,8 @@ class DashboardController extends Controller
                 'name' => $item->name,
                 'quantity' => (float) $item->current_stock,
                 'unit' => $item->unit,
-                'kind' => 'Bahan baku',
+                'kind' => 'Bahan baku', 'icon' => 'boxes',
+                'url' => route('admin.stock.history', ['type' => 'materials', 'id' => $item->id]),
                 'status' => (float) $item->current_stock <= 0 ? 'Habis' : 'Rendah',
             ]);
 
@@ -128,31 +138,32 @@ class DashboardController extends Controller
                 'name' => $item->name,
                 'quantity' => (float) $item->stock_quantity,
                 'unit' => 'pcs',
-                'kind' => 'Produk',
+                'kind' => 'Produk', 'icon' => 'package',
+                'url' => route('admin.stock.history', ['type' => 'products', 'id' => $item->id]),
                 'status' => (float) $item->stock_quantity <= 0 ? 'Habis' : 'Rendah',
             ]);
 
         return $rawMaterials->concat($products)
             ->sortBy(fn (array $item): int => $item['status'] === 'Habis' ? 0 : 1)
-            ->take(8)
+            ->take(5)
             ->values();
     }
 
     private function recentActivities(): Collection
     {
-        $purchases = Purchase::with('supplier:id,name')->latest('purchase_date')->take(5)->get()
+        $purchases = Purchase::with('supplier:id,name')->latest('purchase_date')->latest('id')->take(5)->get()
             ->map(fn (Purchase $item): array => [
                 'type' => 'Pembelian', 'reference' => $item->reference_number,
                 'description' => $item->supplier?->name ?? 'Supplier dihapus',
                 'status' => $item->status, 'date' => $item->purchase_date, 'url' => route('admin.purchases.show', $item),
             ]);
-        $productions = Production::with('results.product:id,name')->latest('production_date')->take(5)->get()
+        $productions = Production::with('results.product:id,name')->latest('production_date')->latest('id')->take(5)->get()
             ->map(fn (Production $item): array => [
                 'type' => 'Produksi', 'reference' => $item->production_number,
                 'description' => $item->results->pluck('product.name')->filter()->join(', ') ?: 'Produksi',
                 'status' => $item->status, 'date' => $item->production_date, 'url' => route('admin.productions.show', $item),
             ]);
-        $sales = Sale::with('customer:id,name')->latest('sale_date')->take(5)->get()
+        $sales = Sale::with('customer:id,name')->latest('sale_date')->latest('id')->take(5)->get()
             ->map(fn (Sale $item): array => [
                 'type' => 'Penjualan', 'reference' => $item->invoice_number,
                 'description' => $item->customer?->name ?? 'Pelanggan umum',
@@ -161,7 +172,7 @@ class DashboardController extends Controller
 
         return $purchases->concat($productions)->concat($sales)
             ->sortByDesc('date')
-            ->take(12)
+            ->take(5)
             ->values();
     }
 }

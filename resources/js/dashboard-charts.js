@@ -7,6 +7,7 @@ function getTooltip() {
     if (tooltip) return tooltip;
     tooltip = document.createElement('div');
     tooltip.className = 'dashboard-chart-tooltip';
+    tooltip.id = 'dashboard-chart-tooltip';
     tooltip.setAttribute('role', 'tooltip');
     tooltip.setAttribute('aria-hidden', 'true');
     tooltip.innerHTML = '<span data-tooltip-period></span><strong data-tooltip-value></strong><span data-tooltip-count></span>';
@@ -34,6 +35,7 @@ function showTooltip(bar, pointer, touch = false) {
     if (!bar?.matches('[data-chart-bar]')) return;
     window.clearTimeout(touchTimer);
     activeBar?.classList.remove('is-chart-active');
+    activeBar?.removeAttribute('aria-describedby');
     activeBar = bar;
     const popup = getTooltip();
     popup.querySelector('[data-tooltip-period]').textContent = bar.dataset.chartPeriod;
@@ -42,12 +44,15 @@ function showTooltip(bar, pointer, touch = false) {
     popup.classList.add('is-visible');
     popup.setAttribute('aria-hidden', 'false');
     bar.classList.add('is-chart-active');
+    bar.setAttribute('aria-describedby', popup.id);
     positionTooltip(bar, pointer, touch);
 }
 
 function hideTooltip() {
     window.clearTimeout(touchTimer);
     activeBar?.classList.remove('is-chart-active');
+    activeBar?.removeAttribute('aria-describedby');
+    document.querySelectorAll('[data-touch-ready]').forEach(item => delete item.dataset.touchReady);
     activeBar = undefined;
     tooltip?.classList.remove('is-visible');
     tooltip?.setAttribute('aria-hidden', 'true');
@@ -81,7 +86,15 @@ document.addEventListener('click', (event) => {
     const bar = event.target.closest?.('[data-chart-bar]');
     if (!bar) return;
     const touch = lastPointerType === 'touch' || window.matchMedia('(hover: none)').matches;
-    showTooltip(bar, undefined, touch);
+    if (touch && bar.dataset.touchReady !== 'true') {
+        event.preventDefault();
+        document.querySelectorAll('[data-touch-ready]').forEach(item => delete item.dataset.touchReady);
+        bar.dataset.touchReady = 'true';
+        showTooltip(bar, undefined, true);
+        getTooltip().querySelector('[data-tooltip-count]').textContent += ' · Ketuk lagi untuk rincian';
+    } else {
+        showTooltip(bar, undefined, touch);
+    }
     if (touch) touchTimer = window.setTimeout(hideTooltip, 4000);
     lastPointerType = undefined;
 });
