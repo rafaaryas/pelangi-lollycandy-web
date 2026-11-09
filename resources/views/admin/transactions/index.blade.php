@@ -17,7 +17,6 @@
     @if(isset($customers))<select name="customer_id" aria-label="Pelanggan"><option value="">Semua pelanggan</option>@foreach($customers as $customer)<option value="{{ $customer->id }}" @selected((string) request('customer_id') === (string) $customer->id)>{{ $customer->name }}</option>@endforeach</select>@endif
     <button class="btn btn-secondary" type="submit"><x-icon name="sliders" />{{ $filtersActive ? 'Filter aktif' : 'Filter' }}</button>
 </form>
-@include('admin.partials.export-menu', ['module' => $kind, 'scope' => 'Seluruh transaksi sesuai filter; satu baris per transaksi'])
 <div class="table-meta"><span>{{ $items->total() }} transaksi</span><span>Status confirmed memengaruhi saldo stok.</span></div>
 <div class="admin-table-wrap module-table-wrap">
     <table class="admin-table module-table">

@@ -10,11 +10,34 @@ use App\Models\PurchaseDetail;
 use App\Models\Sale;
 use App\Models\SaleDetail;
 use App\Services\RawMaterialStockReport;
+use App\Services\OperationalWorkbookReport;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
+    public function workbook(Request $request, OperationalWorkbookReport $report)
+    {
+        $filters = $request->validate([
+            'from' => ['nullable', 'date'],
+            'to' => ['nullable', 'date', 'after_or_equal:from'],
+        ]);
+        $from = CarbonImmutable::parse($filters['from'] ?? now()->startOfMonth())->toDateString();
+        $to = CarbonImmutable::parse($filters['to'] ?? now())->toDateString();
+        $tag = substr($from, 0, 7) === substr($to, 0, 7) ? substr($from, 0, 7) : $from.'_'.$to;
+        try {
+            $content = $report->build($from, $to);
+        } catch (\RuntimeException $exception) {
+            return back()->withErrors(['export' => $exception->getMessage()]);
+        }
+        return response($content, 200, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => 'attachment; filename="Laporan_Operasional_Pelangi_Lollycandy_'.$tag.'.xlsx"',
+            'Content-Length' => strlen($content),
+            'X-Content-Type-Options' => 'nosniff',
+        ]);
+    }
+
     public function export(Request $request, RawMaterialStockReport $stockReport)
     {
         $filters = $request->validate([

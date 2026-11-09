@@ -64,6 +64,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('stock/adjust', [AdminStockController::class, 'adjust'])->name('stock.adjust');
         Route::get('stock/{type}/{id}', [AdminStockController::class, 'history'])->name('stock.history');
         Route::get('reports', [AdminReportController::class, 'index'])->name('reports.index');
+        Route::get('reports/workbook', [AdminReportController::class, 'workbook'])->name('reports.workbook');
         Route::get('reports/export', [AdminReportController::class, 'export'])->name('reports.export');
     });
 });

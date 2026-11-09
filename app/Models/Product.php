@@ -20,6 +20,7 @@ class Product extends Model
         return [
             'published_at' => 'datetime',
             'is_active' => 'boolean',
+            'price_from' => 'decimal:2',
             'stock_quantity' => 'decimal:3',
             'minimum_stock' => 'decimal:3',
         ];

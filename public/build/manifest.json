@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-BksP_PRe.css",
+    "file": "assets/app-CBSW9LMw.css",
     "name": "app",
     "names": [
       "app.css"
@@ -13,7 +13,8 @@
       "assets/Bubblegum-CYz23yZd.ttf",
       "assets/dino-D3nyq5Rw.otf",
       "assets/Gwenchana-BW7iYVev.ttf",
-      "assets/NunitoSans-Latin-BWQ3gi2K.woff2"
+      "assets/NunitoSans-Latin-BWQ3gi2K.woff2",
+      "assets/InterAdmin-Latin-C8xk93SL.woff2"
     ]
   },
   "resources/fonts/Bubblegum.ttf": {
@@ -23,6 +24,10 @@
   "resources/fonts/Gwenchana.ttf": {
     "file": "assets/Gwenchana-BW7iYVev.ttf",
     "src": "resources/fonts/Gwenchana.ttf"
+  },
+  "resources/fonts/InterAdmin-Latin.woff2": {
+    "file": "assets/InterAdmin-Latin-C8xk93SL.woff2",
+    "src": "resources/fonts/InterAdmin-Latin.woff2"
   },
   "resources/fonts/Matcha.otf": {
     "file": "assets/Matcha-B4nJIQn8.otf",
@@ -41,7 +46,7 @@
     "src": "resources/fonts/dino.otf"
   },
   "resources/js/app.js": {
-    "file": "assets/app-BnH2iIbU.js",
+    "file": "assets/app-C8TdBgb9.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true

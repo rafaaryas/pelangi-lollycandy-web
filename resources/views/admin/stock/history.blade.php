@@ -4,7 +4,6 @@
 
 @section('content')
 <header class="module-page-head detail-page-head"><div><div class="admin-breadcrumb"><a href="{{ route('admin.stock.index', ['tab' => $type]) }}"><x-icon name="arrow-left" size="15" /> Stok</a><span>/</span><strong>Histori</strong></div><h1>{{ $item->name }}</h1><p>Riwayat perubahan saldo item ini.</p></div><button class="btn btn-secondary" type="button" data-modal-open="stock-adjust-modal"><x-icon name="sliders" />Sesuaikan stok</button></header>
-@include('admin.partials.export-menu', ['module' => 'stock-history', 'query' => ['type' => $type, 'id' => $item->id], 'scope' => 'Seluruh riwayat perubahan stok item ini'])
 <section class="document-summary stock-detail-summary">
     <div><span>Stok saat ini</span><strong>{{ $currentStock === null ? 'Belum dicatat' : number_format((float) $currentStock, 3, ',', '.').' '.$unit }}</strong></div>
     <div><span>Stok minimum</span><strong>{{ number_format((float) $minimumStock, 3, ',', '.') }} {{ $unit }}</strong></div>
