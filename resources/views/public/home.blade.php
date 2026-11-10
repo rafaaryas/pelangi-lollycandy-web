@@ -7,7 +7,7 @@
     <div class="landing-art hero-art" aria-hidden="true"><x-candy-art kind="sprinkles" class="hero-sugar" /></div>
     <div class="container hero-grid hero-grid-ref">
         <div class="hero-illustration">
-            <img src="{{ asset('images/pelangi-hero-candy.png') }}" alt="Colorful rainbow lollipops and candy" class="hero-lollipop" width="3168" height="1344" fetchpriority="high">
+            <img src="{{ asset('images/pelangi-hero-candy.webp') }}" alt="Colorful rainbow lollipops and candy" class="hero-lollipop" width="3168" height="1344" fetchpriority="high">
         </div>
         <div class="hero-copy">
             <h1 id="home-title">PELANGI<br>LOLLYCANDY</h1>
